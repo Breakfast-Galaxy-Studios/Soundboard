@@ -11,7 +11,7 @@ If you wish to have it output to your microphone, you will likely need to use a 
 There are several free and open source audio cables / mixers, and some closed source but free ones as well.
 
 - macOS: We recommend using [Jack Audio,](https://jackaudio.org/) or [Soundflower.](https://github.com/mattingalls/Soundflower)
-- Linux: The only mainstream option is [Jack Audio,](https://jackaudio.org/), although you can potentially achieve the same thing from command line.
+- Linux: The only mainstream option is [Jack Audio,](https://jackaudio.org/) although you can potentially achieve the same thing from command line.
 - Windows: The open source option is [Jack Audio,](https://jackaudio.org/) but the free but closed source [VB-Audio VoiceMeeter](https://vb-audio.com/Voicemeeter/banana.htm) is more widely adopted and has much more online support.
 
 
