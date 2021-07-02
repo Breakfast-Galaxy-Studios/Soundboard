@@ -2,13 +2,13 @@ package net.breakfaststudios;
 
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
-import jdk.jshell.execution.Util;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
+import net.breakfaststudios.util.Util;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -611,6 +611,14 @@ public class BreakfastSounds extends JFrame {
                     String name = prop.getProperty("name");
                     String rawKeybinds = prop.getProperty("keybind");
                     String path = prop.getProperty("filepath");
+
+                    File f = new File(path);
+                    if(!f.exists()) {
+                        file.close();
+                        new File(Util.getSoundDirectory() + s).delete();
+                        throw new Exception();
+                    }
+
                     float volume = Float.parseFloat(prop.getProperty("volume"));
 
                     StringBuilder keyBind = new StringBuilder();
