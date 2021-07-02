@@ -21,4 +21,5 @@ There are several free and open source audio cables / mixers, and some closed so
 All`.wav`files should be supported. Some`.mp3`files are known to not work.<br>
 Almost all sound formats are potentially playable, but nothing other than WAVE and MP3 have been tested.<br>
 If you would like to convert sound files to `.wav`, we recommend using [this site.](https://convertio.co/mp3-wav/)
+Additionally you can convert MP3 files to WAV files in [Audacity](https://www.audacityteam.org/). (Tutorial Coming soon...)
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
