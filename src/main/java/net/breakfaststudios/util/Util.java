@@ -1,5 +1,7 @@
 package net.breakfaststudios.util;
 
+import net.breakfaststudios.BreakfastSounds;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,24 +9,20 @@ import java.util.Properties;
 
 public class Util {
     public static String getSoundDirectory() {
-        String os = System.getProperty("os.name").toLowerCase();
+        String os = BreakfastSounds.os;
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\sounds\\";
-        else if (os.contains("mac"))
-            return System.getProperty("user.home") + "/BGS-Soundboard/sounds/";
-        else if (os.contains("nux"))
+        else if (os.contains("mac") || os.contains("nux"))
             return System.getProperty("user.home") + "/BGS-Soundboard/sounds/";
         else
             return System.getProperty("user.dir") + "/BGS-Soundboard/sounds/";
     }
 
     public static String getMainDirectory() {
-        String os = System.getProperty("os.name").toLowerCase();
+        String os = BreakfastSounds.os;
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\";
-        else if (os.contains("mac"))
-            return System.getProperty("user.home") + "/BGS-Soundboard/";
-        else if (os.contains("nux"))
+        else if (os.contains("mac") || os.contains("nux"))
             return System.getProperty("user.home") + "/BGS-Soundboard/";
         else
             return System.getProperty("user.dir") + "/BGS-Soundboard/";

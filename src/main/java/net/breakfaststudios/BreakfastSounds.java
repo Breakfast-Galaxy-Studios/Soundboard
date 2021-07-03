@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 
 public class BreakfastSounds extends JFrame {
 
-    private static final String os = System.getProperty("os.name").toLowerCase();
+    public static final String os = System.getProperty("os.name").toLowerCase();
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -56,8 +56,7 @@ public class BreakfastSounds extends JFrame {
 
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) { }
 
         /* Create and display the form */
         makeAppDir();
@@ -160,20 +159,10 @@ public class BreakfastSounds extends JFrame {
         hiddenTextField.setVisible(false);
 
         settingsPopup.setTitle("Settings");
-        settingsPopup.setAlwaysOnTop(false);
-        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        settingsPopup.setMaximumSize(new Dimension(350, 255));
-        settingsPopup.setMinimumSize(new Dimension(350, 255));
-        settingsPopup.setPreferredSize(new Dimension(350, 255));
-        settingsPopup.setResizable(false);
+        setDefaultWindowStyle(settingsPopup);
 
         soundAddMenu.setTitle("Add Sound");
-        soundAddMenu.setAlwaysOnTop(false);
-        soundAddMenu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        soundAddMenu.setMaximumSize(new Dimension(350, 255));
-        soundAddMenu.setMinimumSize(new Dimension(350, 255));
-        soundAddMenu.setPreferredSize(new Dimension(350, 255));
-        soundAddMenu.setResizable(false);
+        setDefaultWindowStyle(soundAddMenu);
 
         jPanel1.setMaximumSize(new Dimension(350, 255));
         jPanel1.setMinimumSize(new Dimension(350, 255));
@@ -186,7 +175,6 @@ public class BreakfastSounds extends JFrame {
 
 
         cancelAddSound.setText("Cancel");
-
 
         fileLabel.setText("File:");
 
@@ -430,7 +418,6 @@ public class BreakfastSounds extends JFrame {
         addButton.setMinimumSize(new Dimension(83, 23));
         addButton.setPreferredSize(new Dimension(83, 23));
 
-
         removeButton.setText("Remove...");
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
@@ -490,9 +477,7 @@ public class BreakfastSounds extends JFrame {
         recordKeybindDialog.setVisible(false);
         keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
 
-
         pack();
-
 
         // -----------------------------------------------------------------
         // -----------------------------------------------------------------
@@ -822,6 +807,15 @@ public class BreakfastSounds extends JFrame {
                 KeybindRecorder.cancelKeybindRecording();
             }
         });
+    }
+
+    private void setDefaultWindowStyle(JDialog settingsPopup) {
+        settingsPopup.setAlwaysOnTop(false);
+        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        settingsPopup.setMaximumSize(new Dimension(350, 255));
+        settingsPopup.setMinimumSize(new Dimension(350, 255));
+        settingsPopup.setPreferredSize(new Dimension(350, 255));
+        settingsPopup.setResizable(false);
     }
 
     private void resetKeyListener() {

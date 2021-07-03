@@ -3,6 +3,7 @@ package net.breakfaststudios.util;
 import java.awt.*;
 
 public class Converter {
+
     public static int getKeyCode(String var0) {
 
         if (Toolkit.getProperty("AWT.undefined", "Undefined").equals(var0)) {
