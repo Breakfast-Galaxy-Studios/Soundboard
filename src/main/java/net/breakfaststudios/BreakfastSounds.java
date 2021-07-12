@@ -2,6 +2,7 @@ package net.breakfaststudios;
 
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
+import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
@@ -9,20 +10,23 @@ import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
-
+import org.json.JSONObject;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,12 +35,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
 public class BreakfastSounds extends JFrame {
 
-    public static final String os = System.getProperty("os.name").toLowerCase();
+    // For every release make sure this is changed. It should correspond to the github tag for the release.
+    private static final String currentVersion = "v1.1";
+
+
+    private static final String os = Util.os;
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -45,8 +56,9 @@ public class BreakfastSounds extends JFrame {
     private JDialog recordKeybindDialog;
 
     /**
-     * Creates new form SoundUi
+     * Creates the UI and init's listeners.
      */
+
     public BreakfastSounds() {
         initComponents();
     }
@@ -54,13 +66,33 @@ public class BreakfastSounds extends JFrame {
     public static void main(String[] args) {
         soundBoard = new SoundBoard();
 
+        /**
+         * Make sure autoupdater is deleted if it exist.
+         * This is to minimize security risk.
+         */
+
+        if(Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))){
+            try {
+                Files.delete(Path.of(Util.getMainDirectory() + "autoupdater.jar"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception ignore) { }
+        } catch (Exception ignore){
+            try {
+                UIManager.setLookAndFeel(new NimbusLookAndFeel());
+            } catch (Exception ignored) { }
+        }
 
-        /* Create and display the form */
+
+        // Create and display the UI
         makeAppDir();
-        EventQueue.invokeLater(() -> new BreakfastSounds().setVisible(true));
+        EventQueue.invokeLater(() -> new BreakfastSounds());
 
         //Register native hook so we can actually listen for keystrokes
         try {
@@ -77,8 +109,9 @@ public class BreakfastSounds extends JFrame {
         if (prop != null) {
             SELECTED_AUDIO_DEVICE = prop.getProperty("soundOutput");
         } else {
+            // Makes new config if it doesn't exist
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false);
+            Util.updateSettings(soundOutput, false, currentVersion, false);
             Properties newProp = Util.getSettingsFile();
             if (newProp != null) {
                 SELECTED_AUDIO_DEVICE = newProp.getProperty("soundOutput");
@@ -95,9 +128,38 @@ public class BreakfastSounds extends JFrame {
         logger.setLevel(Level.OFF);
         logger.setUseParentHandlers(false);
 
+
         //Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
+
+
+        // -----------------------------------------------------------------
+        // Auto Updater
+        // -----------------------------------------------------------------
+
+        try {
+            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+            HttpGet request = new HttpGet("https://api.github.com/repos/Breakfast-Galaxy-Studios/Soundboard/releases/latest");
+            request.addHeader("accept", "application/vnd.github.v3+json");
+            CloseableHttpResponse result = httpClient.execute(request);
+            String js = EntityUtils.toString(result.getEntity(), "UTF-8");
+            result.close();
+            httpClient.close();
+            JSONObject json = new JSONObject(js);
+            String version = json.getString("tag_name");
+            if (!version.equals(Util.getSettingsFile().getProperty("version"))){
+                JOptionPane updatePrompt = new JOptionPane("");
+                updatePrompt.setMessageType(JOptionPane.YES_NO_OPTION);
+                updatePrompt.setVisible(true);
+                int updateResult = JOptionPane.showConfirmDialog(null,"A new update is available. Would you like to update?", "New Soundboard Update Available",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if(updateResult == JOptionPane.YES_OPTION){
+                    Updater.updater(version);
+                }
+            }
+        } catch (IOException ignored) { }
 
     }
 
@@ -121,7 +183,6 @@ public class BreakfastSounds extends JFrame {
     }
 
     private void initComponents() {
-
         soundAddMenu = new JDialog();
         settingsPopup = new JDialog();
         recordKeybindDialog = new JDialog();
@@ -154,15 +215,30 @@ public class BreakfastSounds extends JFrame {
         JButton ConfirmSettings = new JButton();
         JButton cancelSettings = new JButton();
         JPanel recordKeybindPanel = new JPanel();
+        JLabel openToTray = new JLabel("Open To Tray:");
+        JCheckBox openToTrayCheckbox = new JCheckBox();
+
+
+
 
         hiddenTextField.setEditable(false);
         hiddenTextField.setVisible(false);
 
         settingsPopup.setTitle("Settings");
-        setDefaultWindowStyle(settingsPopup);
+        settingsPopup.setAlwaysOnTop(false);
+        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        settingsPopup.setMaximumSize(new Dimension(350, 175));
+        settingsPopup.setMinimumSize(new Dimension(350, 175));
+        settingsPopup.setPreferredSize(new Dimension(350, 175));
+        settingsPopup.setResizable(false);
 
         soundAddMenu.setTitle("Add Sound");
-        setDefaultWindowStyle(soundAddMenu);
+        soundAddMenu.setAlwaysOnTop(false);
+        soundAddMenu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        soundAddMenu.setMaximumSize(new Dimension(350, 255));
+        soundAddMenu.setMinimumSize(new Dimension(350, 255));
+        soundAddMenu.setPreferredSize(new Dimension(350, 255));
+        soundAddMenu.setResizable(false);
 
         jPanel1.setMaximumSize(new Dimension(350, 255));
         jPanel1.setMinimumSize(new Dimension(350, 255));
@@ -172,28 +248,16 @@ public class BreakfastSounds extends JFrame {
         recordKeybindDialog.setMinimumSize(new Dimension(200, 115));
         recordKeybindDialog.setPreferredSize(new Dimension(200, 115));
         recordKeybindDialog.setResizable(false);
-
-
         cancelAddSound.setText("Cancel");
-
         fileLabel.setText("File:");
-
         newSoundNameField.setMaximumSize(new Dimension(7, 20));
-
         volumeSlider.setMaximumSize(new Dimension(36, 26));
-
         newSoundFileField.setEditable(false);
-
         keybindLabel.setText("Key/s:");
-
         recordKeybind.setText("jButton1");
-
         confirmAddSound.setText("Confirm");
-
         volumeLabel.setText("Volume:");
-
         fileAdd.setText("jButton1");
-
         nameLabel.setText("Name:");
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
@@ -344,6 +408,11 @@ public class BreakfastSounds extends JFrame {
                                         .addGap(10, 10, 10)
                                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                 .addGroup(settingsPanelLayout.createSequentialGroup()
+                                                        .addComponent(openToTray)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(openToTrayCheckbox)
+                                                        .addGap(0,0,32767))
+                                                .addGroup(settingsPanelLayout.createSequentialGroup()
                                                         .addComponent(keyboardCompatLabel)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                         .addComponent(keyboardCompatCheckbox)
@@ -361,30 +430,25 @@ public class BreakfastSounds extends JFrame {
         settingsPanelLayout.setVerticalGroup(settingsPanelLayout
                 .createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(settingsPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(soundOutputLabel, -2, 25, -2)
                                 .addComponent(soundOutputDropdown, -2, -1, -2))
-                        .addGap(23, 23, 23)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                 .addComponent(keyboardCompatCheckbox)
                                 .addComponent(keyboardCompatLabel, -2, 25, -2))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addComponent(openToTrayCheckbox)
+                                .addComponent(openToTray, -2, 25, -2))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(ConfirmSettings)
                                 .addComponent(cancelSettings))
                         .addContainerGap()));
 
-        GroupLayout settingsPopupLayout = new GroupLayout(settingsPopup.getContentPane());
-        settingsPopup.getContentPane().setLayout(settingsPopupLayout);
-        settingsPopupLayout.setHorizontalGroup(
-                settingsPopupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(settingsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        settingsPopupLayout.setVerticalGroup(
-                settingsPopupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(settingsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        settingsPopup.add(settingsPanel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("BGS Soundboard");
@@ -417,6 +481,7 @@ public class BreakfastSounds extends JFrame {
         addButton.setMaximumSize(new Dimension(83, 23));
         addButton.setMinimumSize(new Dimension(83, 23));
         addButton.setPreferredSize(new Dimension(83, 23));
+
 
         removeButton.setText("Remove...");
 
@@ -477,7 +542,9 @@ public class BreakfastSounds extends JFrame {
         recordKeybindDialog.setVisible(false);
         keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
 
+
         pack();
+
 
         // -----------------------------------------------------------------
         // -----------------------------------------------------------------
@@ -497,6 +564,7 @@ public class BreakfastSounds extends JFrame {
             if (settings != null) {
                 soundOutputDropdown.setSelectedItem(settings.getProperty("soundOutput"));
                 keyboardCompatCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("keyCompatMode")));
+                openToTrayCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("openToTray")));
             }
             settingsPopup.setVisible(true);
         });
@@ -529,59 +597,10 @@ public class BreakfastSounds extends JFrame {
 
         ConfirmSettings.addActionListener(e -> {
             String soundOutput = (String) soundOutputDropdown.getSelectedItem();
-            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected());
+            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), currentVersion, openToTrayCheckbox.isSelected());
             SELECTED_AUDIO_DEVICE = soundOutput;
             settingsPopup.setVisible(false);
         });
-
-
-        // -----------------------------------------------------------------
-        // Minimize to system tray on windows / supported OS's
-        // -----------------------------------------------------------------
-        if (SystemTray.isSupported()) {
-            SystemTray tray = SystemTray.getSystemTray();
-            Image image = Toolkit.getDefaultToolkit().getImage("src/main/resources/icon.png");
-            TrayIcon trayIcon = new TrayIcon(image, "BGS-Soundboard");
-            trayIcon.setImageAutoSize(true);
-            trayIcon.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    setVisible(true);
-                    tray.remove(trayIcon);
-                    setState(NORMAL);
-                }
-            });
-
-            addWindowStateListener(e -> {
-                // If minimized put in tray
-                if (e.getNewState() == ICONIFIED) {
-                    try {
-                        tray.add(trayIcon);
-                        setVisible(false);
-                    } catch (AWTException ignored) {
-                    }
-                }
-
-                /* Might be necessary on other OS
-                if(e.getNewState()==7){
-                    try{
-                        tray.add(trayIcon);
-                        setVisible(false);
-                    }catch(AWTException ignored){ }
-                }
-                */
-
-                // Both make sure that when it is pulled from system tray it opens fully.
-                if (e.getNewState() == MAXIMIZED_BOTH) {
-                    tray.remove(trayIcon);
-                    setVisible(true);
-                }
-                if (e.getNewState() == NORMAL) {
-                    tray.remove(trayIcon);
-                    setVisible(true);
-                }
-            });
-        }
 
 
         // -----------------------------------------------------------------
@@ -678,7 +697,7 @@ public class BreakfastSounds extends JFrame {
         // -----------------------------------------------------------------
         fileAdd.addActionListener(e -> PlatformImpl.startup(() -> {
             FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter ext = new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", ".au", ".ogg", ".flac");
+            FileChooser.ExtensionFilter ext = new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.au", "*.ogg", "*.flac");
             fileChooser.getExtensionFilters().add(ext);
             File file = fileChooser.showOpenDialog(null);
 
@@ -807,15 +826,72 @@ public class BreakfastSounds extends JFrame {
                 KeybindRecorder.cancelKeybindRecording();
             }
         });
+
+
+        // All things to do with putting app to system tray, and sets the window visible.
+        minimizeToTray();
     }
 
-    private void setDefaultWindowStyle(JDialog settingsPopup) {
-        settingsPopup.setAlwaysOnTop(false);
-        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        settingsPopup.setMaximumSize(new Dimension(350, 255));
-        settingsPopup.setMinimumSize(new Dimension(350, 255));
-        settingsPopup.setPreferredSize(new Dimension(350, 255));
-        settingsPopup.setResizable(false);
+    private void minimizeToTray(){
+        // -----------------------------------------------------------------
+        // Minimize to system tray on windows / supported OS's
+        // -----------------------------------------------------------------
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage("icon.png");
+            TrayIcon trayIcon = new TrayIcon(image, "BGS-Soundboard");
+            trayIcon.setImageAutoSize(true);
+            trayIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    setVisible(true);
+                    tray.remove(trayIcon);
+                    setState(NORMAL);
+                }
+            });
+            addWindowStateListener(e -> {
+                // If minimized put in tray
+                if (e.getNewState() == ICONIFIED) {
+                    try {
+                        tray.add(trayIcon);
+                        setVisible(false);
+                    } catch (AWTException ignored) {
+                    }
+                }
+                /* Might be necessary on other OS
+                if(e.getNewState()==7){
+                    try{
+                        tray.add(trayIcon);
+                        setVisible(false);
+                    }catch(AWTException ignored){ }
+                }
+                */
+
+                // Both make sure that when it is pulled from system tray it opens fully.
+                if (e.getNewState() == MAXIMIZED_BOTH) {
+                    tray.remove(trayIcon);
+                    setVisible(true);
+                }
+                if (e.getNewState() == NORMAL) {
+                    tray.remove(trayIcon);
+                    setVisible(true);
+                }
+            });
+            boolean openToTrayExist = Boolean.parseBoolean(Util.getSettingsFile().getProperty("openToTray"));
+            if (openToTrayExist){
+                try {
+                    tray.add(trayIcon);
+                    setVisible(false);
+                } catch (AWTException e) {
+                    setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Failed to open to tray.");
+                }
+            } else {
+                setVisible(true);
+            }
+        } else {
+            setVisible(true);
+        }
     }
 
     private void resetKeyListener() {
