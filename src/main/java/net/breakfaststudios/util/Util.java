@@ -8,8 +8,9 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 public class Util {
+    public static final String os = System.getProperty("os.name").toLowerCase();
+
     public static String getSoundDirectory() {
-        String os = BreakfastSounds.os;
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\sounds\\";
         else if (os.contains("mac") || os.contains("nux"))
@@ -19,7 +20,6 @@ public class Util {
     }
 
     public static String getMainDirectory() {
-        String os = BreakfastSounds.os;
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\";
         else if (os.contains("mac") || os.contains("nux"))
@@ -28,11 +28,13 @@ public class Util {
             return System.getProperty("user.dir") + "/BGS-Soundboard/";
     }
 
-    public static void updateSettings(String soundOutput, boolean keyCompatMode) {
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, String version, boolean openToTray) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
+        settings.setProperty("version", version);
+        settings.setProperty("openToTray", String.valueOf(openToTray));
         if (!Files.exists(Path.of(settingsFile.getPath()))) {
             try {
                 settingsFile.createNewFile();
