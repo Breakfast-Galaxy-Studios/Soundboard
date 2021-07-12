@@ -24,3 +24,6 @@ Almost all sound formats are potentially playable, but nothing other than WAVE a
 If you would like to convert sound files to `.wav`, we recommend using [this site.](https://convertio.co/mp3-wav/)
 <br>Additionally you can convert MP3 files to WAV files in [Audacity](https://www.audacityteam.org/). (Tutorial Coming soon...)
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
+
+## Known issues
+- Tray icon doesn't appear.
