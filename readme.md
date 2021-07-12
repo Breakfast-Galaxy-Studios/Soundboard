@@ -2,10 +2,10 @@
 
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.
 
-This project is heavy inspired by [DCSB,]("https://github.com/kalejin/dcsb") the main difference being that this one can be easily used on all platforms.
+This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms.
 
 ## Usage
-To run this program, you must have Java 16 installed, which can be found [here.]("https://www.oracle.com/java/technologies/javase-jdk16-downloads.html") <br>
+To run this program, you must have Java 16 installed, which can be found either [here](https://www.oracle.com/java/technologies/javase-jdk16-downloads.html) or [here.](https://jdk.java.net/16/) <br>
 If you wish to have it output to your microphone, you will likely need to use a virtual audio cable. 
 
 ### Virtual audio cables / mixers
