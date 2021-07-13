@@ -27,3 +27,4 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 
 ## Known issues
 - Tray icon doesn't appear.
+- v1.1 will always tell you there is an update
