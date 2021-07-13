@@ -86,7 +86,7 @@ public class BreakfastSounds extends JFrame {
          */
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))){
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, currentVersion, false);
+            Util.updateSettings(soundOutput, false, false);
         } else {
             Properties settings = Util.getSettingsFile();
             Properties validateSettings = new Properties();
@@ -94,11 +94,6 @@ public class BreakfastSounds extends JFrame {
                 validateSettings.setProperty("openToTray", String.valueOf(false));
             } else {
                 validateSettings.setProperty("openToTray", settings.getProperty("openToTray"));
-            }
-            if (settings.getProperty("version") == null){
-                validateSettings.setProperty("version", currentVersion);
-            } else {
-                validateSettings.setProperty("version", settings.getProperty("version"));
             }
             if(settings.getProperty("keyCompatMode") == null){
                 validateSettings.setProperty("keyCompatMode", String.valueOf(false));
@@ -112,7 +107,7 @@ public class BreakfastSounds extends JFrame {
             }
 
             if (!validateSettings.equals(settings)){
-                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), validateSettings.getProperty("version"), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
+                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
             }
         }
 
@@ -148,7 +143,7 @@ public class BreakfastSounds extends JFrame {
         } else {
             // Makes new config if it doesn't exist
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, currentVersion, false);
+            Util.updateSettings(soundOutput, false, false);
             Properties newProp = Util.getSettingsFile();
             if (newProp != null) {
                 SELECTED_AUDIO_DEVICE = newProp.getProperty("soundOutput");
@@ -185,7 +180,7 @@ public class BreakfastSounds extends JFrame {
             httpClient.close();
             JSONObject json = new JSONObject(js);
             String version = json.getString("tag_name");
-            if (!version.equals(Util.getSettingsFile().getProperty("version"))){
+            if (!version.equals(currentVersion)){
                 JOptionPane updatePrompt = new JOptionPane("");
                 updatePrompt.setMessageType(JOptionPane.YES_NO_OPTION);
                 updatePrompt.setVisible(true);
@@ -634,7 +629,7 @@ public class BreakfastSounds extends JFrame {
 
         ConfirmSettings.addActionListener(e -> {
             String soundOutput = (String) soundOutputDropdown.getSelectedItem();
-            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), currentVersion, openToTrayCheckbox.isSelected());
+            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), openToTrayCheckbox.isSelected());
             SELECTED_AUDIO_DEVICE = soundOutput;
             settingsPopup.setVisible(false);
         });
