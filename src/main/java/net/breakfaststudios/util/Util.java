@@ -26,12 +26,11 @@ public class Util {
             return System.getProperty("user.dir") + "/BGS-Soundboard/";
     }
 
-    public static void updateSettings(String soundOutput, boolean keyCompatMode, String version, boolean openToTray) {
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
-        settings.setProperty("version", version);
         settings.setProperty("openToTray", String.valueOf(openToTray));
         if (!Files.exists(Path.of(settingsFile.getPath()))) {
             try {
