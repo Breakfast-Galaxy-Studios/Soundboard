@@ -1,7 +1,5 @@
 package net.breakfaststudios.util;
 
-import net.breakfaststudios.BreakfastSounds;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,6 +53,7 @@ public class Util {
             FileInputStream file = new FileInputStream(Util.getMainDirectory() + "settings.properties");
             Properties prop = new Properties();
             prop.load(file);
+            file.close();
             return prop;
         } catch (IOException e) {
             e.printStackTrace();
