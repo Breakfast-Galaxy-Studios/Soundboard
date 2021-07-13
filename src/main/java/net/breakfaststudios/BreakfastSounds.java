@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class BreakfastSounds extends JFrame {
 
     // For every release make sure this is changed. It should correspond to the github tag for the release.
-    private static final String currentVersion = "v1.1";
+    private static final String currentVersion = "v1.1.1";
 
 
     private static final String os = Util.os;
