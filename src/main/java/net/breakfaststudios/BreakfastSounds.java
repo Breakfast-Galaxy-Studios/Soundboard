@@ -79,6 +79,43 @@ public class BreakfastSounds extends JFrame {
             }
         }
 
+        /*
+            Settings validation - Yes this is a bit messy and can be optimized
+            This was designed to be implemented in a hotfix
+            TODO: Optimize this chunk of code.
+         */
+        if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))){
+            String soundOutput = "Primary Sound Driver";
+            Util.updateSettings(soundOutput, false, currentVersion, false);
+        } else {
+            Properties settings = Util.getSettingsFile();
+            Properties validateSettings = new Properties();
+            if (settings.getProperty("openToTray") == null){
+                validateSettings.setProperty("openToTray", String.valueOf(false));
+            } else {
+                validateSettings.setProperty("openToTray", settings.getProperty("openToTray"));
+            }
+            if (settings.getProperty("version") == null){
+                validateSettings.setProperty("version", currentVersion);
+            } else {
+                validateSettings.setProperty("version", settings.getProperty("version"));
+            }
+            if(settings.getProperty("keyCompatMode") == null){
+                validateSettings.setProperty("keyCompatMode", String.valueOf(false));
+            } else {
+                validateSettings.setProperty("keyCompatMode", settings.getProperty("keyCompatMode"));
+            }
+            if (settings.getProperty("soundOutput") == null){
+                validateSettings.setProperty("soundOutput", "Primary Sound Driver");
+            } else {
+                validateSettings.setProperty("soundOutput", settings.getProperty("soundOutput"));
+            }
+
+            if (!validateSettings.equals(settings)){
+                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), validateSettings.getProperty("version"), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
+            }
+        }
+
 
         // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
