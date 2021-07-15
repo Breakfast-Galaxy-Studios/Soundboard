@@ -27,3 +27,4 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 
 ## Known issues
 - Tray icon doesn't appear.
+- If it can't fild a file, it will crash instead of trying to load the rest.
