@@ -8,7 +8,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GlobalKeyListener implements NativeKeyListener {
@@ -25,24 +25,22 @@ public class GlobalKeyListener implements NativeKeyListener {
             currentlyPressedKeys.add(e.getKeyCode());
         try {
             for (Sound sound : soundBoard.getSounds()) {
-                List<Integer> neededKeys = new ArrayList<>(Arrays.asList(sound.getKeys()));
+                List<Integer> neededKeys = new ArrayList<>();
+                Collections.addAll(neededKeys, sound.getKeys());
+
                 for (int key : currentlyPressedKeys) {
-                    if (neededKeys.get(0) == key && neededKeys.size() != 1) {
+                    if (neededKeys.get(0) == key) {
                         neededKeys.remove((Object) key);
-                    } else if (neededKeys.get(0) == key && neededKeys.size() == 1) {
-                        neededKeys.clear();
                     } else if (neededKeys.contains(key)) {
                         break;
                     }
                 }
-                if (neededKeys.size() == 0) {
-                    SoundThread t = new SoundThread(sound.getPath(), sound.getVolume());
-                    t.start();
-                }
 
+                if (neededKeys.size() == 0) {
+                    new SoundThread(sound.getPath(), sound.getVolume()).start();
+                }
             }
-        } catch (IndexOutOfBoundsException ignored) {
-        }
+        } catch (IndexOutOfBoundsException ignored) { }
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {

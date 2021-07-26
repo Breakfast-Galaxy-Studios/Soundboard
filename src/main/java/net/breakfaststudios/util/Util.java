@@ -1,8 +1,13 @@
 package net.breakfaststudios.util;
 
+import org.jnativehook.keyboard.NativeKeyEvent;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class Util {
@@ -58,6 +63,31 @@ public class Util {
             e.printStackTrace();
             System.out.println("\n\nError occurs on first setup. If this isn't first setup there is a problem.\n\n");
             return null;
+        }
+    }
+
+    public static Integer[] intListToArray(ArrayList<Integer> list) {
+        Integer[] intArray = new Integer[list.size()];
+
+        for(int i = 0; i < intArray.length; i++) {
+            intArray[i] = list.get(i);
+        }
+
+        return intArray;
+    }
+
+    public static ArrayList<Integer> intArrayToArrayList(Integer[] array) {
+        return new ArrayList<>(Arrays.asList(array));
+    }
+
+    public static void parseRawCodeText(String rawText, ArrayList<Integer> keys, StringBuilder builder) {
+        for (String key : rawText.split("_")) {
+            if (key.equalsIgnoreCase("none"))
+                break;
+
+            int toAdd = Integer.parseInt(key);
+            keys.add(toAdd);
+            builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
         }
     }
 }

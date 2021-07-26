@@ -2,7 +2,7 @@ package net.breakfaststudios.soundboard;
 
 public class Sound {
 
-    private final Integer[] keys;
+    private Integer[] keys;
     private String name;
     private String path;
     private float volume;
@@ -39,8 +39,7 @@ public class Sound {
         this.volume = volume;
     }
 
-    public Integer[] getKeys() {
-        return keys;
-    }
+    public Integer[] getKeys() { return keys; }
 
+    public void setKeys(Integer[] newKeys){ this.keys = newKeys;}
 }

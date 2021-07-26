@@ -20,6 +20,7 @@ public class SoundThread extends Thread {
     private static Mixer.Info getSpeakers() {
         Mixer.Info speakers = null;
         Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
+
         for (Mixer.Info mi : mixerInfo) {
             if (mi.getName().equalsIgnoreCase(BreakfastSounds.SELECTED_AUDIO_DEVICE)) {
                 speakers = mi;
@@ -34,20 +35,10 @@ public class SoundThread extends Thread {
 
     @Override
     public void run() {
-        task();
-    }
-
-    private void task() {
-
-        play(path, volume);
-
-    }
-
-    private void play(String filePath, float volume) {
         AudioInputStream inputStream = null;
         AudioFormat reformatFormat = new AudioFormat(44100.0F, 16, 2, true, false);
         try {
-            inputStream = AudioSystem.getAudioInputStream(new File(filePath));
+            inputStream = AudioSystem.getAudioInputStream(new File(path));
             inputStream = AudioSystem.getAudioInputStream(reformatFormat, inputStream);
         } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
