@@ -475,14 +475,13 @@ public class UI extends JFrame {
 
                     float volume = Float.parseFloat(prop.getProperty("volume"));
 
-                    StringBuilder keyBind = new StringBuilder();
-
-
                     //Convert keybind text to Integer array and parse the text of the keybind column
+                    StringBuilder keyBind = new StringBuilder();
                     ArrayList<Integer> keys = new ArrayList<>();
                     Util.parseRawCodeText(rawKeybinds, keys, keyBind);
                     Integer[] arr = Util.intListToArray(keys);
 
+                    //Add sound to cache and rows
                     String todo = keyBind.toString();
                     soundTableModel.addRow(new Object[]{name, todo.substring(0, todo.length() - 3)});
                     getSoundBoard().addSound(new Sound(name, path, arr, volume));

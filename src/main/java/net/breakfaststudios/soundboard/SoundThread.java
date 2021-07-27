@@ -27,8 +27,6 @@ public class SoundThread extends Thread {
                 break;
             }
         }
-        // DEBUG MESSAGE. DO NOT UN COMMENT OR YOU DIE (JUST KIDDING LOL)
-        //System.out.println((speakers != null ? speakers.getName() : "<no speakers>"));
 
         return speakers;
     }
@@ -58,7 +56,7 @@ public class SoundThread extends Thread {
 
             // Start clip, wait for it to play, then close it so java can garbage collect it.
             clip.start();
-            sleep(clip.getMicrosecondLength() / 1000 + 1000);
+            sleep((clip.getMicrosecondLength() * 1000 ) + 250);
             clip.drain();
             clip.close();
         } catch (Throwable t) {

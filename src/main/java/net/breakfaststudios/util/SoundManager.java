@@ -32,9 +32,7 @@ public class SoundManager {
                         keys.add(Integer.valueOf(key));
                     }
 
-                    Integer[] arr = new Integer[keys.size()];
-                    for (int i = 0; i < keys.size(); i++)
-                        arr[i] = keys.get(i);
+                    Integer[] arr = Util.intListToArray(keys);
 
                     BreakfastSounds.getSoundBoard().addSound(new Sound(name, filePath, arr, volume));
 
@@ -64,7 +62,7 @@ public class SoundManager {
             }
         } else {
             try {
-                File soundDir = new File(String.valueOf(path));
+                File soundDir = new File(path.toString());
                 if (soundDir.mkdir()) {
                     prop.store(output, null);
                 } else {
@@ -91,13 +89,11 @@ public class SoundManager {
             SoundBoard sb = BreakfastSounds.getSoundBoard();
             sb.removeSound(sb.getSound(prop.getProperty("name")));
 
-
             /*
              * Actually Deletes the file.
              */
             file.close();
-            File actualFile = new File(filePath + fileName);
-            return actualFile.delete();
+            return Files.deleteIfExists(Path.of(filePath + fileName));
 
         } catch (Exception ignored) {
             return false;

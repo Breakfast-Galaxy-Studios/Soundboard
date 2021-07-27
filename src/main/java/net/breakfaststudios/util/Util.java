@@ -37,7 +37,7 @@ public class Util {
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
         settings.setProperty("openToTray", String.valueOf(openToTray));
-        if (!Files.exists(Path.of(settingsFile.getPath()))) {
+        if (!settingsFile.exists()) {
             try {
                 settingsFile.createNewFile();
             } catch (IOException e) {
@@ -74,10 +74,6 @@ public class Util {
         }
 
         return intArray;
-    }
-
-    public static ArrayList<Integer> intArrayToArrayList(Integer[] array) {
-        return new ArrayList<>(Arrays.asList(array));
     }
 
     public static void parseRawCodeText(String rawText, ArrayList<Integer> keys, StringBuilder builder) {
