@@ -26,4 +26,4 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
 
 ## Known issues
-- If it can't fild a file, it will crash instead of trying to load the rest.
+idk
