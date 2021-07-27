@@ -1,4 +1,5 @@
 ## Exit codes and their meanings:
+
 <hr>
 0: Program closed normally. <br>
 -1: Program forced closed.<br>

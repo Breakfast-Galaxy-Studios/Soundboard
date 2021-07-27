@@ -11,10 +11,12 @@ public class SoundThread extends Thread {
 
     private final String path;
     private final float volume;
+    private final long clipLength;
 
-    public SoundThread(String path, float volume) {
+    public SoundThread(String path, float volume, long clipLength) {
         this.path = path;
         this.volume = volume;
+        this.clipLength = clipLength;
     }
 
     private static Mixer.Info getSpeakers() {
@@ -56,7 +58,7 @@ public class SoundThread extends Thread {
 
             // Start clip, wait for it to play, then close it so java can garbage collect it.
             clip.start();
-            sleep((clip.getMicrosecondLength() * 1000 ) + 250);
+            sleep(clipLength);
             clip.drain();
             clip.close();
         } catch (Throwable t) {

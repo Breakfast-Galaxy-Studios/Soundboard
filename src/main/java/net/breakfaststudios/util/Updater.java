@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
+
 import static net.breakfaststudios.util.Util.os;
 
 public class Updater {
@@ -33,18 +34,19 @@ public class Updater {
             httpClient.close();
             JSONObject json = new JSONObject(js);
             String version = json.getString("tag_name");
-            if (!version.equals(BreakfastSounds.currentVersion)){
+            if (!version.equals(BreakfastSounds.currentVersion)) {
                 JOptionPane updatePrompt = new JOptionPane("");
                 updatePrompt.setMessageType(JOptionPane.YES_NO_OPTION);
                 updatePrompt.setVisible(true);
-                int updateResult = JOptionPane.showConfirmDialog(null,"A new update is available. Would you like to update?", "New Soundboard Update Available",
+                int updateResult = JOptionPane.showConfirmDialog(null, "A new update is available. Would you like to update?", "New Soundboard Update Available",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
-                if(updateResult == JOptionPane.YES_OPTION){
+                if (updateResult == JOptionPane.YES_OPTION) {
                     Updater.updater(version);
                 }
             }
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 
     private static void updater(String newVersion) {
@@ -61,7 +63,7 @@ public class Updater {
                     String[] newPath = jarPath.split("/");
                     String[] operatingPathArray = Arrays.copyOf(newPath, newPath.length - 1);
                     StringBuilder operatingPath = new StringBuilder(String.join("/", operatingPathArray));
-                    if (os.contains("win")){
+                    if (os.contains("win")) {
                         operatingPath.deleteCharAt(0);
                     }
                     operatingPath.append("/");
@@ -83,7 +85,7 @@ public class Updater {
         }
     }
 
-    private static void downloadFile(String saveDir){
+    private static void downloadFile(String saveDir) {
         try (BufferedInputStream in = new BufferedInputStream(new URL(Updater.autoUpdaterURL).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(saveDir + "autoupdater.jar")) {
             System.out.println("Downloading Updater.");

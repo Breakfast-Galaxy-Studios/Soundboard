@@ -7,7 +7,6 @@ import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
@@ -67,8 +66,6 @@ public class UI extends JFrame {
         JPanel recordKeybindPanel = new JPanel();
         JLabel openToTray = new JLabel("Open To Tray:");
         JCheckBox openToTrayCheckbox = new JCheckBox();
-
-
 
 
         hiddenTextField.setEditable(false);
@@ -261,7 +258,7 @@ public class UI extends JFrame {
                                                         .addComponent(openToTray)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                         .addComponent(openToTrayCheckbox)
-                                                        .addGap(0,0,32767))
+                                                        .addGap(0, 0, 32767))
                                                 .addGroup(settingsPanelLayout.createSequentialGroup()
                                                         .addComponent(keyboardCompatLabel)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
@@ -467,7 +464,7 @@ public class UI extends JFrame {
                     String path = prop.getProperty("filepath");
 
                     File f = new File(path);
-                    if(!f.exists()) {
+                    if (!f.exists()) {
                         file.close();
                         new File(Util.getSoundDirectory() + s).delete();
                         throw new Exception();
@@ -658,7 +655,7 @@ public class UI extends JFrame {
         minimizeToTray();
     }
 
-    private void minimizeToTray(){
+    private void minimizeToTray() {
         // -----------------------------------------------------------------
         // Minimize to system tray on windows / supported OS's
         // -----------------------------------------------------------------
@@ -704,7 +701,7 @@ public class UI extends JFrame {
                 }
             });
             boolean openToTrayExist = Boolean.parseBoolean(Util.getSettingsFile().getProperty("openToTray"));
-            if (openToTrayExist){
+            if (openToTrayExist) {
                 try {
                     tray.add(trayIcon);
                     setVisible(false);

@@ -1,18 +1,12 @@
 package net.breakfaststudios;
 
-import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.util.Util;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyListener;
-import org.json.JSONObject;
+
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
@@ -25,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
 public class BreakfastSounds {
 
     /*
@@ -33,9 +26,8 @@ public class BreakfastSounds {
      *
      */
     public static final String currentVersion = "v1.2";
-
-    public static String SELECTED_AUDIO_DEVICE;
     protected static final String os = Util.os;
+    public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
 
@@ -59,7 +51,7 @@ public class BreakfastSounds {
          *
          */
 
-        if(Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))){
+        if (Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))) {
             try {
                 Files.delete(Path.of(Util.getMainDirectory() + "autoupdater.jar"));
             } catch (IOException e) {
@@ -70,7 +62,7 @@ public class BreakfastSounds {
         /*
          * Settings validation
          */
-        if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))){
+        if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
             Util.updateSettings(soundOutput, false, false);
         } else {
@@ -78,16 +70,16 @@ public class BreakfastSounds {
             Properties validateSettings = new Properties();
 
             assert settings != null;
-            for(Object key : settings.keySet()) {
+            for (Object key : settings.keySet()) {
                 String keyAsString = (String) key;
-                if (settings.getProperty(keyAsString) == null){
-                    if(key.equals("soundOutput")) {
+                if (settings.getProperty(keyAsString) == null) {
+                    if (key.equals("soundOutput")) {
                         validateSettings.setProperty(keyAsString, "Primary Sound Driver");
                         continue;
                     }
                     validateSettings.setProperty(keyAsString, "false");
                 } else {
-                    if(key.equals("soundOutput")) {
+                    if (key.equals("soundOutput")) {
                         validateSettings.setProperty(keyAsString, settings.getProperty("soundOutput"));
                         continue;
                     }
@@ -95,7 +87,7 @@ public class BreakfastSounds {
                 }
             }
 
-            if (!validateSettings.equals(settings)){
+            if (!validateSettings.equals(settings)) {
                 Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
             }
         }
@@ -104,10 +96,11 @@ public class BreakfastSounds {
         // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception ignore){
+        } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
 

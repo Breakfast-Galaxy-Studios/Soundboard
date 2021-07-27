@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GlobalKeyListener implements NativeKeyListener {
 
-    public static ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
+    private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
 
     public GlobalKeyListener() {
@@ -23,28 +23,33 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (!currentlyPressedKeys.contains(e.getKeyCode()))
             currentlyPressedKeys.add(e.getKeyCode());
+        if(currentlyPressedKeys.isEmpty())
+            return;
         try {
+            List<Integer> neededKeys = new ArrayList<>();
             for (Sound sound : soundBoard.getSounds()) {
-                List<Integer> neededKeys = new ArrayList<>();
+
                 Collections.addAll(neededKeys, sound.getKeys());
 
                 for (int key : currentlyPressedKeys) {
                     if (neededKeys.get(0) == key) {
-                        neededKeys.remove((Object) key);
+                        neededKeys.remove((Integer) key);
                     } else if (neededKeys.contains(key)) {
                         break;
                     }
                 }
 
                 if (neededKeys.size() == 0) {
-                    new SoundThread(sound.getPath(), sound.getVolume()).start();
+                    new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()).start();
                 }
+                neededKeys.clear();
             }
-        } catch (IndexOutOfBoundsException ignored) { }
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-        currentlyPressedKeys.remove((Object) e.getKeyCode());
+        currentlyPressedKeys.remove((Integer) e.getKeyCode());
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) {

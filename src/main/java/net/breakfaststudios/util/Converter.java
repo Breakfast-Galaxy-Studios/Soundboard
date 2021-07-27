@@ -6,6 +6,7 @@ public class Converter {
 
     /**
      * Stupid class i hate this class.
+     *
      * @param var0 The character you need the code of as a string
      * @return key code int
      */

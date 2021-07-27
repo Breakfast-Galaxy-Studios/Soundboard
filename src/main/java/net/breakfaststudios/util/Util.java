@@ -3,11 +3,7 @@ package net.breakfaststudios.util;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 public class Util {
@@ -69,7 +65,7 @@ public class Util {
     public static Integer[] intListToArray(ArrayList<Integer> list) {
         Integer[] intArray = new Integer[list.size()];
 
-        for(int i = 0; i < intArray.length; i++) {
+        for (int i = 0; i < intArray.length; i++) {
             intArray[i] = list.get(i);
         }
 
