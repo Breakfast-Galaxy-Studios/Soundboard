@@ -24,7 +24,7 @@ public class SoundThread extends Thread {
         Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
 
         for (Mixer.Info mi : mixerInfo) {
-            if (mi.getName().equalsIgnoreCase(BreakfastSounds.SELECTED_AUDIO_DEVICE)) {
+            if (mi.getName().equals(BreakfastSounds.SELECTED_AUDIO_DEVICE)) {
                 speakers = mi;
                 break;
             }

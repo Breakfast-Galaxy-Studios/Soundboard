@@ -67,9 +67,11 @@ public class UI extends JFrame {
         JLabel openToTray = new JLabel("Open To Tray:");
         JCheckBox openToTrayCheckbox = new JCheckBox();
 
-
         hiddenTextField.setEditable(false);
         hiddenTextField.setVisible(false);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon.png"));
+        setIconImage(icon);
 
         settingsPopup.setTitle("Settings");
         settingsPopup.setAlwaysOnTop(false);

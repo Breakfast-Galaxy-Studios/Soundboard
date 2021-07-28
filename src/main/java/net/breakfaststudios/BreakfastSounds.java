@@ -31,6 +31,7 @@ public class BreakfastSounds {
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
 
+
     /**
      * Creates the UI and init's listeners.
      */
@@ -46,7 +47,7 @@ public class BreakfastSounds {
 
         /*
          *
-         * Make sure AutoUpdater is deleted if it exist.
+         * Make sure AutoUpdater is deleted if it exists.
          * This is to minimize security risk.
          *
          */
