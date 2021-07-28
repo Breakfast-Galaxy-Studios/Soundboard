@@ -2,6 +2,7 @@ package net.breakfaststudios;
 
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
+import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -51,7 +52,6 @@ public class BreakfastSounds {
          * This is to minimize security risk.
          *
          */
-
         if (Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))) {
             try {
                 Files.delete(Path.of(Util.getMainDirectory() + "autoupdater.jar"));
@@ -59,6 +59,8 @@ public class BreakfastSounds {
                 e.printStackTrace();
             }
         }
+
+        Updater.runAutoUpdater();
 
         /*
          * Settings validation
