@@ -111,19 +111,6 @@ public class UI extends JFrame {
         componentArrayList.add(soundOutputLabel);
 
 
-        // Buttons
-        /*
-        componentArrayList.add(recordKeybind);
-        componentArrayList.add(confirmAddSound);
-        componentArrayList.add(cancelAddSound);
-        componentArrayList.add(fileAdd);
-        componentArrayList.add(addButton);
-        componentArrayList.add(removeButton);
-        componentArrayList.add(ConfirmSettings);
-        componentArrayList.add(cancelSettings);
-        componentArrayList.add(volumeSlider);
-        */
-
         // Panels
         componentArrayList.add(settingsPanel);
         componentArrayList.add(jPanel2);
@@ -135,6 +122,18 @@ public class UI extends JFrame {
         componentArrayList.add(newKeybindField);
         componentArrayList.add(newSoundFileField);
         componentArrayList.add(hiddenTextField);
+
+        // Button arraylist because they have to be styled differently
+        // Buttons
+        ArrayList<JButton> buttonArrayList = new ArrayList<>();
+        buttonArrayList.add(recordKeybind);
+        buttonArrayList.add(confirmAddSound);
+        buttonArrayList.add(cancelAddSound);
+        buttonArrayList.add(fileAdd);
+        buttonArrayList.add(addButton);
+        buttonArrayList.add(removeButton);
+        buttonArrayList.add(ConfirmSettings);
+        buttonArrayList.add(cancelSettings);
 
         // -----------------------------------------------------------------
         // End of arraylist creation
@@ -739,8 +738,15 @@ public class UI extends JFrame {
                 j.setOpaque(true);
             }
 
+            for (JButton button : buttonArrayList){
+                button.setOpaque(true);
+                button.setBackground(grey);
+            }
+
             tablePane.getViewport().setBackground(grey);
-            // tablePane.setBorder(BorderFactory.createLineBorder(white));
+            soundTable.getTableHeader().setBackground(grey);
+            soundTable.getTableHeader().setForeground(white);
+
             soundTable.setForeground(white);
             soundTable.setBackground(grey);
             menuBar.setBackground(grey);
