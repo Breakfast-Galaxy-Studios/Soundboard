@@ -38,7 +38,7 @@ public class BreakfastSounds {
      */
 
     public BreakfastSounds() {
-
+        System.out.println("starting soundboard");
         new UI().build();
     }
 
