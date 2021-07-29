@@ -23,8 +23,7 @@ import java.util.logging.Logger;
 public class BreakfastSounds {
 
     /*
-     * //TODO For every release make sure this is changed. It should correspond to the github tag for the release.
-     *
+     * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
     public static final String currentVersion = "v1.3.1";
     protected static final String os = Util.os;
@@ -47,10 +46,7 @@ public class BreakfastSounds {
         Properties settings = null;
 
         /*
-         *
          * Make sure AutoUpdater is deleted if it exists.
-         * This is to minimize security risk.
-         *
          */
         if (Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))) {
             try {
@@ -64,7 +60,7 @@ public class BreakfastSounds {
 
         /*
          * Settings validation
-         */
+        todo undo this
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
             Util.updateSettings(soundOutput, false, false);
@@ -94,7 +90,7 @@ public class BreakfastSounds {
                 Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
             }
         }
-
+        */
 
         // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
@@ -127,12 +123,7 @@ public class BreakfastSounds {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
         } else {
             // Makes new config if it doesn't exist
-            String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, false);
-
-            // If it still doesn't exist there is a problem.
-            JOptionPane.showMessageDialog(null, "Fatal error when reading file. \nPlease report this error to the Github Repo.");
-            System.exit(125);
+            SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
         }
 
 
@@ -144,8 +135,6 @@ public class BreakfastSounds {
         //Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
-
-
     }
 
     private static void makeAppDir() {
@@ -160,7 +149,6 @@ public class BreakfastSounds {
                 System.exit(3);
             }
         }
-
     }
 
     public static SoundBoard getSoundBoard() {

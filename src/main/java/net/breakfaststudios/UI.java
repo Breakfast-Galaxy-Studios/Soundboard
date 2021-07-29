@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Properties;
 
 import static net.breakfaststudios.BreakfastSounds.*;
@@ -32,40 +33,113 @@ public class UI extends JFrame {
 
 
     public void build() {
+        // -----------------------------------------------------------------
+        // Define all components
+        // -----------------------------------------------------------------
+
+        // Checkboxes
+        JCheckBox openToTrayCheckbox = new JCheckBox();
+        JCheckBox keyboardCompatCheckbox = new JCheckBox();
+
+        // Panels and dialog boxes
         soundAddMenu = new JDialog();
         settingsPopup = new JDialog();
         recordKeybindDialog = new JDialog();
-        JLabel keyboardCompatLabel = new JLabel();
-        JCheckBox keyboardCompatCheckbox = new JCheckBox();
+        JPanel recordKeybindPanel = new JPanel();
+        JPanel settingsPanel = new JPanel();
+        JPanel jPanel2 = new JPanel();
         JPanel jPanel1 = new JPanel();
-        JButton cancelAddSound = new JButton();
-        JLabel fileLabel = new JLabel();
+
+        // Text fields
         JTextField newSoundNameField = new JTextField();
         JTextField newKeybindField = new JTextField();
-        JSlider volumeSlider = new JSlider();
         JTextField newSoundFileField = new JTextField();
+        JTextField hiddenTextField = new JTextField();
+
+        // Labels
+        JLabel openToTray = new JLabel("Open To Tray:");
+        JLabel keyboardCompatLabel = new JLabel();
+        JLabel fileLabel = new JLabel();
         JLabel keybindLabel = new JLabel();
+        JLabel volumeLabel = new JLabel();
+        JLabel nameLabel = new JLabel();
+        JLabel soundOutputLabel = new JLabel();
+
+        // Buttons
         JButton recordKeybind = new JButton();
         JButton confirmAddSound = new JButton();
-        JLabel volumeLabel = new JLabel();
+        JButton cancelAddSound = new JButton();
         JButton fileAdd = new JButton();
-        JLabel nameLabel = new JLabel();
-        JPanel jPanel2 = new JPanel();
-        JScrollPane tablePane = new JScrollPane();
-        JTable soundTable = new JTable();
         JButton addButton = new JButton();
         JButton removeButton = new JButton();
-        JMenuBar menuBar = new JMenuBar();
-        JMenu settingsMenu = new JMenu();
-        JTextField hiddenTextField = new JTextField();
-        JPanel settingsPanel = new JPanel();
-        JLabel soundOutputLabel = new JLabel();
-        JComboBox<String> soundOutputDropdown = new JComboBox<>();
         JButton ConfirmSettings = new JButton();
         JButton cancelSettings = new JButton();
-        JPanel recordKeybindPanel = new JPanel();
-        JLabel openToTray = new JLabel("Open To Tray:");
-        JCheckBox openToTrayCheckbox = new JCheckBox();
+
+
+        // Other components
+        JScrollPane tablePane = new JScrollPane();
+        JTable soundTable = new JTable();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu settingsMenu = new JMenu();
+        JComboBox<String> soundOutputDropdown = new JComboBox<>();
+        JSlider volumeSlider = new JSlider();
+
+
+        // -----------------------------------------------------------------
+        // TODO: I'm sure there is a better way of doing this
+        // Group components together to make it easier to style.
+        // -----------------------------------------------------------------
+
+        ArrayList<JComponent> componentArrayList = new ArrayList<>();
+        // Other
+        componentArrayList.add(tablePane);
+
+        // componentArrayList.add(menuBar);
+        // componentArrayList.add(settingsMenu);
+        // componentArrayList.add(soundOutputDropdown);
+        componentArrayList.add(volumeSlider);
+        componentArrayList.add(keyboardCompatCheckbox);
+        componentArrayList.add(openToTrayCheckbox);
+
+        // Labels
+        componentArrayList.add(openToTray);
+        componentArrayList.add(keyboardCompatLabel);
+        componentArrayList.add(fileLabel);
+        componentArrayList.add(keybindLabel);
+        componentArrayList.add(volumeLabel);
+        componentArrayList.add(nameLabel);
+        componentArrayList.add(soundOutputLabel);
+
+
+        // Buttons
+        /*
+        componentArrayList.add(recordKeybind);
+        componentArrayList.add(confirmAddSound);
+        componentArrayList.add(cancelAddSound);
+        componentArrayList.add(fileAdd);
+        componentArrayList.add(addButton);
+        componentArrayList.add(removeButton);
+        componentArrayList.add(ConfirmSettings);
+        componentArrayList.add(cancelSettings);
+        componentArrayList.add(volumeSlider);
+        */
+
+        // Panels
+        componentArrayList.add(settingsPanel);
+        componentArrayList.add(jPanel2);
+        componentArrayList.add(jPanel1);
+        componentArrayList.add(recordKeybindPanel);
+
+        // textfields
+        componentArrayList.add(newSoundNameField);
+        componentArrayList.add(newKeybindField);
+        componentArrayList.add(newSoundFileField);
+        componentArrayList.add(hiddenTextField);
+
+        // -----------------------------------------------------------------
+        // End of arraylist creation
+        // -----------------------------------------------------------------
+
 
         hiddenTextField.setEditable(false);
         hiddenTextField.setVisible(false);
@@ -307,7 +381,7 @@ public class UI extends JFrame {
 
                 },
                 new String[]{
-                        "Name", "Keybind"
+
                 }
         ) {
             final boolean[] canEdit = new boolean[]{
@@ -318,6 +392,8 @@ public class UI extends JFrame {
                 return canEdit[columnIndex];
             }
         };
+        String[] cols = {"Name", "Keybind"};
+        soundTableModel.setColumnIdentifiers(cols);
         soundTable.setModel(soundTableModel);
         tablePane.setViewportView(soundTable);
         if (soundTable.getColumnModel().getColumnCount() > 0) {
@@ -616,8 +692,7 @@ public class UI extends JFrame {
         KeyListener keybindListener = new KeyListener() {
             public void keyTyped(KeyEvent e) {
             }
-
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed( KeyEvent e) {
                 if (!characters.contains(KeyEvent.getKeyText(e.getKeyCode())))
                     characters.add(KeyEvent.getKeyText(e.getKeyCode()));
             }
@@ -652,6 +727,28 @@ public class UI extends JFrame {
             }
         });
 
+        // Dark mode
+        if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")){
+            Color grey = new Color(51,51,51);
+            Color white = new Color(255,255,255);
+            // Changes almost all components, some refuse to be styled this way.
+            for (JComponent j : componentArrayList){
+                j.setBackground(grey);
+                j.setForeground(white);
+                j.setOpaque(true);
+            }
+
+            tablePane.getViewport().setBackground(grey);
+            // tablePane.setBorder(BorderFactory.createLineBorder(white));
+            soundTable.setForeground(white);
+            soundTable.setBackground(grey);
+            menuBar.setBackground(grey);
+
+
+            getContentPane().setBackground(grey);
+            getContentPane().setForeground(white);
+            setForeground(new Color(255,255,255));
+        }
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
@@ -659,7 +756,7 @@ public class UI extends JFrame {
 
     private void minimizeToTray() {
         // -----------------------------------------------------------------
-        // Minimize to system tray on windows / supported OS's
+        // Minimize to system tray on Windows / supported OS's
         // -----------------------------------------------------------------
         if (SystemTray.isSupported()) {
             SystemTray tray = SystemTray.getSystemTray();
@@ -675,7 +772,7 @@ public class UI extends JFrame {
                 }
             });
             addWindowStateListener(e -> {
-                // If minimized put in tray
+                // If minimized put in-tray
                 if (e.getNewState() == ICONIFIED) {
                     try {
                         tray.add(trayIcon);
