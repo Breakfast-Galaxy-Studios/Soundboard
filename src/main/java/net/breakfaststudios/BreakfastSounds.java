@@ -145,7 +145,6 @@ public class BreakfastSounds {
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
 
-
     }
 
     private static void makeAppDir() {
@@ -153,7 +152,6 @@ public class BreakfastSounds {
         if (!Files.exists(soundDir)) {
             try {
                 Files.createDirectories(soundDir);
-
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");

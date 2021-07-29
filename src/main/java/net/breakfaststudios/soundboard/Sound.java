@@ -4,6 +4,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,7 +31,9 @@ public class Sound {
             this.length = (long)(durationInSeconds * 1000) + 250;
 
         } catch (Exception exception) {
-            System.out.println("You prolly won't see this, but literally you cannot play that file.");
+            exception.printStackTrace();
+            JOptionPane.showMessageDialog(null, "You prolly won't see this, but literally you cannot play that file. (" + path + " )");
+            System.exit(90);
         }
     }
 
