@@ -395,6 +395,7 @@ public class UI extends JFrame {
         String[] cols = {"Name", "Keybind"};
         soundTableModel.setColumnIdentifiers(cols);
         soundTable.setModel(soundTableModel);
+        soundTable.getTableHeader().setOpaque(false);
         tablePane.setViewportView(soundTable);
         if (soundTable.getColumnModel().getColumnCount() > 0) {
             soundTable.getColumnModel().getColumn(0).setResizable(false);
@@ -728,7 +729,7 @@ public class UI extends JFrame {
         });
 
         // Dark mode
-        if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")){
+        if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
             Color grey = new Color(51,51,51);
             Color white = new Color(255,255,255);
             // Changes almost all components, some refuse to be styled this way.
