@@ -26,4 +26,4 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
 
 ## Known issues
-idk
+- Users on version 1.2 or 1.3 will not recieve auto-updates. 1.3.1+ or 1.1 and earlier will work.
