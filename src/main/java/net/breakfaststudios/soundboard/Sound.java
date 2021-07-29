@@ -32,7 +32,7 @@ public class Sound {
 
         } catch (Exception exception) {
             exception.printStackTrace();
-            JOptionPane.showMessageDialog(null, "You prolly won't see this, but literally you cannot play that file. (" + path + " )");
+            JOptionPane.showMessageDialog(null, "You prolly won't see this, but literally you cannot play that file. (" + path + ")");
             System.exit(90);
         }
     }
