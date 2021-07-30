@@ -543,7 +543,9 @@ public class UI extends JFrame {
             SELECTED_AUDIO_DEVICE = soundOutput;
             settingsPopup.setVisible(false);
             if (darkModeCheckbox.isSelected()){
-                JOptionPane.showMessageDialog(null, "Dark mode will be applied next time the app is launched.");
+                darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
+            } else {
+                lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
             }
         });
 
@@ -747,52 +749,93 @@ public class UI extends JFrame {
             }
         });
 
-        ImageIcon settingsIcon;
-        Image settingsImage;
-        // Dark mode stuff
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
-
-            Color grey = new Color(51,51,51);
-            Color white = new Color(255,255,255);
-
-            // Changes almost all components, some refuse to be styled this way.
-            for (JComponent j : componentArrayList){
-                j.setBackground(grey);
-                j.setForeground(white);
-                j.setOpaque(true);
-            }
-
-            for (JButton button : buttonArrayList){
-                button.setOpaque(true);
-                button.setBackground(grey);
-            }
-
-            tablePane.getViewport().setBackground(grey);
-            soundTable.getTableHeader().setBackground(grey);
-            soundTable.getTableHeader().setForeground(white);
-
-            soundTable.setForeground(white);
-            soundTable.setBackground(grey);
-
-            menuBar.setUI ( new BasicMenuBarUI(){
-                public void paint ( Graphics g, JComponent c ){
-                    g.setColor ( grey );
-                    g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
-                }
-            } );
-
-            getContentPane().setBackground(grey);
-            getContentPane().setForeground(white);
-            setForeground(new Color(255,255,255));
-            settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
+            darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         } else {
-            settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
+            lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         }
-
-        settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        settingsMenu.setIcon(settingsIcon);
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
+    }
+
+    private void darkMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
+        ImageIcon settingsIcon;
+        Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
+
+        Color grey = new Color(51,51,51);
+        Color white = new Color(255,255,255);
+
+        // Changes almost all components, some refuse to be styled this way.
+        for (JComponent j : componentArrayList){
+            j.setBackground(grey);
+            j.setForeground(white);
+            j.setOpaque(true);
+        }
+
+        for (JButton button : buttonArrayList){
+            button.setOpaque(true);
+            button.setBackground(grey);
+        }
+
+        tablePane.getViewport().setBackground(grey);
+        soundTable.getTableHeader().setBackground(grey);
+        soundTable.getTableHeader().setForeground(white);
+
+        soundTable.setForeground(white);
+        soundTable.setBackground(grey);
+
+        menuBar.setUI ( new BasicMenuBarUI(){
+            public void paint ( Graphics g, JComponent c ){
+                g.setColor ( grey );
+                g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
+            }
+        } );
+
+        getContentPane().setBackground(grey);
+        getContentPane().setForeground(white);
+        setForeground(new Color(255,255,255));
+        settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        settingsMenu.setIcon(settingsIcon);
+    }
+
+    private void lightMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
+        ImageIcon settingsIcon;
+        Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
+
+        Color black = new Color(0,0,0);
+        Color white = new Color(255,255,255);
+
+        // Changes almost all components, some refuse to be styled this way.
+        for (JComponent j : componentArrayList){
+            j.setBackground(white);
+            j.setForeground(black);
+            j.setOpaque(true);
+        }
+
+        for (JButton button : buttonArrayList){
+            button.setOpaque(true);
+            button.setBackground(white);
+        }
+
+        tablePane.getViewport().setBackground(white);
+        soundTable.getTableHeader().setBackground(white);
+        soundTable.getTableHeader().setForeground(black);
+
+        soundTable.setForeground(black);
+        soundTable.setBackground(white);
+
+        menuBar.setUI ( new BasicMenuBarUI(){
+            public void paint ( Graphics g, JComponent c ){
+                g.setColor ( white );
+                g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
+            }
+        } );
+
+        getContentPane().setBackground(white);
+        getContentPane().setForeground(black);
+        setForeground(new Color(255,255,255));
+        settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        settingsMenu.setIcon(settingsIcon);
     }
 
     private void minimizeToTray() {
