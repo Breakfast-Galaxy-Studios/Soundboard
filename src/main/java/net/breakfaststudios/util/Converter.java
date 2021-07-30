@@ -5,7 +5,7 @@ import java.awt.*;
 public class Converter {
 
     /**
-     * Stupid class i hate this class.
+     * Converts keycodes into the String of the key.
      *
      * @param var0 The character you need the code of as a string
      * @return key code int
