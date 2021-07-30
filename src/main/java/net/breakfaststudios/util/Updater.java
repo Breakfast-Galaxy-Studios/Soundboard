@@ -23,6 +23,9 @@ public class Updater {
     private static final String autoUpdaterPath = Util.getMainDirectory() + "autoupdater.jar";
     private static final String autoUpdaterURL = "https://github.com/Breakfast-Galaxy-Studios/Universial-Auto-Updater/releases/download/v1.0/autoupdater.jar";
 
+    /**
+     * Checks if there is a new release on the github, and prompts the user to update.
+     */
     public static void runAutoUpdater() {
         try {
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -54,6 +57,9 @@ public class Updater {
         } catch (IOException ignored) { }
     }
 
+    /**
+     * @param newVersion The newest version of the app, according to the github tag.
+     */
     private static void updater(String newVersion) {
         try {
             // Get operating path of current jar
@@ -73,12 +79,11 @@ public class Updater {
                     }
                     operatingPath.append("/");
 
-                    // Arguments for autoupdater: updateURL(URL for new release), saveDir(directory to write to), fileName (name of new file)
                     String[] autoUpdater = {"java", "-jar", autoUpdaterPath, updateURL, operatingPath.toString(), fileName};
                     Runtime.getRuntime().exec(autoUpdater);
                     System.out.println(Arrays.toString(autoUpdater));
 
-                    // Make sure program closes itself
+                    // Make sure program closes itself, even though it should on its own.
                     System.exit(47);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Failed to update the application.");
@@ -90,6 +95,11 @@ public class Updater {
         }
     }
 
+
+    /**
+     * Downloads the auto-updater
+     * @param saveDir The save directory for the auto-updater.
+     */
     private static void downloadFile(String saveDir) {
         try (BufferedInputStream in = new BufferedInputStream(new URL(Updater.autoUpdaterURL).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(saveDir + "autoupdater.jar")) {

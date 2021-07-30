@@ -33,14 +33,16 @@ public class BreakfastSounds {
 
 
     /**
-     * Creates the UI and init's listeners.
+     * Creates the UI, and initializes all listeners.
      */
-
     public BreakfastSounds() {
-
         new UI().build();
     }
 
+    /**
+     * Main method for the program.
+     * @param args Accepts no command line arguments.
+     */
     public static void main(String[] args) {
         soundBoard = new SoundBoard();
         Properties settings = null;
@@ -134,6 +136,9 @@ public class BreakfastSounds {
         GlobalScreen.addNativeKeyListener(listener);
     }
 
+    /**
+     * Creates the app directory in APPDATA on Windows, or the user's home folder on linux/macOS.
+     */
     private static void makeAppDir() {
         Path soundDir = Paths.get(Util.getSoundDirectory());
         if (!Files.exists(soundDir)) {
@@ -148,10 +153,16 @@ public class BreakfastSounds {
         }
     }
 
+    /**
+     * Returns the soundboard.
+     */
     public static SoundBoard getSoundBoard() {
         return soundBoard;
     }
 
+    /**
+     * Re-initializes the key listener.
+     */
     public static void resetKeyListener() {
         GlobalScreen.removeNativeKeyListener(listener);
         listener = new GlobalKeyListener();

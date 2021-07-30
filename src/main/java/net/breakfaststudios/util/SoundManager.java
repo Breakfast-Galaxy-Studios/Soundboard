@@ -98,6 +98,5 @@ public class SoundManager {
         } catch (Exception ignored) {
             return false;
         }
-
     }
 }

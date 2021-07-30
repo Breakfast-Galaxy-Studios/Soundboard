@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Util {
+    /**
+     * Returns the name of the OS.
+     */
     public static final String os = System.getProperty("os.name").toLowerCase();
 
+    /**
+     * @return String representing the dir that the sound-config files are stored.
+     */
     public static String getSoundDirectory() {
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\sounds\\";
@@ -18,6 +24,9 @@ public class Util {
             return System.getProperty("user.dir") + "/BGS-Soundboard/sounds/";
     }
 
+    /**
+     * @return String of the main app folder.
+     */
     public static String getMainDirectory() {
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\";
@@ -27,6 +36,13 @@ public class Util {
             return System.getProperty("user.dir") + "/BGS-Soundboard/";
     }
 
+    /**
+     * Updates the settings file.
+     * @param soundOutput String of the chosen sound output device.
+     * @param keyCompatMode Bool representing if keybind compatibility mode is on or off.
+     * @param openToTray Bool representing if open to tray on startup is on or off.
+     * @param darkMode Bool representing if dark mode is on or off.
+     */
     public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
@@ -49,6 +65,10 @@ public class Util {
         }
     }
 
+    /**
+     * Gets the settings file from the main app dir.
+     * @return Properties file if it exist, else returns null.
+     */
     public static Properties getSettingsFile() {
         try {
             FileInputStream file = new FileInputStream(Util.getMainDirectory() + "settings.properties");
@@ -63,6 +83,9 @@ public class Util {
         }
     }
 
+    /**
+     * Turns arraylist of integers into an Integer[].
+     */
     public static Integer[] intListToArray(ArrayList<Integer> list) {
         Integer[] intArray = new Integer[list.size()];
         for (int i = 0; i < intArray.length; i++) { intArray[i] = list.get(i); }
@@ -70,6 +93,9 @@ public class Util {
         return intArray;
     }
 
+    /**
+     * Turns the keycode into the string representation of the key.
+     */
     public static void parseRawCodeText(String rawText, ArrayList<Integer> keys, StringBuilder builder) {
         for (String key : rawText.split("_")) {
             if (key.equalsIgnoreCase("none")) break;

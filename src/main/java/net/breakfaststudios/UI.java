@@ -30,6 +30,9 @@ public class UI extends JFrame {
     private JDialog recordKeybindDialog;
 
 
+    /**
+     * Creates all UI elements, initializes listeners, 
+     */
     public void build() {
         // -----------------------------------------------------------------
         // Define all components
@@ -761,6 +764,9 @@ public class UI extends JFrame {
         minimizeToTray();
     }
 
+    /**
+     * Changes all UI elements to fit a dark theme.
+     */
     private void darkMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
         ImageIcon settingsIcon;
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
@@ -801,6 +807,9 @@ public class UI extends JFrame {
         settingsMenu.setIcon(settingsIcon);
     }
 
+    /**
+     * Changes all UI elements to fit a light theme.
+     */
     private void lightMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
         ImageIcon settingsIcon;
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
@@ -841,6 +850,9 @@ public class UI extends JFrame {
         settingsMenu.setIcon(settingsIcon);
     }
 
+    /**
+     * Allows the program to minimize to tray.
+     */
     private void minimizeToTray() {
         // -----------------------------------------------------------------
         // Minimize to system tray on Windows / supported OS's
@@ -903,9 +915,11 @@ public class UI extends JFrame {
         }
     }
 
+    /**
+     * @return String[] of all files in the sound-config directory.
+     */
     private String[] getFileList() {
         File file = new File(Util.getSoundDirectory());
         return file.list();
     }
-
 }
