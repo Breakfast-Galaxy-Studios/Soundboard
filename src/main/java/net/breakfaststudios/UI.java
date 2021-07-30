@@ -7,6 +7,7 @@ import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
@@ -115,7 +116,7 @@ public class UI extends JFrame {
         componentArrayList.add(jPanel1);
         componentArrayList.add(recordKeybindPanel);
 
-        // textfields
+        // text fields
         componentArrayList.add(newSoundNameField);
         componentArrayList.add(newKeybindField);
         componentArrayList.add(newSoundFileField);
@@ -566,7 +567,9 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        boolean a = new File(Util.getSoundDirectory() + s).delete();
+                        if(new File(Util.getSoundDirectory() + s).delete()){
+                            System.out.println("Deleted File");
+                        }
                         throw new Exception();
                     }
 
