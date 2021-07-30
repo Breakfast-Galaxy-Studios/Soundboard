@@ -11,6 +11,7 @@ import net.breakfaststudios.util.Util;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicMenuBarUI;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,7 +21,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Properties;
 
 import static net.breakfaststudios.BreakfastSounds.*;
@@ -122,6 +122,7 @@ public class UI extends JFrame {
         componentArrayList.add(newKeybindField);
         componentArrayList.add(newSoundFileField);
         componentArrayList.add(hiddenTextField);
+        componentArrayList.add(settingsMenu);
 
         // Button arraylist because they have to be styled differently
         // Buttons
@@ -446,6 +447,7 @@ public class UI extends JFrame {
         settingsMenu.add(settingsMenuItem);
         setJMenuBar(menuBar);
 
+
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -731,6 +733,7 @@ public class UI extends JFrame {
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
             Color grey = new Color(51,51,51);
             Color white = new Color(255,255,255);
+
             // Changes almost all components, some refuse to be styled this way.
             for (JComponent j : componentArrayList){
                 j.setBackground(grey);
@@ -749,12 +752,27 @@ public class UI extends JFrame {
 
             soundTable.setForeground(white);
             soundTable.setBackground(grey);
-            menuBar.setBackground(grey);
 
+            menuBar.setUI ( new BasicMenuBarUI(){
+                public void paint ( Graphics g, JComponent c ){
+                    g.setColor ( grey );
+                    g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
+                }
+            } );
 
             getContentPane().setBackground(grey);
             getContentPane().setForeground(white);
             setForeground(new Color(255,255,255));
+
+            Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
+            ImageIcon settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            settingsMenu.setIcon(settingsIcon);
+
+        } else {
+            Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
+
+            ImageIcon settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            settingsMenu.setIcon(settingsIcon);
         }
 
         // All things to do with putting app to system tray, and sets the window visible.
