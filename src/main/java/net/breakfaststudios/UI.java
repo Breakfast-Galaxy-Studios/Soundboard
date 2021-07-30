@@ -546,7 +546,7 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        new File(Util.getSoundDirectory() + s).delete();
+                        boolean a = new File(Util.getSoundDirectory() + s).delete();
                         throw new Exception();
                     }
 
@@ -729,6 +729,8 @@ public class UI extends JFrame {
             }
         });
 
+        ImageIcon settingsIcon;
+        Image settingsImage;
         // Dark mode
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
             Color grey = new Color(51,51,51);
@@ -764,17 +766,13 @@ public class UI extends JFrame {
             getContentPane().setForeground(white);
             setForeground(new Color(255,255,255));
 
-            Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
-            ImageIcon settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-            settingsMenu.setIcon(settingsIcon);
-
+            settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
         } else {
-            Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
-
-            ImageIcon settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-            settingsMenu.setIcon(settingsIcon);
+            settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
         }
 
+        settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        settingsMenu.setIcon(settingsIcon);
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
     }
