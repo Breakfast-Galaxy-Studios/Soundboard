@@ -58,12 +58,9 @@ public class BreakfastSounds {
 
         Updater.runAutoUpdater();
 
-        /*
-         * Settings validation
-        todo undo this
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, false);
+            Util.updateSettings(soundOutput, false, false, false);
         } else {
             settings = Util.getSettingsFile();
             Properties validateSettings = new Properties();
@@ -87,10 +84,10 @@ public class BreakfastSounds {
             }
 
             if (!validateSettings.equals(settings)) {
-                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")));
+                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")), Boolean.parseBoolean(validateSettings.getProperty("darkMode")));
             }
         }
-        */
+
 
         // UI Scaling will be slightly messed up outside of a Windows OS.
         try {

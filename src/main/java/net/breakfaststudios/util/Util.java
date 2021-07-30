@@ -27,12 +27,13 @@ public class Util {
             return System.getProperty("user.dir") + "/BGS-Soundboard/";
     }
 
-    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray) {
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
         settings.setProperty("openToTray", String.valueOf(openToTray));
+        settings.setProperty("darkMode", String.valueOf(darkMode));
         if (!settingsFile.exists()) {
             try {
                 settingsFile.createNewFile();
@@ -57,25 +58,21 @@ public class Util {
             return prop;
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("\n\nError occurs on first setup. If this isn't first setup there is a problem.\n\n");
+            System.out.println("\n\nError tends to occur on first startup.\n\n");
             return null;
         }
     }
 
     public static Integer[] intListToArray(ArrayList<Integer> list) {
         Integer[] intArray = new Integer[list.size()];
-
-        for (int i = 0; i < intArray.length; i++) {
-            intArray[i] = list.get(i);
-        }
+        for (int i = 0; i < intArray.length; i++) { intArray[i] = list.get(i); }
 
         return intArray;
     }
 
     public static void parseRawCodeText(String rawText, ArrayList<Integer> keys, StringBuilder builder) {
         for (String key : rawText.split("_")) {
-            if (key.equalsIgnoreCase("none"))
-                break;
+            if (key.equalsIgnoreCase("none")) break;
 
             int toAdd = Integer.parseInt(key);
             keys.add(toAdd);

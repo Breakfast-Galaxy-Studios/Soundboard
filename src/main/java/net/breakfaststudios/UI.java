@@ -14,10 +14,7 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -40,6 +37,7 @@ public class UI extends JFrame {
         // Checkboxes
         JCheckBox openToTrayCheckbox = new JCheckBox();
         JCheckBox keyboardCompatCheckbox = new JCheckBox();
+        JCheckBox darkModeCheckbox = new JCheckBox();
 
         // Panels and dialog boxes
         soundAddMenu = new JDialog();
@@ -64,6 +62,7 @@ public class UI extends JFrame {
         JLabel volumeLabel = new JLabel();
         JLabel nameLabel = new JLabel();
         JLabel soundOutputLabel = new JLabel();
+        JLabel darkModeLabel = new JLabel("Dark Mode:");
 
         // Buttons
         JButton recordKeybind = new JButton();
@@ -94,12 +93,11 @@ public class UI extends JFrame {
         // Other
         componentArrayList.add(tablePane);
 
-        // componentArrayList.add(menuBar);
-        // componentArrayList.add(settingsMenu);
-        // componentArrayList.add(soundOutputDropdown);
         componentArrayList.add(volumeSlider);
         componentArrayList.add(keyboardCompatCheckbox);
         componentArrayList.add(openToTrayCheckbox);
+        componentArrayList.add(darkModeCheckbox);
+
 
         // Labels
         componentArrayList.add(openToTray);
@@ -109,7 +107,7 @@ public class UI extends JFrame {
         componentArrayList.add(volumeLabel);
         componentArrayList.add(nameLabel);
         componentArrayList.add(soundOutputLabel);
-
+        componentArrayList.add(darkModeLabel);
 
         // Panels
         componentArrayList.add(settingsPanel);
@@ -150,9 +148,9 @@ public class UI extends JFrame {
         settingsPopup.setTitle("Settings");
         settingsPopup.setAlwaysOnTop(false);
         settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        settingsPopup.setMaximumSize(new Dimension(350, 175));
-        settingsPopup.setMinimumSize(new Dimension(350, 175));
-        settingsPopup.setPreferredSize(new Dimension(350, 175));
+        settingsPopup.setMaximumSize(new Dimension(350, 200));
+        settingsPopup.setMinimumSize(new Dimension(350, 200));
+        settingsPopup.setPreferredSize(new Dimension(350, 200));
         settingsPopup.setResizable(false);
 
         soundAddMenu.setTitle("Add Sound");
@@ -331,6 +329,11 @@ public class UI extends JFrame {
                                         .addGap(10, 10, 10)
                                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                 .addGroup(settingsPanelLayout.createSequentialGroup()
+                                                        .addComponent(darkModeLabel)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(darkModeCheckbox)
+                                                        .addGap(0, 0, 32767))
+                                                .addGroup(settingsPanelLayout.createSequentialGroup()
                                                         .addComponent(openToTray)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                         .addComponent(openToTrayCheckbox)
@@ -366,6 +369,9 @@ public class UI extends JFrame {
                                 .addComponent(openToTrayCheckbox)
                                 .addComponent(openToTray, -2, 25, -2))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addComponent(darkModeCheckbox)
+                                .addComponent(darkModeLabel, -2, 25, -2))
                         .addGroup(settingsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(ConfirmSettings)
                                 .addComponent(cancelSettings))
@@ -443,8 +449,6 @@ public class UI extends JFrame {
 
         settingsMenu.setText("Settings");
         menuBar.add(settingsMenu);
-        JMenuItem settingsMenuItem = new JMenuItem("Settings...");
-        settingsMenu.add(settingsMenuItem);
         setJMenuBar(menuBar);
 
 
@@ -468,7 +472,8 @@ public class UI extends JFrame {
         volumeSlider.setValue(100);
         recordKeybindDialog.setVisible(false);
         keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
-
+        openToTray.setToolTipText("Open to tray at startup on supported OS's.");
+        darkModeLabel.setToolTipText("Changing this setting will take affect at next startup.");
 
         pack();
 
@@ -486,14 +491,24 @@ public class UI extends JFrame {
         // -----------------------------------------------------------------
 
         // Opens settings window and sets defaults to current settings
-        settingsMenuItem.addActionListener(e -> {
-            Properties settings = Util.getSettingsFile();
-            if (settings != null) {
-                soundOutputDropdown.setSelectedItem(settings.getProperty("soundOutput"));
-                keyboardCompatCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("keyCompatMode")));
-                openToTrayCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("openToTray")));
+        settingsMenu.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Properties settings = Util.getSettingsFile();
+                if (settings != null) {
+                    soundOutputDropdown.setSelectedItem(settings.getProperty("soundOutput"));
+                    keyboardCompatCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("keyCompatMode")));
+                    openToTrayCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("openToTray")));
+                    darkModeCheckbox.setSelected(Boolean.parseBoolean(settings.getProperty("darkMode")));
+                }
+                settingsPopup.setVisible(true);
             }
-            settingsPopup.setVisible(true);
+
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
+
         });
 
         // Close settings window
@@ -524,9 +539,12 @@ public class UI extends JFrame {
 
         ConfirmSettings.addActionListener(e -> {
             String soundOutput = (String) soundOutputDropdown.getSelectedItem();
-            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), openToTrayCheckbox.isSelected());
+            Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), openToTrayCheckbox.isSelected(), darkModeCheckbox.isSelected());
             SELECTED_AUDIO_DEVICE = soundOutput;
             settingsPopup.setVisible(false);
+            if (darkModeCheckbox.isSelected()){
+                JOptionPane.showMessageDialog(null, "Dark mode will be applied next time the app is launched.");
+            }
         });
 
 
@@ -731,8 +749,9 @@ public class UI extends JFrame {
 
         ImageIcon settingsIcon;
         Image settingsImage;
-        // Dark mode
+        // Dark mode stuff
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
+
             Color grey = new Color(51,51,51);
             Color white = new Color(255,255,255);
 
@@ -765,7 +784,6 @@ public class UI extends JFrame {
             getContentPane().setBackground(grey);
             getContentPane().setForeground(white);
             setForeground(new Color(255,255,255));
-
             settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
         } else {
             settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
