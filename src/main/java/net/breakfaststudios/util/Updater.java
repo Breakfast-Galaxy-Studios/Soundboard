@@ -38,15 +38,20 @@ public class Updater {
                 JOptionPane updatePrompt = new JOptionPane("");
                 updatePrompt.setMessageType(JOptionPane.YES_NO_OPTION);
                 updatePrompt.setVisible(true);
-                int updateResult = JOptionPane.showConfirmDialog(null, "A new update is available. Would you like to update?", "New Soundboard Update Available",
+                String message;
+                if (version.startsWith("pre") || version.startsWith("alpha")){
+                    message = "A new update is available.\nThis version is a pre-release and may include some bugs.\n Would you like to update?";
+                } else {
+                    message = "A new update is available. Would you like to update?";
+                }
+                int updateResult = JOptionPane.showConfirmDialog(null, message, "New Soundboard Update Available",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
                 if (updateResult == JOptionPane.YES_OPTION) {
                     Updater.updater(version);
                 }
             }
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) { }
     }
 
     private static void updater(String newVersion) {
