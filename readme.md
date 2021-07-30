@@ -25,5 +25,5 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 <br>Additionally you can convert MP3 files to WAV files in [Audacity](https://www.audacityteam.org/). (Tutorial Coming soon...)
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
 
-## Known issues
+###### Known issues
 - Users on version 1.2 or 1.3 will not recieve auto-updates. 1.3.1+ or 1.1 and earlier will work.
