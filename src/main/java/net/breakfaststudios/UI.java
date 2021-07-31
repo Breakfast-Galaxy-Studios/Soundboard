@@ -31,7 +31,7 @@ public class UI extends JFrame {
     private boolean editSound = false;
 
     /**
-     * Creates all UI elements, initializes listeners,
+     * Creates all UI elements, initializes listeners, 
      */
     public void build() {
         // -----------------------------------------------------------------
@@ -86,6 +86,9 @@ public class UI extends JFrame {
         JMenu settingsMenu = new JMenu();
         JComboBox<String> soundOutputDropdown = new JComboBox<>();
         JSlider volumeSlider = new JSlider();
+        JPopupMenu editMenu = new JPopupMenu();
+        JMenuItem editMenuItem = new JMenuItem("Edit...");
+        JMenuItem deleteSound = new JMenuItem("Delete");
 
 
         // -----------------------------------------------------------------
@@ -507,21 +510,10 @@ public class UI extends JFrame {
                 settingsPopup.setVisible(true);
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
 
         });
 
@@ -580,7 +572,7 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        if (new File(Util.getSoundDirectory() + s).delete()) {
+                        if(new File(Util.getSoundDirectory() + s).delete()){
                             System.out.println("Deleted File");
                         }
                         JOptionPane.showMessageDialog(null, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
@@ -701,8 +693,7 @@ public class UI extends JFrame {
                             } else {
                                 JOptionPane.showMessageDialog(null, "Failed to change that sound.");
                             }
-                        } catch (Exception ignored) {
-                        }
+                        } catch (Exception ignored) { }
                     }
 
                     StringBuilder rawCodes = new StringBuilder();
@@ -740,8 +731,7 @@ public class UI extends JFrame {
         KeyListener keybindListener = new KeyListener() {
             public void keyTyped(KeyEvent e) {
             }
-
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed( KeyEvent e) {
                 if (!characters.contains(KeyEvent.getKeyText(e.getKeyCode())))
                     characters.add(KeyEvent.getKeyText(e.getKeyCode()));
             }
@@ -775,9 +765,7 @@ public class UI extends JFrame {
                 KeybindRecorder.cancelKeybindRecording();
             }
         });
-        JPopupMenu editMenu = new JPopupMenu();
-        JMenuItem editMenuItem = new JMenuItem("Edit...");
-        JMenuItem deleteSound = new JMenuItem("Delete");
+
 
         editMenu.add(editMenuItem);
         editMenu.add(deleteSound);
@@ -800,22 +788,10 @@ public class UI extends JFrame {
                     soundTable.setRowSelectionInterval(row, row);
                 }
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            @Override public void mousePressed(MouseEvent e) { }
+            @Override public void mouseReleased(MouseEvent e) { }
+            @Override public void mouseEntered(MouseEvent e) { }
+            @Override public void mouseExited(MouseEvent e) { }
         });
 
         editMenuItem.addActionListener(e -> {
@@ -835,14 +811,7 @@ public class UI extends JFrame {
                 Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
 
                 // todo fix this
-
-                newKeybindField.setText(
-                        new StringBuilder(keyBind.toString())
-                                .deleteCharAt(keyBind.toString().length() - 2)
-                                .toString()
-                                .replaceAll(" ", "")
-                                .replaceAll("\\+", "_")
-                );
+                newKeybindField.setText(keyBind.substring(0, keyBind.length() - 3).replaceAll(" ", "").replaceAll("\\+", "_"));
 
                 volumeSlider.setValue((int) (Float.parseFloat(soundProp.getProperty("volume")) * 100));
 
@@ -888,8 +857,7 @@ public class UI extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to delete that sound.");
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
     }
 
 
@@ -901,7 +869,7 @@ public class UI extends JFrame {
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
 
         Color grey = new Color(51, 51, 51);
-        Color white = new Color(225, 232, 227);
+        Color white = new Color(255, 255, 255);
 
         // Changes almost all components, some refuse to be styled this way.
         for (JComponent j : components) {
@@ -945,7 +913,7 @@ public class UI extends JFrame {
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
 
         Color black = new Color(0, 0, 0);
-        Color white = new Color(225, 232, 227);
+        Color white = new Color(242, 242, 242);
 
         // Changes almost all components, some refuse to be styled this way.
         for (JComponent j : components) {
@@ -962,6 +930,7 @@ public class UI extends JFrame {
         tablePane.getViewport().setBackground(white);
         soundTable.getTableHeader().setBackground(white);
         soundTable.getTableHeader().setForeground(black);
+
         soundTable.setForeground(black);
         soundTable.setBackground(white);
 
@@ -1029,7 +998,7 @@ public class UI extends JFrame {
                     setVisible(true);
                 }
             });
-            boolean openToTrayExist = Boolean.parseBoolean(Objects.requireNonNull(Util.getSettingsFile()).getProperty("openToTray"));
+            boolean openToTrayExist = Boolean.parseBoolean(Util.getSettingsFile().getProperty("openToTray"));
             if (openToTrayExist) {
                 try {
                     tray.add(trayIcon);
