@@ -183,6 +183,7 @@ public class UI extends JFrame {
         volumeLabel.setText("Volume:");
         fileAdd.setText("jButton1");
         nameLabel.setText("Name:");
+        this.setResizable(false);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
