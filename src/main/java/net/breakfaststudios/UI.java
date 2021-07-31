@@ -19,7 +19,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.breakfaststudios.BreakfastSounds.*;
 
@@ -28,7 +30,7 @@ public class UI extends JFrame {
     private JDialog soundAddMenu;
     private JDialog settingsPopup;
     private JDialog recordKeybindDialog;
-
+    private AtomicBoolean editSound = new AtomicBoolean(false);
 
     /**
      * Creates all UI elements, initializes listeners, 
@@ -573,7 +575,7 @@ public class UI extends JFrame {
                         if(new File(Util.getSoundDirectory() + s).delete()){
                             System.out.println("Deleted File");
                         }
-                        throw new Exception();
+                        JOptionPane.showMessageDialog(null, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
                     }
 
                     float volume = Float.parseFloat(prop.getProperty("volume"));
@@ -610,26 +612,22 @@ public class UI extends JFrame {
         // Main Panel functions
         // -----------------------------------------------------------------
         addButton.addActionListener(e -> {
-            soundAddMenu.setVisible(true);
+            // Reset title
+            soundAddMenu.setTitle("Add New Sound");
+
             // Make sure all fields are cleared
             newSoundNameField.setText("");
             newKeybindField.setText("");
             hiddenTextField.setText("");
             newSoundFileField.setText("");
+            volumeSlider.setValue(100);
+
+            editSound.set(false);
+            soundAddMenu.setVisible(true);
         });
 
         removeButton.addActionListener(e -> {
-            try {
-                int column = 0;
-                int row = soundTable.getSelectedRow();
-                String value = soundTable.getModel().getValueAt(row, column).toString();
-                if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
-                    soundTableModel.removeRow(row);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to delete that sound.");
-                }
-            } catch (Exception ignored) {
-            }
+            removeSound(soundTable, soundTableModel);
         });
 
 
@@ -667,7 +665,8 @@ public class UI extends JFrame {
             if (!uniqueName) {
                 for (String s : a) {
                     if (s.equals(newSoundNameField.getText() + ".properties")) {
-                        JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
+                        if (!editSound.get())
+                            JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
                     }
                     if (s.equals("")) {
                         JOptionPane.showMessageDialog(null, "Name field cannot be empty.");
@@ -683,8 +682,23 @@ public class UI extends JFrame {
                 } else {
                     keybindField = newKeybindField.getText();
                 }
+                if (hiddenTextField.getText().endsWith("mp3")){
+                    JOptionPane.showMessageDialog(null, "MP3 files are not supported.");
+                } else if (!newSoundFileField.getText().equals("") || !hiddenTextField.getText().equals("")) {
+                    // todo make this shit a method bro
+                    if (editSound.get()){
+                        try {
+                            int column = 0;
+                            int row = soundTable.getSelectedRow();
+                            String value = soundTable.getModel().getValueAt(row, column).toString();
+                            if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
+                                soundTableModel.removeRow(row);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Failed to change that sound.");
+                            }
+                        } catch (Exception ignored) { }
+                    }
 
-                if (!newSoundFileField.getText().equals("") || !hiddenTextField.getText().equals("")) {
                     StringBuilder rawCodes = new StringBuilder();
                     StringBuilder keyBind = new StringBuilder();
 
@@ -754,15 +768,110 @@ public class UI extends JFrame {
                 KeybindRecorder.cancelKeybindRecording();
             }
         });
+        JPopupMenu editMenu = new JPopupMenu();
+        JMenuItem editMenuItem = new JMenuItem("Edit...");
+        JMenuItem deleteSound = new JMenuItem("Delete");
 
+        editMenu.add(editMenuItem);
+        editMenu.add(deleteSound);
+        // -----------------------------------------------------------------
+        // Remove sound
+        // -----------------------------------------------------------------
+        deleteSound.addActionListener(e -> removeSound(soundTable, soundTableModel));
+
+        // -----------------------------------------------------------------
+        // Edit sound
+        // -----------------------------------------------------------------
+        soundTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (e.getButton() == 3){
+                    editMenu.show(e.getComponent(), e.getX(), e.getY());
+                    int row = soundTable.rowAtPoint(e.getPoint());
+                    int col = 0;
+                    soundTable.setRowSelectionInterval(row, row);
+                }
+            }
+            @Override public void mousePressed(MouseEvent e) { }
+            @Override public void mouseReleased(MouseEvent e) { }
+            @Override public void mouseEntered(MouseEvent e) { }
+            @Override public void mouseExited(MouseEvent e) { }
+        });
+
+        editMenuItem.addActionListener(e -> {
+            int col = 0;
+            int row = soundTable.getSelectedRow();
+            Properties soundProp = SoundManager.getSoundConfig(soundTable.getValueAt(row, col).toString());
+            if (soundProp != null){
+                // Change title
+                soundAddMenu.setTitle("Edit sound");
+
+                // Fill all fields
+                newSoundNameField.setText(soundProp.getProperty("name"));
+
+
+                StringBuilder keyBind = new StringBuilder();
+                ArrayList<Integer> keys = new ArrayList<>();
+                Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
+
+                newKeybindField.setText(
+                        new StringBuilder(keyBind.toString())
+                                .deleteCharAt(keyBind.toString().length() - 2)
+                                .toString()
+                                .replaceAll(" ", "")
+                                .replaceAll("\\+", "_")
+                );
+
+                volumeSlider.setValue((int) (Float.parseFloat(soundProp.getProperty("volume")) * 100));
+
+                String[] a;
+                if (os.contains("win")) {
+                    a = soundProp.getProperty("filepath").split("\\\\");
+                } else {
+                    a = soundProp.getProperty("filepath").split("/");
+                }
+                newSoundFileField.setText(a[a.length - 1]);
+                hiddenTextField.setText(soundProp.getProperty("filepath"));
+
+                soundAddMenu.setVisible(true);
+                editSound.set(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to load that sound file.");
+            }
+
+        });
+
+
+
+        // -----------------------------------------------------------------
+        // Darkmode
+        // -----------------------------------------------------------------
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
             darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         } else {
             lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         }
+
+
+
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
     }
+
+    private void removeSound(JTable soundTable, DefaultTableModel soundTableModel) {
+        try {
+            int column = 0;
+            int row = soundTable.getSelectedRow();
+            String value = soundTable.getModel().getValueAt(row, column).toString();
+            if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
+                soundTableModel.removeRow(row);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to delete that sound.");
+            }
+        } catch (Exception ignored) { }
+    }
+
 
     /**
      * Changes all UI elements to fit a dark theme.

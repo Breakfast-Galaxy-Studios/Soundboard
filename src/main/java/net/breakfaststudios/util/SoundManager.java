@@ -121,4 +121,18 @@ public class SoundManager {
             return false;
         }
     }
+
+
+    public static Properties getSoundConfig(String soundName){
+        try {
+            FileInputStream file = new FileInputStream(Util.getSoundDirectory() + soundName + ".properties");
+            Properties prop = new Properties();
+            prop.load(file);
+            file.close();
+            return prop;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
