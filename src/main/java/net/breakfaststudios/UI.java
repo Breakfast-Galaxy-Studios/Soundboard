@@ -815,6 +815,7 @@ public class UI extends JFrame {
                 ArrayList<Integer> keys = new ArrayList<>();
                 Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
 
+                // todo fix this
                 newKeybindField.setText(
                         new StringBuilder(keyBind.toString())
                                 .deleteCharAt(keyBind.toString().length() - 2)
