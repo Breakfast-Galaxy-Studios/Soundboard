@@ -15,10 +15,11 @@ import java.util.Properties;
 public class SoundManager {
     /**
      * Creates a new sound config file.
-     * @param name Name of the sound.
+     *
+     * @param name     Name of the sound.
      * @param filePath Path to the audio file.
-     * @param keybind Key codes for the keybind.
-     * @param volume Volume level between 0-1.
+     * @param keybind  Key codes for the keybind.
+     * @param volume   Volume level between 0-1.
      */
     public static void createNewSound(String name, String filePath, String keybind, float volume) {
         String userConfigDir = Util.getSoundDirectory();
@@ -53,13 +54,12 @@ public class SoundManager {
     }
 
     /**
-     *
      * @param userConfigDir Directory for the save file.
-     * @param name Name of the sound.
-     * @param filePath Path to the audio file.
-     * @param keybind Key codes for the keybind.
-     * @param volume Volume level between 0-1.
-     * @param output Output stream for the file.
+     * @param name          Name of the sound.
+     * @param filePath      Path to the audio file.
+     * @param keybind       Key codes for the keybind.
+     * @param volume        Volume level between 0-1.
+     * @param output        Output stream for the file.
      */
     private static void createNewSoundProp(String userConfigDir, String name, String filePath, String keybind, float volume, OutputStream output) {
         Path path = Paths.get(userConfigDir);
@@ -95,6 +95,7 @@ public class SoundManager {
 
     /**
      * Deletes the specified sound file, and removes the sound from the cache.
+     *
      * @param filePath Path of the file.
      * @param fileName Name of the file.
      * @return True if file is deleted, false otherwise.
@@ -106,6 +107,7 @@ public class SoundManager {
             /*
              * Remove Sound from SoundBoard cache.
              */
+
             Properties prop = new Properties();
             prop.load(file);
             SoundBoard sb = BreakfastSounds.getSoundBoard();
@@ -123,7 +125,7 @@ public class SoundManager {
     }
 
 
-    public static Properties getSoundConfig(String soundName){
+    public static Properties getSoundConfig(String soundName) {
         try {
             FileInputStream file = new FileInputStream(Util.getSoundDirectory() + soundName + ".properties");
             Properties prop = new Properties();

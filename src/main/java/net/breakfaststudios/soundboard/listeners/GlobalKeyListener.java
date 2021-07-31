@@ -23,8 +23,6 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (!currentlyPressedKeys.contains(e.getKeyCode()))
             currentlyPressedKeys.add(e.getKeyCode());
-        if(currentlyPressedKeys.isEmpty())
-            return;
         try {
             List<Integer> neededKeys = new ArrayList<>();
             for (Sound sound : soundBoard.getSounds()) {

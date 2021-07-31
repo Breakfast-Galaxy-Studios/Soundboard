@@ -38,10 +38,11 @@ public class Util {
 
     /**
      * Updates the settings file.
-     * @param soundOutput String of the chosen sound output device.
+     *
+     * @param soundOutput   String of the chosen sound output device.
      * @param keyCompatMode Bool representing if keybind compatibility mode is on or off.
-     * @param openToTray Bool representing if open to tray on startup is on or off.
-     * @param darkMode Bool representing if dark mode is on or off.
+     * @param openToTray    Bool representing if open to tray on startup is on or off.
+     * @param darkMode      Bool representing if dark mode is on or off.
      */
     public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
@@ -52,7 +53,7 @@ public class Util {
         settings.setProperty("darkMode", String.valueOf(darkMode));
         if (!settingsFile.exists()) {
             try {
-                settingsFile.createNewFile();
+                boolean a = settingsFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,6 +68,7 @@ public class Util {
 
     /**
      * Gets the settings file from the main app dir.
+     *
      * @return Properties file if it exist, else returns null.
      */
     public static Properties getSettingsFile() {
@@ -88,7 +90,9 @@ public class Util {
      */
     public static Integer[] intListToArray(ArrayList<Integer> list) {
         Integer[] intArray = new Integer[list.size()];
-        for (int i = 0; i < intArray.length; i++) { intArray[i] = list.get(i); }
+        for (int i = 0; i < intArray.length; i++) {
+            intArray[i] = list.get(i);
+        }
 
         return intArray;
     }

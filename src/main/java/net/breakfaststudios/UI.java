@@ -7,7 +7,6 @@ import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
-import org.jetbrains.annotations.NotNull;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
@@ -19,9 +18,8 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.breakfaststudios.BreakfastSounds.*;
 
@@ -30,10 +28,10 @@ public class UI extends JFrame {
     private JDialog soundAddMenu;
     private JDialog settingsPopup;
     private JDialog recordKeybindDialog;
-    private AtomicBoolean editSound = new AtomicBoolean(false);
+    private boolean editSound = false;
 
     /**
-     * Creates all UI elements, initializes listeners, 
+     * Creates all UI elements, initializes listeners,
      */
     public void build() {
         // -----------------------------------------------------------------
@@ -95,50 +93,49 @@ public class UI extends JFrame {
         // Group components together to make it easier to style.
         // -----------------------------------------------------------------
 
-        ArrayList<JComponent> componentArrayList = new ArrayList<>();
+        ArrayList<JComponent> components = new ArrayList<>();
+        ArrayList<JButton> buttons = new ArrayList<>();
         // Other
-        componentArrayList.add(tablePane);
-
-        componentArrayList.add(volumeSlider);
-        componentArrayList.add(keyboardCompatCheckbox);
-        componentArrayList.add(openToTrayCheckbox);
-        componentArrayList.add(darkModeCheckbox);
+        components.add(tablePane);
+        components.add(volumeSlider);
+        components.add(keyboardCompatCheckbox);
+        components.add(openToTrayCheckbox);
+        components.add(darkModeCheckbox);
 
 
         // Labels
-        componentArrayList.add(openToTray);
-        componentArrayList.add(keyboardCompatLabel);
-        componentArrayList.add(fileLabel);
-        componentArrayList.add(keybindLabel);
-        componentArrayList.add(volumeLabel);
-        componentArrayList.add(nameLabel);
-        componentArrayList.add(soundOutputLabel);
-        componentArrayList.add(darkModeLabel);
+        components.add(openToTray);
+        components.add(keyboardCompatLabel);
+        components.add(fileLabel);
+        components.add(keybindLabel);
+        components.add(volumeLabel);
+        components.add(nameLabel);
+        components.add(soundOutputLabel);
+        components.add(darkModeLabel);
 
         // Panels
-        componentArrayList.add(settingsPanel);
-        componentArrayList.add(jPanel2);
-        componentArrayList.add(jPanel1);
-        componentArrayList.add(recordKeybindPanel);
+        components.add(settingsPanel);
+        components.add(jPanel2);
+        components.add(jPanel1);
+        components.add(recordKeybindPanel);
 
         // text fields
-        componentArrayList.add(newSoundNameField);
-        componentArrayList.add(newKeybindField);
-        componentArrayList.add(newSoundFileField);
-        componentArrayList.add(hiddenTextField);
-        componentArrayList.add(settingsMenu);
+        components.add(newSoundNameField);
+        components.add(newKeybindField);
+        components.add(newSoundFileField);
+        components.add(hiddenTextField);
+        components.add(settingsMenu);
 
         // Button arraylist because they have to be styled differently
         // Buttons
-        ArrayList<JButton> buttonArrayList = new ArrayList<>();
-        buttonArrayList.add(recordKeybind);
-        buttonArrayList.add(confirmAddSound);
-        buttonArrayList.add(cancelAddSound);
-        buttonArrayList.add(fileAdd);
-        buttonArrayList.add(addButton);
-        buttonArrayList.add(removeButton);
-        buttonArrayList.add(ConfirmSettings);
-        buttonArrayList.add(cancelSettings);
+        buttons.add(recordKeybind);
+        buttons.add(confirmAddSound);
+        buttons.add(cancelAddSound);
+        buttons.add(fileAdd);
+        buttons.add(addButton);
+        buttons.add(removeButton);
+        buttons.add(ConfirmSettings);
+        buttons.add(cancelSettings);
 
         // -----------------------------------------------------------------
         // End of arraylist creation
@@ -413,8 +410,7 @@ public class UI extends JFrame {
             soundTable.getColumnModel().getColumn(0).setResizable(false);
             soundTable.getColumnModel().getColumn(1).setResizable(false);
         }
-
-
+        soundTable.getTableHeader().setReorderingAllowed(false);
         addButton.setText("Add...");
         addButton.setMaximumSize(new Dimension(83, 23));
         addButton.setMinimumSize(new Dimension(83, 23));
@@ -510,10 +506,21 @@ public class UI extends JFrame {
                 settingsPopup.setVisible(true);
             }
 
-            @Override public void mousePressed(MouseEvent e) {}
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
 
         });
 
@@ -548,10 +555,10 @@ public class UI extends JFrame {
             Util.updateSettings(soundOutput, keyboardCompatCheckbox.isSelected(), openToTrayCheckbox.isSelected(), darkModeCheckbox.isSelected());
             SELECTED_AUDIO_DEVICE = soundOutput;
             settingsPopup.setVisible(false);
-            if (darkModeCheckbox.isSelected()){
-                darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
+            if (darkModeCheckbox.isSelected()) {
+                enableDarkMode(components, buttons, tablePane, soundTable, menuBar, settingsMenu);
             } else {
-                lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
+                enableLightMode(components, buttons, tablePane, soundTable, menuBar, settingsMenu);
             }
         });
 
@@ -572,7 +579,7 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        if(new File(Util.getSoundDirectory() + s).delete()){
+                        if (new File(Util.getSoundDirectory() + s).delete()) {
                             System.out.println("Deleted File");
                         }
                         JOptionPane.showMessageDialog(null, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
@@ -622,13 +629,11 @@ public class UI extends JFrame {
             newSoundFileField.setText("");
             volumeSlider.setValue(100);
 
-            editSound.set(false);
+            editSound = false;
             soundAddMenu.setVisible(true);
         });
 
-        removeButton.addActionListener(e -> {
-            removeSound(soundTable, soundTableModel);
-        });
+        removeButton.addActionListener(e -> removeSound(soundTable, soundTableModel));
 
 
         // -----------------------------------------------------------------
@@ -665,7 +670,7 @@ public class UI extends JFrame {
             if (!uniqueName) {
                 for (String s : a) {
                     if (s.equals(newSoundNameField.getText() + ".properties")) {
-                        if (!editSound.get())
+                        if (!editSound)
                             JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
                     }
                     if (s.equals("")) {
@@ -682,10 +687,10 @@ public class UI extends JFrame {
                 } else {
                     keybindField = newKeybindField.getText();
                 }
-                if (hiddenTextField.getText().endsWith("mp3")){
+                if (hiddenTextField.getText().endsWith("mp3")) {
                     JOptionPane.showMessageDialog(null, "MP3 files are not supported.");
                 } else if (!newSoundFileField.getText().equals("") || !hiddenTextField.getText().equals("")) {
-                    if (editSound.get()){
+                    if (editSound) {
                         try {
                             int column = 0;
                             int row = soundTable.getSelectedRow();
@@ -695,7 +700,8 @@ public class UI extends JFrame {
                             } else {
                                 JOptionPane.showMessageDialog(null, "Failed to change that sound.");
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                     }
 
                     StringBuilder rawCodes = new StringBuilder();
@@ -733,7 +739,8 @@ public class UI extends JFrame {
         KeyListener keybindListener = new KeyListener() {
             public void keyTyped(KeyEvent e) {
             }
-            public void keyPressed( KeyEvent e) {
+
+            public void keyPressed(KeyEvent e) {
                 if (!characters.contains(KeyEvent.getKeyText(e.getKeyCode())))
                     characters.add(KeyEvent.getKeyText(e.getKeyCode()));
             }
@@ -785,24 +792,36 @@ public class UI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
 
-                if (e.getButton() == 3){
+                if (e.getButton() == 3) {
                     editMenu.show(e.getComponent(), e.getX(), e.getY());
                     int row = soundTable.rowAtPoint(e.getPoint());
                     int col = 0;
                     soundTable.setRowSelectionInterval(row, row);
                 }
             }
-            @Override public void mousePressed(MouseEvent e) { }
-            @Override public void mouseReleased(MouseEvent e) { }
-            @Override public void mouseEntered(MouseEvent e) { }
-            @Override public void mouseExited(MouseEvent e) { }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
         });
 
         editMenuItem.addActionListener(e -> {
             int col = 0;
             int row = soundTable.getSelectedRow();
             Properties soundProp = SoundManager.getSoundConfig(soundTable.getValueAt(row, col).toString());
-            if (soundProp != null){
+            if (soundProp != null) {
                 // Change title
                 soundAddMenu.setTitle("Edit sound");
 
@@ -815,6 +834,7 @@ public class UI extends JFrame {
                 Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
 
                 // todo fix this
+
                 newKeybindField.setText(
                         new StringBuilder(keyBind.toString())
                                 .deleteCharAt(keyBind.toString().length() - 2)
@@ -835,7 +855,7 @@ public class UI extends JFrame {
                 hiddenTextField.setText(soundProp.getProperty("filepath"));
 
                 soundAddMenu.setVisible(true);
-                editSound.set(true);
+                editSound = true;
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to load that sound file.");
             }
@@ -843,16 +863,14 @@ public class UI extends JFrame {
         });
 
 
-
         // -----------------------------------------------------------------
         // Darkmode
         // -----------------------------------------------------------------
-        if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
-            darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
+        if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")) {
+            enableDarkMode(components, buttons, tablePane, soundTable, menuBar, settingsMenu);
         } else {
-            lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
+            enableLightMode(components, buttons, tablePane, soundTable, menuBar, settingsMenu);
         }
-
 
 
         // All things to do with putting app to system tray, and sets the window visible.
@@ -869,28 +887,29 @@ public class UI extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to delete that sound.");
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
 
     /**
      * Changes all UI elements to fit a dark theme.
      */
-    private void darkMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
+    private void enableDarkMode(ArrayList<JComponent> components, ArrayList<JButton> buttons, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu) {
         ImageIcon settingsIcon;
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconblack.png"));
 
-        Color grey = new Color(51,51,51);
-        Color white = new Color(255,255,255);
+        Color grey = new Color(51, 51, 51);
+        Color white = new Color(225, 232, 227);
 
         // Changes almost all components, some refuse to be styled this way.
-        for (JComponent j : componentArrayList){
+        for (JComponent j : components) {
             j.setBackground(grey);
             j.setForeground(white);
             j.setOpaque(true);
         }
 
-        for (JButton button : buttonArrayList){
+        for (JButton button : buttons) {
             button.setOpaque(true);
             button.setBackground(grey);
         }
@@ -902,16 +921,17 @@ public class UI extends JFrame {
         soundTable.setForeground(white);
         soundTable.setBackground(grey);
 
-        menuBar.setUI ( new BasicMenuBarUI(){
-            public void paint ( Graphics g, JComponent c ){
-                g.setColor ( grey );
-                g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
+        menuBar.setUI(new BasicMenuBarUI() {
+            public void paint(Graphics g, JComponent c) {
+                g.setColor(grey);
+                g.fillRect(0, 0, c.getWidth(), c.getHeight());
             }
-        } );
+        });
 
         getContentPane().setBackground(grey);
         getContentPane().setForeground(white);
-        setForeground(new Color(255,255,255));
+        menuBar.setBorderPainted(false);
+        setForeground(white);
         settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         settingsMenu.setIcon(settingsIcon);
     }
@@ -919,21 +939,21 @@ public class UI extends JFrame {
     /**
      * Changes all UI elements to fit a light theme.
      */
-    private void lightMode(ArrayList<JComponent> componentArrayList, ArrayList<JButton> buttonArrayList, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu){
+    private void enableLightMode(ArrayList<JComponent> components, ArrayList<JButton> buttons, JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu) {
         ImageIcon settingsIcon;
         Image settingsImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
 
-        Color black = new Color(0,0,0);
-        Color white = new Color(255,255,255);
+        Color black = new Color(0, 0, 0);
+        Color white = new Color(225, 232, 227);
 
         // Changes almost all components, some refuse to be styled this way.
-        for (JComponent j : componentArrayList){
+        for (JComponent j : components) {
             j.setBackground(white);
             j.setForeground(black);
             j.setOpaque(true);
         }
 
-        for (JButton button : buttonArrayList){
+        for (JButton button : buttons) {
             button.setOpaque(true);
             button.setBackground(white);
         }
@@ -941,20 +961,21 @@ public class UI extends JFrame {
         tablePane.getViewport().setBackground(white);
         soundTable.getTableHeader().setBackground(white);
         soundTable.getTableHeader().setForeground(black);
-
         soundTable.setForeground(black);
         soundTable.setBackground(white);
 
-        menuBar.setUI ( new BasicMenuBarUI(){
-            public void paint ( Graphics g, JComponent c ){
-                g.setColor ( white );
-                g.fillRect ( 0, 0, c.getWidth (), c.getHeight() );
+        menuBar.setUI(new BasicMenuBarUI() {
+            public void paint(Graphics g, JComponent c) {
+                g.setColor(white);
+                g.fillRect(0, 0, c.getWidth(), c.getHeight());
             }
-        } );
+        });
 
         getContentPane().setBackground(white);
         getContentPane().setForeground(black);
-        setForeground(new Color(255,255,255));
+        menuBar.setBorderPainted(false);
+
+        setForeground(white);
         settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         settingsMenu.setIcon(settingsIcon);
     }
@@ -1007,7 +1028,7 @@ public class UI extends JFrame {
                     setVisible(true);
                 }
             });
-            boolean openToTrayExist = Boolean.parseBoolean(Util.getSettingsFile().getProperty("openToTray"));
+            boolean openToTrayExist = Boolean.parseBoolean(Objects.requireNonNull(Util.getSettingsFile()).getProperty("openToTray"));
             if (openToTrayExist) {
                 try {
                     tray.add(trayIcon);

@@ -41,6 +41,7 @@ public class BreakfastSounds {
 
     /**
      * Main method for the program.
+     *
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {

@@ -3,10 +3,8 @@ package net.breakfaststudios.soundboard;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 
 public class Sound {
 
@@ -28,7 +26,7 @@ public class Sound {
             AudioFormat format = audioInputStream.getFormat();
             long frames = audioInputStream.getFrameLength();
             double durationInSeconds = ((double) frames) / format.getFrameRate();
-            this.length = (long)(durationInSeconds * 1000) + 250;
+            this.length = (long) (durationInSeconds * 1000) + 250;
 
         } catch (Exception exception) {
             exception.printStackTrace();

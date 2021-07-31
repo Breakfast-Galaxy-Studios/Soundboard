@@ -42,7 +42,7 @@ public class Updater {
                 updatePrompt.setMessageType(JOptionPane.YES_NO_OPTION);
                 updatePrompt.setVisible(true);
                 String message;
-                if (version.startsWith("pre") || version.startsWith("alpha")){
+                if (version.startsWith("pre") || version.startsWith("alpha")) {
                     message = "A new update is available.\nThis version is a pre-release and may include some bugs.\n Would you like to update?";
                 } else {
                     message = "A new update is available. Would you like to update?";
@@ -54,7 +54,8 @@ public class Updater {
                     Updater.updater(version);
                 }
             }
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 
     /**
@@ -98,6 +99,7 @@ public class Updater {
 
     /**
      * Downloads the auto-updater
+     *
      * @param saveDir The save directory for the auto-updater.
      */
     private static void downloadFile(String saveDir) {
