@@ -685,7 +685,6 @@ public class UI extends JFrame {
                 if (hiddenTextField.getText().endsWith("mp3")){
                     JOptionPane.showMessageDialog(null, "MP3 files are not supported.");
                 } else if (!newSoundFileField.getText().equals("") || !hiddenTextField.getText().equals("")) {
-                    // todo make this shit a method bro
                     if (editSound.get()){
                         try {
                             int column = 0;
