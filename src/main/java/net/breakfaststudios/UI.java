@@ -88,6 +88,9 @@ public class UI extends JFrame {
         JMenu settingsMenu = new JMenu();
         JComboBox<String> soundOutputDropdown = new JComboBox<>();
         JSlider volumeSlider = new JSlider();
+        JPopupMenu editMenu = new JPopupMenu();
+        JMenuItem editMenuItem = new JMenuItem("Edit...");
+        JMenuItem deleteSound = new JMenuItem("Delete");
 
 
         // -----------------------------------------------------------------
@@ -767,9 +770,7 @@ public class UI extends JFrame {
                 KeybindRecorder.cancelKeybindRecording();
             }
         });
-        JPopupMenu editMenu = new JPopupMenu();
-        JMenuItem editMenuItem = new JMenuItem("Edit...");
-        JMenuItem deleteSound = new JMenuItem("Delete");
+
 
         editMenu.add(editMenuItem);
         editMenu.add(deleteSound);
@@ -815,13 +816,7 @@ public class UI extends JFrame {
                 Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
 
                 // todo fix this
-                newKeybindField.setText(
-                        new StringBuilder(keyBind.toString())
-                                .deleteCharAt(keyBind.toString().length() - 2)
-                                .toString()
-                                .replaceAll(" ", "")
-                                .replaceAll("\\+", "_")
-                );
+                newKeybindField.setText(keyBind.substring(0, keyBind.length() - 3).replaceAll(" ", "").replaceAll("\\+", "_"));
 
                 volumeSlider.setValue((int) (Float.parseFloat(soundProp.getProperty("volume")) * 100));
 
@@ -842,18 +837,14 @@ public class UI extends JFrame {
 
         });
 
-
-
         // -----------------------------------------------------------------
-        // Darkmode
+        // Dark mode
         // -----------------------------------------------------------------
         if (Util.getSettingsFile().getProperty("darkMode").equals("true")){
             darkMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         } else {
             lightMode(componentArrayList, buttonArrayList, tablePane, soundTable, menuBar, settingsMenu);
         }
-
-
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
