@@ -55,9 +55,9 @@ public class UI extends JFrame {
         JPanel recordKeybindPanel = new JPanel();
         JPanel settingsPanel = new JPanel();
         JPanel jPanel2 = new JPanel();
-        JPanel jPanel1 = new JPanel();
+        JPanel soundAddMenuPanel = new JPanel();
 
-        panels.add(jPanel1);
+        panels.add(soundAddMenuPanel);
         panels.add(jPanel2);
         panels.add(settingsPanel);
         panels.add(recordKeybindPanel);
@@ -104,20 +104,11 @@ public class UI extends JFrame {
         JSlider volumeSlider = new JSlider();
 
 
+        // -----------------------------------------------------------------
+        // Set state, size, and content of all UI components.
+        // -----------------------------------------------------------------
 
-
-        // Shape, size, and state of all UI elements.
-        hiddenTextField.setEditable(false);
-        hiddenTextField.setVisible(false);
-
-        settingsPopup.setTitle("Settings");
-        settingsPopup.setAlwaysOnTop(false);
-        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        settingsPopup.setMaximumSize(new Dimension(350, 200));
-        settingsPopup.setMinimumSize(new Dimension(350, 200));
-        settingsPopup.setPreferredSize(new Dimension(350, 200));
-        settingsPopup.setResizable(false);
-
+        // Add sound menu
         soundAddMenu.setTitle("Add Sound");
         soundAddMenu.setAlwaysOnTop(false);
         soundAddMenu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -125,15 +116,8 @@ public class UI extends JFrame {
         soundAddMenu.setMinimumSize(new Dimension(350, 255));
         soundAddMenu.setPreferredSize(new Dimension(350, 255));
         soundAddMenu.setResizable(false);
-
-        jPanel1.setMaximumSize(new Dimension(350, 255));
-        jPanel1.setMinimumSize(new Dimension(350, 255));
-        jPanel1.setPreferredSize(new Dimension(350, 255));
-
-        recordKeybindDialog.setMaximumSize(new Dimension(200, 115));
-        recordKeybindDialog.setMinimumSize(new Dimension(200, 115));
-        recordKeybindDialog.setPreferredSize(new Dimension(200, 115));
-        recordKeybindDialog.setResizable(false);
+        hiddenTextField.setEditable(false);
+        hiddenTextField.setVisible(false);
         cancelAddSound.setText("Cancel");
         fileLabel.setText("File:");
         newSoundNameField.setMaximumSize(new Dimension(7, 20));
@@ -143,22 +127,54 @@ public class UI extends JFrame {
         recordKeybind.setText("jButton1");
         confirmAddSound.setText("Confirm");
         volumeLabel.setText("Volume:");
-        fileAdd.setText("jButton1");
+        fileAdd.setText("...");
         nameLabel.setText("Name:");
+        soundAddMenuPanel.setMaximumSize(new Dimension(350, 255));
+        soundAddMenuPanel.setMinimumSize(new Dimension(350, 255));
+        soundAddMenuPanel.setPreferredSize(new Dimension(350, 255));
+        recordKeybindDialog.setMaximumSize(new Dimension(200, 115));
+        recordKeybindDialog.setMinimumSize(new Dimension(200, 115));
+        recordKeybindDialog.setPreferredSize(new Dimension(200, 115));
+        recordKeybindDialog.setResizable(false);
+        recordKeybindDialog.setVisible(false);
+        newKeybindField.setEditable(false);
+        volumeSlider.setValue(100);
 
+        // Settings
         soundOutputDropdown.setModel(new DefaultComboBoxModel<>(new String[]{SELECTED_AUDIO_DEVICE}));
         ConfirmSettings.setText("Confirm");
         soundOutputLabel.setText("Sound Output:");
         keyboardCompatLabel.setText("Keybind Recording Compatibility mode:");
         cancelSettings.setText("Cancel");
+        settingsPopup.setTitle("Settings");
+        settingsPopup.setAlwaysOnTop(false);
+        settingsPopup.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        settingsPopup.setMaximumSize(new Dimension(350, 200));
+        settingsPopup.setMinimumSize(new Dimension(350, 200));
+        settingsPopup.setPreferredSize(new Dimension(350, 200));
+        settingsPopup.setResizable(false);
+        keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
+        openToTray.setToolTipText("Open to tray at startup on supported OS's.");
+        darkModeLabel.setToolTipText("Changing this setting will take affect at next startup.");
+        settingsMenu.setText("Settings");
 
+        // Main JFrame (this)
         Image icon = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon.png"));
         this.setIconImage(icon);
         this.setResizable(false);
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("BGS Soundboard");
+        menuBar.add(settingsMenu);
+        setJMenuBar(menuBar);
 
+        // Main panel buttons
+        addButton.setText("Add...");
+        addButton.setMaximumSize(new Dimension(83, 23));
+        addButton.setMinimumSize(new Dimension(83, 23));
+        addButton.setPreferredSize(new Dimension(83, 23));
+        removeButton.setText("Remove...");
+
+        // Sound Table
         DefaultTableModel soundTableModel = new DefaultTableModel(
                 new Object[][]{
 
@@ -185,93 +201,77 @@ public class UI extends JFrame {
             soundTable.getColumnModel().getColumn(1).setResizable(false);
         }
         soundTable.getTableHeader().setReorderingAllowed(false);
-        addButton.setText("Add...");
-        addButton.setMaximumSize(new Dimension(83, 23));
-        addButton.setMinimumSize(new Dimension(83, 23));
-        addButton.setPreferredSize(new Dimension(83, 23));
 
-
-        removeButton.setText("Remove...");
-
-        newKeybindField.setEditable(false);
-        volumeSlider.setValue(100);
-        recordKeybindDialog.setVisible(false);
-        keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
-        openToTray.setToolTipText("Open to tray at startup on supported OS's.");
-        darkModeLabel.setToolTipText("Changing this setting will take affect at next startup.");
-        settingsMenu.setText("Settings");
-        menuBar.add(settingsMenu);
-        setJMenuBar(menuBar);
-
-
+        // -----------------------------------------------------------------
         // Positioning of all UI elements
-        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+        // -----------------------------------------------------------------
+        GroupLayout soundAddMenuPanelLayout = new GroupLayout(soundAddMenuPanel);
+        soundAddMenuPanel.setLayout(soundAddMenuPanelLayout);
+        soundAddMenuPanelLayout.setHorizontalGroup(
+                soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(20, 20, 20)
                                                 .addComponent(newSoundNameField, GroupLayout.PREFERRED_SIZE, 231, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addComponent(fileLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(20, 20, 20)
                                                 .addComponent(newSoundFileField, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(fileAdd, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addComponent(keybindLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(20, 20, 20)
                                                 .addComponent(newKeybindField, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(recordKeybind, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addComponent(volumeLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(20, 20, 20)
                                                 .addComponent(volumeSlider, GroupLayout.PREFERRED_SIZE, 231, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addComponent(confirmAddSound)
                                                 .addGap(10, 10, 10)
                                                 .addComponent(cancelAddSound)))
                                 .addGap(39, 39, 39))
                         .addComponent(hiddenTextField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
-        jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+        soundAddMenuPanelLayout.setVerticalGroup(
+                soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addGap(1, 1, 1)
                                                 .addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
                                         .addComponent(newSoundNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(fileLabel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addGap(6, 6, 6)
-                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(newSoundFileField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(fileAdd, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(keybindLabel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addGap(3, 3, 3)
-                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(newKeybindField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(recordKeybind, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(soundAddMenuPanelLayout.createSequentialGroup()
                                                 .addGap(1, 1, 1)
                                                 .addComponent(volumeLabel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
                                         .addComponent(volumeSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(soundAddMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(confirmAddSound)
                                         .addComponent(cancelAddSound))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
@@ -284,11 +284,11 @@ public class UI extends JFrame {
                 soundAddMenuLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(soundAddMenuLayout.createSequentialGroup()
                                 .addGap(0, 0, 0)
-                                .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(soundAddMenuPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         soundAddMenuLayout.setVerticalGroup(
                 soundAddMenuLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(soundAddMenuPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
 
