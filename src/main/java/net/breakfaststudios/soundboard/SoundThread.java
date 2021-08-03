@@ -7,18 +7,33 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class basically is just for playing sounds on threads
+ */
 public class SoundThread extends Thread {
 
     private final String path;
     private final float volume;
     private final long clipLength;
 
+    /**
+     * The normal sound thread constructor
+     *
+     * @param path       Path to the sound
+     * @param volume     Volume of the sound
+     * @param clipLength Length of the sound
+     */
     public SoundThread(String path, float volume, long clipLength) {
         this.path = path;
         this.volume = volume;
         this.clipLength = clipLength;
     }
 
+    /**
+     * Gets the speakers as a Mixer.info
+     *
+     * @return Mixer.info speakers
+     */
     private static Mixer.Info getSpeakers() {
         Mixer.Info speakers = null;
         Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
@@ -33,6 +48,9 @@ public class SoundThread extends Thread {
         return speakers;
     }
 
+    /**
+     * Tries to play a sound with the information provided
+     */
     @Override
     public void run() {
         AudioInputStream inputStream = null;

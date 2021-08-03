@@ -7,6 +7,9 @@ import org.jnativehook.keyboard.NativeKeyListener;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * This is the keybind recording class for the regular keybind recording mode.
+ */
 public class KeybindRecorder implements NativeKeyListener {
 
     public static ArrayList<Integer> keyBindKeys = new ArrayList<>();
@@ -16,6 +19,12 @@ public class KeybindRecorder implements NativeKeyListener {
     private static KeybindRecorder keybindRecorder;
     private static NativeKeyEvent startingKey;
 
+    /**
+     * Starts the keybind recorder
+     *
+     * @param dialogBox Dialog box to show
+     * @param label     Text in the box
+     */
     public static void startRecording(JDialog dialogBox, JTextField label) {
         isRecording = true;
         recorderWindow = dialogBox;
@@ -32,6 +41,9 @@ public class KeybindRecorder implements NativeKeyListener {
         GlobalScreen.addNativeKeyListener(keybindRecorder);
     }
 
+    /**
+     * Cancels the keybind recording
+     */
     public static void cancelKeybindRecording() {
         isRecording = false;
         GlobalScreen.removeNativeKeyListener(keybindRecorder);
@@ -45,6 +57,11 @@ public class KeybindRecorder implements NativeKeyListener {
         keybindText = null;
     }
 
+    /**
+     * Records key presses
+     *
+     * @param e The key that was pressed
+     */
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (!keyBindKeys.contains(e.getKeyCode())) {
             keyBindKeys.add(e.getKeyCode());
@@ -58,6 +75,11 @@ public class KeybindRecorder implements NativeKeyListener {
     public void nativeKeyTyped(NativeKeyEvent e) {
     }
 
+    /**
+     * Listens for key releases and checks if it should stop recording
+     *
+     * @param e Key that was released
+     */
     public void nativeKeyReleased(NativeKeyEvent e) {
 
         if (startingKey != null && e.getKeyCode() == startingKey.getKeyCode()) {

@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class holds the method of playing sounds if the correct keys are pressed
+ */
 public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
@@ -20,6 +23,11 @@ public class GlobalKeyListener implements NativeKeyListener {
         soundBoard = BreakfastSounds.getSoundBoard();
     }
 
+    /**
+     * Listens for all key presses and plays sound if requirements are met
+     *
+     * @param e Key that was pressed
+     */
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (!currentlyPressedKeys.contains(e.getKeyCode()))
             currentlyPressedKeys.add(e.getKeyCode());
@@ -46,6 +54,11 @@ public class GlobalKeyListener implements NativeKeyListener {
         }
     }
 
+    /**
+     * Listens for key releases and removes that key from the pressed keys cache
+     *
+     * @param e Key that was released
+     */
     public void nativeKeyReleased(NativeKeyEvent e) {
         currentlyPressedKeys.remove((Integer) e.getKeyCode());
     }

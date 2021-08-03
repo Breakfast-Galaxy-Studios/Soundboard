@@ -6,6 +6,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.swing.*;
 import java.io.File;
 
+/**
+ * This is all pretty self-explanatory...
+ */
 public class Sound {
 
     private Integer[] keys;
