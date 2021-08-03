@@ -780,7 +780,6 @@ public class UI extends JFrame {
                 ArrayList<Integer> keys = new ArrayList<>();
                 Util.parseRawCodeText(soundProp.getProperty("keybind"), keys, keyBind);
 
-                // todo fix this
                 newKeybindField.setText(keyBind.substring(0, keyBind.length() - 3).replaceAll(" ", "").replaceAll("\\+", "_"));
 
                 volumeSlider.setValue((int) (Float.parseFloat(soundProp.getProperty("volume")) * 100));
