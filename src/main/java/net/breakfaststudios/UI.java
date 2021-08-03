@@ -78,6 +78,7 @@ public class UI extends JFrame {
         JLabel nameLabel = new JLabel();
         JLabel soundOutputLabel = new JLabel();
         JLabel darkModeLabel = new JLabel("Dark Mode:");
+        JLabel recordKeybindLabel = new JLabel("Recording.....");
 
         // Buttons
         JButton recordKeybind = new JButton();
@@ -91,6 +92,8 @@ public class UI extends JFrame {
         JPopupMenu editMenu = new JPopupMenu();
         JMenuItem editMenuItem = new JMenuItem("Edit...");
         JMenuItem deleteSound = new JMenuItem("Delete");
+        JButton recordKeybindCancel = new JButton("Cancel");
+
 
         // Other components
         JScrollPane tablePane = new JScrollPane();
@@ -100,6 +103,10 @@ public class UI extends JFrame {
         JComboBox<String> soundOutputDropdown = new JComboBox<>();
         JSlider volumeSlider = new JSlider();
 
+
+
+
+        // Shape, size, and state of all UI elements.
         hiddenTextField.setEditable(false);
         hiddenTextField.setVisible(false);
 
@@ -139,10 +146,65 @@ public class UI extends JFrame {
         fileAdd.setText("jButton1");
         nameLabel.setText("Name:");
 
+        soundOutputDropdown.setModel(new DefaultComboBoxModel<>(new String[]{SELECTED_AUDIO_DEVICE}));
+        ConfirmSettings.setText("Confirm");
+        soundOutputLabel.setText("Sound Output:");
+        keyboardCompatLabel.setText("Keybind Recording Compatibility mode:");
+        cancelSettings.setText("Cancel");
+
         Image icon = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon.png"));
         this.setIconImage(icon);
         this.setResizable(false);
 
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("BGS Soundboard");
+
+        DefaultTableModel soundTableModel = new DefaultTableModel(
+                new Object[][]{
+
+                },
+                new String[]{
+
+                }
+        ) {
+            final boolean[] canEdit = new boolean[]{
+                    false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+        String[] cols = {"Name", "Keybind"};
+        soundTableModel.setColumnIdentifiers(cols);
+        soundTable.setModel(soundTableModel);
+        soundTable.getTableHeader().setOpaque(false);
+        tablePane.setViewportView(soundTable);
+        if (soundTable.getColumnModel().getColumnCount() > 0) {
+            soundTable.getColumnModel().getColumn(0).setResizable(false);
+            soundTable.getColumnModel().getColumn(1).setResizable(false);
+        }
+        soundTable.getTableHeader().setReorderingAllowed(false);
+        addButton.setText("Add...");
+        addButton.setMaximumSize(new Dimension(83, 23));
+        addButton.setMinimumSize(new Dimension(83, 23));
+        addButton.setPreferredSize(new Dimension(83, 23));
+
+
+        removeButton.setText("Remove...");
+
+        newKeybindField.setEditable(false);
+        volumeSlider.setValue(100);
+        recordKeybindDialog.setVisible(false);
+        keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
+        openToTray.setToolTipText("Open to tray at startup on supported OS's.");
+        darkModeLabel.setToolTipText("Changing this setting will take affect at next startup.");
+        settingsMenu.setText("Settings");
+        menuBar.add(settingsMenu);
+        setJMenuBar(menuBar);
+
+
+        // Positioning of all UI elements
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -230,13 +292,8 @@ public class UI extends JFrame {
         );
 
 
-        soundOutputDropdown.setModel(new DefaultComboBoxModel<>(new String[]{SELECTED_AUDIO_DEVICE}));
-        ConfirmSettings.setText("Confirm");
-        soundOutputLabel.setText("Sound Output:");
-        keyboardCompatLabel.setText("Keybind Recording Compatibility mode:");
-        cancelSettings.setText("Cancel");
-        JButton recordKeybindCancel = new JButton("Cancel");
-        JLabel recordKeybindLabel = new JLabel("Recording.....");
+
+
         GroupLayout recordKeybindPanelLayout = new GroupLayout(recordKeybindPanel);
         recordKeybindPanel.setLayout(recordKeybindPanelLayout);
         recordKeybindPanelLayout.setHorizontalGroup(
@@ -341,42 +398,7 @@ public class UI extends JFrame {
 
         settingsPopup.add(settingsPanel);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("BGS Soundboard");
 
-        DefaultTableModel soundTableModel = new DefaultTableModel(
-                new Object[][]{
-
-                },
-                new String[]{
-
-                }
-        ) {
-            final boolean[] canEdit = new boolean[]{
-                    false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        };
-        String[] cols = {"Name", "Keybind"};
-        soundTableModel.setColumnIdentifiers(cols);
-        soundTable.setModel(soundTableModel);
-        soundTable.getTableHeader().setOpaque(false);
-        tablePane.setViewportView(soundTable);
-        if (soundTable.getColumnModel().getColumnCount() > 0) {
-            soundTable.getColumnModel().getColumn(0).setResizable(false);
-            soundTable.getColumnModel().getColumn(1).setResizable(false);
-        }
-        soundTable.getTableHeader().setReorderingAllowed(false);
-        addButton.setText("Add...");
-        addButton.setMaximumSize(new Dimension(83, 23));
-        addButton.setMinimumSize(new Dimension(83, 23));
-        addButton.setPreferredSize(new Dimension(83, 23));
-
-
-        removeButton.setText("Remove...");
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -408,11 +430,6 @@ public class UI extends JFrame {
                         .addContainerGap())
         );
 
-        settingsMenu.setText("Settings");
-        menuBar.add(settingsMenu);
-        setJMenuBar(menuBar);
-
-
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -429,16 +446,11 @@ public class UI extends JFrame {
                                 .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
         );
-        newKeybindField.setEditable(false);
-        volumeSlider.setValue(100);
-        recordKeybindDialog.setVisible(false);
-        keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
-        openToTray.setToolTipText("Open to tray at startup on supported OS's.");
-        darkModeLabel.setToolTipText("Changing this setting will take affect at next startup.");
+
+
+
 
         pack();
-
-
         // -----------------------------------------------------------------
         // -----------------------------------------------------------------
         // -----------------------------------------------------------------
@@ -907,14 +919,6 @@ public class UI extends JFrame {
                     } catch (AWTException ignored) {
                     }
                 }
-                /* Might be necessary on other OS
-                if(e.getNewState()==7){
-                    try{
-                        tray.add(trayIcon);
-                        setVisible(false);
-                    }catch(AWTException ignored){ }
-                }
-                */
 
                 // Both make sure that when it is pulled from system tray it opens fully.
                 if (e.getNewState() == MAXIMIZED_BOTH) {

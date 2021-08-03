@@ -98,8 +98,7 @@ public class BreakfastSounds {
         } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) { }
         }
 
 
