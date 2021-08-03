@@ -755,7 +755,6 @@ public class UI extends JFrame {
                 if (e.getButton() == 3) {
                     editMenu.show(e.getComponent(), e.getX(), e.getY());
                     int row = soundTable.rowAtPoint(e.getPoint());
-                    int col = 0;
                     soundTable.setRowSelectionInterval(row, row);
                 }
             }
