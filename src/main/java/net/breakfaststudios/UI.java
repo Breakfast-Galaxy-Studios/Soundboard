@@ -671,6 +671,8 @@ public class UI extends JFrame {
                     StringBuilder keyBind = new StringBuilder();
 
                     for (String character : keybindField.split("_")) {
+                        // I'm sick of compiler warnings for this deprecation
+                        //noinspection deprecation
                         rawCodes.append(Converter.getKeyCode(character)).append("_");
                     }
                     String newRawCodes = rawCodes.substring(0, rawCodes.length() - 1);
