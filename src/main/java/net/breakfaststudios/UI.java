@@ -14,8 +14,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -808,7 +810,7 @@ public class UI extends JFrame {
 
 
         // -----------------------------------------------------------------
-        // Darkmode
+        // Dark mode
         // -----------------------------------------------------------------
         if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")) {
             Color grey = new Color(51, 51, 51);
@@ -822,7 +824,9 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
-        openOnStartup(true);
+        if (openOnStartup(true)){
+            System.out.println("temp error message");
+        }
     }
 
 
@@ -880,7 +884,8 @@ public class UI extends JFrame {
 
     }
 
-    private void openOnStartup(boolean bool){
+    private boolean openOnStartup(boolean bool){
+        Path winStartupPath = Paths.get(System.getenv("APPDATA") + "Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.bat");
         if (os.contains("win") && bool){
             try{
                 String[] newPath;
@@ -891,16 +896,26 @@ public class UI extends JFrame {
                 StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
                 operatingPath.deleteCharAt(0);
                 String fileContents = "java -jar \"" + operatingPath + "\"";
-                if (!Files.exists(Path.of(getMainDirectory() + "temp.bat")))
-                    Files.createFile(Path.of(getMainDirectory() + "temp.bat"));
-                if (Files.exists(Path.of(getMainDirectory() + "temp.bat"))){
-                    Files.writeString(Path.of(getMainDirectory() + "temp.bat"), fileContents);
+
+                if (!Files.exists(winStartupPath)) Files.createFile(winStartupPath);
+
+                if (Files.exists(winStartupPath)){
+                    Files.writeString(winStartupPath, fileContents);
+                    return true;
                 }
             } catch (Exception e){
                 e.printStackTrace();
             }
         } else if (os.equals("win")){
-
+            try{
+                Files.deleteIfExists(winStartupPath);
+            } catch (IOException ex){
+                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
+                ex.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 
