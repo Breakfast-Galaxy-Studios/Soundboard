@@ -1,8 +1,9 @@
 package net.breakfaststudios.util;
 
+import net.breakfaststudios.BreakfastSounds;
 import org.jnativehook.keyboard.NativeKeyEvent;
-
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -11,6 +12,18 @@ public class Util {
      * Returns the name of the OS.
      */
     public static final String os = System.getProperty("os.name").toLowerCase();
+    /**
+     * Path of the current location of the jar file.
+     */
+    public static String jarPath = null;
+    static {
+        try {
+            jarPath = BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.out.println("Error occurred when getting jar path.");
+        }
+    }
 
     /**
      * @return String representing the dir that the sound-config files are stored.

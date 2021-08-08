@@ -1,13 +1,10 @@
 package net.breakfaststudios;
 
-import com.sun.javafx.application.PlatformImpl;
-import javafx.stage.FileChooser;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.*;
@@ -17,12 +14,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
-
+import com.sun.javafx.application.PlatformImpl;
+import javafx.stage.FileChooser;
 import static java.awt.Color.black;
 import static net.breakfaststudios.BreakfastSounds.*;
+import static net.breakfaststudios.util.Util.*;
+import static net.breakfaststudios.util.Util.os;
 
 public class UI extends JFrame {
 
@@ -819,6 +822,7 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
+        openOnStartup(true);
     }
 
 
@@ -876,6 +880,29 @@ public class UI extends JFrame {
 
     }
 
+    private void openOnStartup(boolean bool){
+        if (os.contains("win") && bool){
+            try{
+                String[] newPath;
+                if (jarPath != null){
+                    newPath = jarPath.split("/");
+                } else {throw new Exception();}
+
+                StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
+                operatingPath.deleteCharAt(0);
+                String fileContents = "java -jar \"" + operatingPath + "\"";
+                if (!Files.exists(Path.of(getMainDirectory() + "temp.bat")))
+                    Files.createFile(Path.of(getMainDirectory() + "temp.bat"));
+                if (Files.exists(Path.of(getMainDirectory() + "temp.bat"))){
+                    Files.writeString(Path.of(getMainDirectory() + "temp.bat"), fileContents);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else if (os.equals("win")){
+
+        }
+    }
 
     private void removeSound(JTable soundTable, DefaultTableModel soundTableModel) {
         try {
