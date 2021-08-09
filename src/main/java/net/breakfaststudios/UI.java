@@ -824,7 +824,8 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
-        openOnStartup(true);
+        // TODO remove this on release
+        Util.openOnStartup(true);
     }
 
 
@@ -833,7 +834,7 @@ public class UI extends JFrame {
         ImageIcon settingsIcon;
         Image settingsImage = darkMode ? toolKit.getImage(this.getClass().getClassLoader().getResource("iconblack.png")) : toolKit.getImage(this.getClass().getClassLoader().getResource("iconwhite.png"));
 
-        //All components
+        // All components
         panels.forEach(panel -> {
             for (Component c : panel.getComponents()) {
                 JComponent jc = (JComponent) c;
@@ -849,7 +850,7 @@ public class UI extends JFrame {
             panel.setBackground(backgroundColor);
         });
 
-        //Sound table
+        // Sound table
         tablePane.getViewport().setBackground(backgroundColor);
 
         soundTable.getTableHeader().setBackground(backgroundColor);
@@ -858,7 +859,7 @@ public class UI extends JFrame {
         soundTable.setBackground(backgroundColor);
         soundTable.setForeground(textColor);
 
-        //Menu bar
+        // Menu bar
         menuBar.setBorderPainted(false);
         menuBar.setUI(new BasicMenuBarUI() {
             public void paint(Graphics g, JComponent c) {
@@ -867,59 +868,22 @@ public class UI extends JFrame {
             }
         });
 
-        //Big boi frame
+        // Main frame (this)
         getContentPane().setBackground(backgroundColor);
         getContentPane().setForeground(textColor);
 
-        //Sound dropdown
+        // Sound dropdown
         soundOutputDropdown.setForeground(black);
         soundOutputDropdown.setOpaque(false);
 
-        //Settings menu
+        // Settings menu
         settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         settingsMenu.setIcon(settingsIcon);
         settingsMenu.setForeground(textColor);
 
     }
 
-    private void openOnStartup(boolean bool){
-        // todo make shortcut maybe, this way works fine tho
-        Path winStartupBatch = Paths.get(Util.getMainDirectory() + "soundboard.bat");
-        Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
-        String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + winStartupBatch + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
-        if (os.contains("win") && bool){
-            try{
-                String[] newPath;
-                if (jarPath != null){
-                    newPath = jarPath.split("/");
-                } else {throw new Exception();}
 
-                StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
-                operatingPath.deleteCharAt(0);
-                String fileContents = "java -jar \"" + operatingPath + "\"";
-
-                if (!Files.exists(winStartupBatch)) Files.createFile(winStartupBatch);
-                if (Files.exists(winStartupBatch)){
-                    Files.writeString(winStartupBatch, fileContents);
-                }
-
-                if (!Files.exists(winStartupScript)) Files.createFile(winStartupScript);
-                if (Files.exists(winStartupScript)){
-                    Files.writeString(winStartupScript, script);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        } else if (os.equals("win")){
-            try{
-                Files.deleteIfExists(winStartupBatch);
-                Files.deleteIfExists(winStartupScript);
-            } catch (IOException ex){
-                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
-                ex.printStackTrace();
-            }
-        }
-    }
 
     private void removeSound(JTable soundTable, DefaultTableModel soundTableModel) {
         try {

@@ -2,8 +2,13 @@ package net.breakfaststudios.util;
 
 import net.breakfaststudios.BreakfastSounds;
 import org.jnativehook.keyboard.NativeKeyEvent;
+
+import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -120,6 +125,49 @@ public class Util {
             int toAdd = Integer.parseInt(key);
             keys.add(toAdd);
             builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
+        }
+    }
+
+    /**
+     * Changes open to startup settings.
+     * @param bool True if you want it to open on startup, else false.
+     */
+    public static void openOnStartup(boolean bool){
+        // todo make shortcut maybe, this way works fine tho
+        Path winStartupBatch = Paths.get(Util.getMainDirectory() + "soundboard.bat");
+        Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
+        String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + winStartupBatch + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
+        if (os.contains("win") && bool){
+            try{
+                String[] newPath;
+                if (jarPath != null){
+                    newPath = jarPath.split("/");
+                } else {throw new Exception();}
+
+                StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
+                operatingPath.deleteCharAt(0);
+                String fileContents = "java -jar \"" + operatingPath + "\"";
+
+                if (!Files.exists(winStartupBatch)) Files.createFile(winStartupBatch);
+                if (Files.exists(winStartupBatch)){
+                    Files.writeString(winStartupBatch, fileContents);
+                }
+
+                if (!Files.exists(winStartupScript)) Files.createFile(winStartupScript);
+                if (Files.exists(winStartupScript)){
+                    Files.writeString(winStartupScript, script);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else if (os.equals("win")){
+            try{
+                Files.deleteIfExists(winStartupBatch);
+                Files.deleteIfExists(winStartupScript);
+            } catch (IOException ex){
+                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
+                ex.printStackTrace();
+            }
         }
     }
 }
