@@ -61,14 +61,16 @@ public class Util {
      * @param keyCompatMode Bool representing if keybind compatibility mode is on or off.
      * @param openToTray    Bool representing if open to tray on startup is on or off.
      * @param darkMode      Bool representing if dark mode is on or off.
+     * @param openOnStartup Bool representing if open on startup is on or off.
      */
-    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode) {
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode, boolean openOnStartup) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
         settings.setProperty("openToTray", String.valueOf(openToTray));
         settings.setProperty("darkMode", String.valueOf(darkMode));
+        settings.setProperty("openOnStartup", String.valueOf(openOnStartup));
         if (!settingsFile.exists()) {
             try {
                 boolean a = settingsFile.createNewFile();
@@ -137,37 +139,45 @@ public class Util {
         Path winStartupBatch = Paths.get(Util.getMainDirectory() + "soundboard.bat");
         Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
         String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + winStartupBatch + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
-        if (os.contains("win") && bool){
-            try{
-                String[] newPath;
-                if (jarPath != null){
-                    newPath = jarPath.split("/");
-                } else {throw new Exception();}
+        if (os.contains("win")){
+            if (bool){
+                try{
+                    String[] newPath;
+                    if (jarPath != null){
+                        newPath = jarPath.split("/");
+                    } else {throw new Exception();}
 
-                StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
-                operatingPath.deleteCharAt(0);
-                String fileContents = "java -jar \"" + operatingPath + "\"";
+                    StringBuilder operatingPath = new StringBuilder(String.join("/", newPath));
+                    operatingPath.deleteCharAt(0);
+                    String fileContents = "java -jar \"" + operatingPath + "\"";
 
-                if (!Files.exists(winStartupBatch)) Files.createFile(winStartupBatch);
-                if (Files.exists(winStartupBatch)){
-                    Files.writeString(winStartupBatch, fileContents);
+                    if (!Files.exists(winStartupBatch)) Files.createFile(winStartupBatch);
+                    if (Files.exists(winStartupBatch)){
+                        Files.writeString(winStartupBatch, fileContents);
+                    }
+
+                    if (!Files.exists(winStartupScript)) Files.createFile(winStartupScript);
+                    if (Files.exists(winStartupScript)){
+                        Files.writeString(winStartupScript, script);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
-
-                if (!Files.exists(winStartupScript)) Files.createFile(winStartupScript);
-                if (Files.exists(winStartupScript)){
-                    Files.writeString(winStartupScript, script);
+            } else {
+                try{
+                    Files.deleteIfExists(winStartupBatch);
+                    Files.deleteIfExists(winStartupScript);
+                } catch (IOException ex){
+                    JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
+                    ex.printStackTrace();
                 }
-            } catch (Exception e){
-                e.printStackTrace();
             }
-        } else if (os.equals("win")){
-            try{
-                Files.deleteIfExists(winStartupBatch);
-                Files.deleteIfExists(winStartupScript);
-            } catch (IOException ex){
-                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
-                ex.printStackTrace();
-            }
+        } else if (os.equals("mac")){
+            // TODO implement macOS support here
+        } else if (os.contains("nux")){
+            // TODO implement linux support here
+        } else {
+            JOptionPane.showMessageDialog(null, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
         }
     }
 }

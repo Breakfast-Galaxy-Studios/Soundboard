@@ -25,7 +25,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.0.2";
+    public static final String currentVersion = "pre-v2.0.3";
     protected static final String os = Util.os;
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
@@ -63,7 +63,7 @@ public class BreakfastSounds {
 
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, false, false);
+            Util.updateSettings(soundOutput, false, false, false, false);
         } else {
             settings = Util.getSettingsFile();
             Properties validateSettings = new Properties();
@@ -87,7 +87,13 @@ public class BreakfastSounds {
             }
 
             if (!validateSettings.equals(settings)) {
-                Util.updateSettings(validateSettings.getProperty("soundOutput"), Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")), Boolean.parseBoolean(validateSettings.getProperty("openToTray")), Boolean.parseBoolean(validateSettings.getProperty("darkMode")));
+                Util.updateSettings(
+                        validateSettings.getProperty("soundOutput"),
+                        Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")),
+                        Boolean.parseBoolean(validateSettings.getProperty("openToTray")),
+                        Boolean.parseBoolean(validateSettings.getProperty("darkMode")),
+                        Boolean.parseBoolean(validateSettings.getProperty("openOnStartup"))
+                );
             }
         }
 
