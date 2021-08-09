@@ -824,9 +824,7 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
-        if (openOnStartup(true)){
-            System.out.println("temp error message");
-        }
+        openOnStartup(true);
     }
 
 
@@ -884,8 +882,11 @@ public class UI extends JFrame {
 
     }
 
-    private boolean openOnStartup(boolean bool){
-        Path winStartupPath = Paths.get(System.getenv("APPDATA") + "Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.bat");
+    private void openOnStartup(boolean bool){
+        // todo make shortcut maybe, this way works fine tho
+        Path winStartupBatch = Paths.get(Util.getMainDirectory() + "soundboard.bat");
+        Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
+        String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + winStartupBatch + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
         if (os.contains("win") && bool){
             try{
                 String[] newPath;
@@ -897,25 +898,26 @@ public class UI extends JFrame {
                 operatingPath.deleteCharAt(0);
                 String fileContents = "java -jar \"" + operatingPath + "\"";
 
-                if (!Files.exists(winStartupPath)) Files.createFile(winStartupPath);
+                if (!Files.exists(winStartupBatch)) Files.createFile(winStartupBatch);
+                if (Files.exists(winStartupBatch)){
+                    Files.writeString(winStartupBatch, fileContents);
+                }
 
-                if (Files.exists(winStartupPath)){
-                    Files.writeString(winStartupPath, fileContents);
-                    return true;
+                if (!Files.exists(winStartupScript)) Files.createFile(winStartupScript);
+                if (Files.exists(winStartupScript)){
+                    Files.writeString(winStartupScript, script);
                 }
             } catch (Exception e){
                 e.printStackTrace();
             }
         } else if (os.equals("win")){
             try{
-                Files.deleteIfExists(winStartupPath);
+                Files.deleteIfExists(winStartupBatch);
+                Files.deleteIfExists(winStartupScript);
             } catch (IOException ex){
                 JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
                 ex.printStackTrace();
-                return false;
             }
-        } else {
-            return false;
         }
     }
 
