@@ -1,5 +1,9 @@
 # Warning
-This current version of soundboard WILL NOT RUN CORRECTLY. Use one of the release versions if you wish to build this yourself.
+This version is not guaranteed to work correctly. It likely contains tons of bugs, and may not even build. 
+All release versions build and almost all the recent ones are bug free. 
+If you wish to build this yourself, I would recommend using one of the past release versions, instead of using the current branch.
+After v2.0 is released, there will be at least two branches. One branch that is experimental dev builds, mostly used to get new
+changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
 
 # BGS-Soundboard
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.

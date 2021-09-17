@@ -1,8 +1,9 @@
 package net.breakfaststudios;
 
 import net.breakfaststudios.soundboard.SoundBoard;
+import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
-import net.breakfaststudios.soundboard.listeners.InterceptionListener;
+import net.breakfaststudios.soundboard.interception.InterceptionListener;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
@@ -21,7 +22,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class BreakfastSounds {
 
     /*
@@ -31,7 +31,6 @@ public class BreakfastSounds {
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-    public static InterceptionListener interceptionListener;
 
     /**
      * Creates the UI, and initializes all listeners.
@@ -49,15 +48,8 @@ public class BreakfastSounds {
         Properties settings = null;
 
         // Init interception listener
-        // Todo: remove this
-        if (Util.os.contains("win") && Util.getInterceptionSettings().getProperty("interception").equals("true")) {
-            try {
-                interceptionListener = new InterceptionListener();
-                interceptionListener.startInterception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        // Todo add startup for interceptor in this method
+        InterceptionMain.initKeyboardListener();
 
         /*
          * Make sure AutoUpdater is deleted if it exists.
@@ -185,5 +177,4 @@ public class BreakfastSounds {
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
     }
-
 }

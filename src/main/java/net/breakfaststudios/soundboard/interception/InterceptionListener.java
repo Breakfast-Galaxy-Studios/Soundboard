@@ -1,5 +1,6 @@
-package net.breakfaststudios.soundboard.listeners;
+package net.breakfaststudios.soundboard.interception;
 
+import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.util.Converter;
 
 import javax.swing.*;
@@ -7,12 +8,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-/*
- * For recording keybinds, create a method here to listen for the next packet of data and only that packet
- */
-
 public class InterceptionListener{
 
+    /**
+     * Initializes the main socket used in the listener
+     */
     private DatagramSocket listenerSocket;
     {
         try {
@@ -22,20 +22,22 @@ public class InterceptionListener{
         }
     }
 
-    // Turns byte[] into a string
-    private static String data(byte[] a) {
-        if (a == null)
+    /**
+     * Converts a byte array into a string
+     * @param udpPacket byte[] from a socket, all bytes are converted to chars
+     * @return String of all the chars in the byte array.
+     */
+    private static String data(byte[] udpPacket) {
+        if (udpPacket == null)
             return null;
         StringBuilder data = new StringBuilder();
-        int i = 0;
-        while (a[i] != 0) {
-            data.append((char) a[i]);
-            i++;
+        for (byte character : udpPacket){
+            data.append((char) character);
         }
         return data.toString();
     }
 
-    public void startInterception() {
+    public void startInterceptor() {
         new Thread(()->{
             // Listen to localhost port 55555
 

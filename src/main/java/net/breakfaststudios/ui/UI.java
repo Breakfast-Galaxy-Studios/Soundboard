@@ -4,7 +4,7 @@ import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
-import net.breakfaststudios.soundboard.listeners.InterceptionListener;
+import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
@@ -623,7 +623,7 @@ public class UI extends JFrame {
                 //noinspection ConstantConditions
                 if (Util.getInterceptionSettings().getProperty("interception").equals("true")) {
                     try {
-                        BreakfastSounds.interceptionListener.closeProgram();
+                        InterceptionMain.interceptionListener.closeProgram();
                     } catch (IOException exception){
                         System.out.println("This happens if program is already closed.");
                         exception.printStackTrace();
@@ -756,7 +756,7 @@ public class UI extends JFrame {
                 recordKeybindDialog.setVisible(true);
                 String text = "Unknown 0x255";
                 try {
-                    text = Converter.getKeyText(Integer.parseInt(interceptionListener.getNextKeycode()));
+                    text = Converter.getKeyText(Integer.parseInt(InterceptionMain.interceptionListener.getNextKeycode()));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
