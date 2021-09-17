@@ -73,11 +73,17 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     /**
      * Listens for key releases and removes that key from the pressed keys cache
-     *
      * @param releasedKey Key that was released
      */
     public void nativeKeyReleased(NativeKeyEvent releasedKey) {
         currentlyPressedKeys.remove((Integer) releasedKey.getKeyCode());
+    }
+    /**
+     * Deletes stored interception key from cache
+     * @param releasedKey Key that was released
+     */
+    public void interceptionKeyReleased(Integer releasedKey) {
+        currentlyPressedKeys.remove(releasedKey);
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) { }

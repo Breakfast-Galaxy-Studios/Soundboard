@@ -11,10 +11,9 @@ import java.net.*;
  * For recording keybinds, create a method here to listen for the next packet of data and only that packet
  */
 
-public class InterceptionListener {
+public class InterceptionListener{
 
     private DatagramSocket listenerSocket;
-
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
@@ -28,14 +27,16 @@ public class InterceptionListener {
         if (a == null)
             return null;
         StringBuilder data = new StringBuilder();
-        for (byte b : a) {
-            data.append((char) b);
+        int i = 0;
+        while (a[i] != 0) {
+            data.append((char) a[i]);
+            i++;
         }
         return data.toString();
     }
 
     public void startInterception() {
-        new Thread(() -> {
+        new Thread(()->{
             // Listen to localhost port 55555
 
             byte[] receive = new byte[65535];
@@ -50,8 +51,11 @@ public class InterceptionListener {
                 try {
                     listenerSocket.receive(receivePacket);
                     System.out.println(Converter.getKeyText(Integer.parseInt(data(receive))));
-                    // Checks if the key is registered to a sound
+
+                    // Checks if the key is registered to a sound, and simulates key up event
                     keyListener.interceptionKeyRegister(Integer.parseInt(data(receive)));
+                    keyListener.interceptionKeyReleased(Integer.parseInt(data(receive)));
+
                     // Break the loop if the other program ends.
                     if (data(receive).equals("FATALERROR")) {
                         System.out.println("Fatal error occurred \"serverside\".");
@@ -82,6 +86,7 @@ public class InterceptionListener {
             byte[] receive = new byte[65535];
             DatagramPacket receivePacket;
             DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
+
 
             // Create a packet to receive the data
             receivePacket = new DatagramPacket(receive, receive.length);

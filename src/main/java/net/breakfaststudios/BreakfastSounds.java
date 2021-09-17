@@ -50,7 +50,7 @@ public class BreakfastSounds {
 
         // Init interception listener
         // Todo: remove this
-        if (Util.os.contains("win")) {
+        if (Util.os.contains("win") && Util.getInterceptionSettings().getProperty("interception").equals("true")) {
             try {
                 interceptionListener = new InterceptionListener();
                 interceptionListener.startInterception();

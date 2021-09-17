@@ -7,14 +7,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-
 import static net.breakfaststudios.util.Util.jarPath;
 import static net.breakfaststudios.util.Util.os;
 

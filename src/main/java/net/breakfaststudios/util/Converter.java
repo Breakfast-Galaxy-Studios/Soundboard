@@ -475,9 +475,10 @@ public class Converter {
             return 1080;
         } else if ("num6".equals(var0)){
             return 1077;
-        }  else if ("num4".equals(var0)) {
+        }  else if ("num4".equals(var0)){
             return 1075;
-        } else return -1;
+        }
+        return -1;
     }
 
 }
