@@ -26,41 +26,29 @@ public class GlobalKeyListener implements NativeKeyListener {
     /**
      * Listens for all key presses and plays sound if requirements are met
      *
-     * @param e Key that was pressed
+     * @param pressedKey Key that was pressed
      */
-    public void nativeKeyPressed(NativeKeyEvent e) {
-        if (!currentlyPressedKeys.contains(e.getKeyCode()))
-            currentlyPressedKeys.add(e.getKeyCode());
-        try {
-            List<Integer> neededKeys = new ArrayList<>();
-            for (Sound sound : soundBoard.getSounds()) {
-
-                Collections.addAll(neededKeys, sound.getKeys());
-
-                for (int key : currentlyPressedKeys) {
-                    if (neededKeys.get(0) == key) {
-                        neededKeys.remove((Integer) key);
-                    } else if (neededKeys.contains(key)) {
-                        break;
-                    }
-                }
-
-                if (neededKeys.size() == 0) {
-                    new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()).start();
-                }
-                neededKeys.clear();
-            }
-        } catch (IndexOutOfBoundsException ignored) {
-        }
+    public void nativeKeyPressed(NativeKeyEvent pressedKey) {
+        if (!currentlyPressedKeys.contains(pressedKey.getKeyCode()))
+            currentlyPressedKeys.add(pressedKey.getKeyCode());
+        registerSound();
     }
 
     /**
      * Allows the same registry to be used by the keyboard interceptor.
+     *
      * @param keycode int - The keycode of the key that was pressed.
      */
-    public void interceptionKeyRegister(int keycode){
+    public void interceptionKeyRegister(int keycode) {
         if (!currentlyPressedKeys.contains(keycode))
             currentlyPressedKeys.add(keycode);
+        registerSound();
+    }
+
+    /**
+     * Plays the sound if all the keys needed are pressed.
+     */
+    private void registerSound() {
         try {
             List<Integer> neededKeys = new ArrayList<>();
             for (Sound sound : soundBoard.getSounds()) {
@@ -86,12 +74,11 @@ public class GlobalKeyListener implements NativeKeyListener {
     /**
      * Listens for key releases and removes that key from the pressed keys cache
      *
-     * @param e Key that was released
+     * @param releasedKey Key that was released
      */
-    public void nativeKeyReleased(NativeKeyEvent e) {
-        currentlyPressedKeys.remove((Integer) e.getKeyCode());
+    public void nativeKeyReleased(NativeKeyEvent releasedKey) {
+        currentlyPressedKeys.remove((Integer) releasedKey.getKeyCode());
     }
 
-    public void nativeKeyTyped(NativeKeyEvent e) {
-    }
+    public void nativeKeyTyped(NativeKeyEvent e) { }
 }

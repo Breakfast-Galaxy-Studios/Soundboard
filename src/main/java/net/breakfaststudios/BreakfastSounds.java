@@ -28,12 +28,10 @@ public class BreakfastSounds {
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
     public static final String currentVersion = "pre-v2.0.3";
-    // Todo just to get your attention, why does this exist? can it be removed?
-    protected static final String os = Util.os;
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-    public static InterceptionListener interceptionListener = new InterceptionListener();
+    public static InterceptionListener interceptionListener;
 
     /**
      * Creates the UI, and initializes all listeners.
@@ -52,9 +50,10 @@ public class BreakfastSounds {
 
         // Init interception listener
         // Todo: remove this
-        if (os.contains("win")){
+        if (Util.os.contains("win")) {
             try {
-                interceptionListener.Interception();
+                interceptionListener = new InterceptionListener();
+                interceptionListener.startInterception();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -11,9 +11,10 @@ import java.net.*;
  * For recording keybinds, create a method here to listen for the next packet of data and only that packet
  */
 
-public class InterceptionListener{
+public class InterceptionListener {
 
     private DatagramSocket listenerSocket;
+
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
@@ -27,16 +28,14 @@ public class InterceptionListener{
         if (a == null)
             return null;
         StringBuilder data = new StringBuilder();
-        int i = 0;
-        while (a[i] != 0) {
-            data.append((char) a[i]);
-            i++;
+        for (byte b : a) {
+            data.append((char) b);
         }
         return data.toString();
     }
 
-    public void Interception() {
-        new Thread(()->{
+    public void startInterception() {
+        new Thread(() -> {
             // Listen to localhost port 55555
 
             byte[] receive = new byte[65535];
@@ -83,7 +82,6 @@ public class InterceptionListener{
             byte[] receive = new byte[65535];
             DatagramPacket receivePacket;
             DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
-
 
             // Create a packet to receive the data
             receivePacket = new DatagramPacket(receive, receive.length);

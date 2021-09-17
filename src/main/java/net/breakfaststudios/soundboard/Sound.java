@@ -30,7 +30,6 @@ public class Sound {
             long frames = audioInputStream.getFrameLength();
             double durationInSeconds = ((double) frames) / format.getFrameRate();
             this.length = (long) (durationInSeconds * 1000) + 250;
-
         } catch (Exception exception) {
             exception.printStackTrace();
             JOptionPane.showMessageDialog(null, "You prolly won't see this, but literally you cannot play that file. (" + path + ")");
