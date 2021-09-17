@@ -126,7 +126,43 @@ public class Util {
 
             int toAdd = Integer.parseInt(key);
             keys.add(toAdd);
-            builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
+            // builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
+            builder.append(Converter.getKeyText(toAdd)).append(" + ");
+        }
+    }
+
+    public static void createInterceptionSettings(boolean interception, int devID){
+        File interceptionFile = new File(Util.getMainDirectory() + "interception.properties");
+        Properties interceptionProp = new Properties();
+        interceptionProp.setProperty("interception", String.valueOf(interception));
+        interceptionProp.setProperty("devID", String.valueOf(devID));
+        if (!interceptionFile.exists()) {
+            try {
+                // Sick of compiler warnings for ignored return
+                //noinspection ResultOfMethodCallIgnored
+                interceptionFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            OutputStream output = new FileOutputStream(interceptionFile.getPath());
+            interceptionProp.store(output, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Properties getInterceptionSettings(){
+        try {
+            FileInputStream file = new FileInputStream(Util.getMainDirectory() + "interception.properties");
+            Properties prop = new Properties();
+            prop.load(file);
+            file.close();
+            return prop;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

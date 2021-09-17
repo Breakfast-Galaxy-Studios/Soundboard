@@ -2,6 +2,8 @@ package net.breakfaststudios;
 
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
+import net.breakfaststudios.soundboard.listeners.InterceptionListener;
+import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
 import org.jnativehook.GlobalScreen;
@@ -26,11 +28,12 @@ public class BreakfastSounds {
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
     public static final String currentVersion = "pre-v2.0.3";
+    // Todo just to get your attention, why does this exist? can it be removed?
     protected static final String os = Util.os;
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-
+    public static InterceptionListener interceptionListener = new InterceptionListener();
 
     /**
      * Creates the UI, and initializes all listeners.
@@ -41,12 +44,21 @@ public class BreakfastSounds {
 
     /**
      * Main method for the program.
-     *
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {
         soundBoard = new SoundBoard();
         Properties settings = null;
+
+        // Init interception listener
+        // Todo: remove this
+        if (os.contains("win")){
+            try {
+                interceptionListener.Interception();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         /*
          * Make sure AutoUpdater is deleted if it exists.

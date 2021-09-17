@@ -1,8 +1,10 @@
-package net.breakfaststudios;
+package net.breakfaststudios.ui;
 
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
+import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
+import net.breakfaststudios.soundboard.listeners.InterceptionListener;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
@@ -17,6 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
@@ -127,7 +130,7 @@ public class UI extends JFrame {
         volumeSlider.setMaximumSize(new Dimension(36, 26));
         newSoundFileField.setEditable(false);
         keybindLabel.setText("Key/s:");
-        recordKeybind.setText("jButton1");
+        recordKeybind.setText("...");
         confirmAddSound.setText("Confirm");
         volumeLabel.setText("Volume:");
         fileAdd.setText("...");
@@ -612,6 +615,21 @@ public class UI extends JFrame {
 
         removeButton.addActionListener(e -> removeSound(soundTable, soundTableModel));
 
+        // If interception is turned on, send close to the listening program
+        this.addWindowListener(new WindowAdapter() {
+            @Override public void windowClosing(WindowEvent e) {
+                // I got tired of it complaining about the property potentially being null.
+                //noinspection ConstantConditions
+                if (Util.getInterceptionSettings().getProperty("interception").equals("true")) {
+                    try {
+                        BreakfastSounds.interceptionListener.closeProgram();
+                    } catch (IOException exception){
+                        System.out.println("This happens if program is already closed.");
+                        exception.printStackTrace();
+                    }
+                }
+            }
+        });
 
         // -----------------------------------------------------------------
         // Add sound panel functions
@@ -724,8 +742,7 @@ public class UI extends JFrame {
 
             public void keyReleased(KeyEvent e) {
                 recordKeybindDialog.removeKeyListener(this);
-                recordKeybindDialog.setVisible(false);
-                newKeybindField.setText(String.join("_", characters));
+
             }
         };
 
@@ -733,7 +750,18 @@ public class UI extends JFrame {
 
         recordKeybind.addActionListener(e -> {
             Properties prop = Util.getSettingsFile();
-            if (prop != null && Boolean.parseBoolean(prop.getProperty("keyCompatMode"))) {
+            Properties intercept = Util.getInterceptionSettings();
+            if (intercept != null && Boolean.parseBoolean(intercept.getProperty("interception"))){
+                recordKeybindDialog.setVisible(true);
+                String text = "Unknown 0x255";
+                try {
+                    text = Converter.getKeyText(Integer.parseInt(interceptionListener.getNextKeycode()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                recordKeybindDialog.setVisible(false);
+                newKeybindField.setText(text);
+            } else if (prop != null && Boolean.parseBoolean(prop.getProperty("keyCompatMode"))) {
                 recordKeybindDialog.setVisible(true);
                 characters.clear();
                 recordKeybindDialog.addKeyListener(keybindListener);
@@ -832,6 +860,9 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
+
+        // TODO Remove this before release
+        // new InterceptionUI().interceptionMenu(this, panels);
     }
 
 
