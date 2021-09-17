@@ -25,14 +25,14 @@ public class SoundManager {
         String userConfigDir = Util.getSoundDirectory();
         String soundPath = userConfigDir + name + ".properties";
         try (OutputStream output = new FileOutputStream(soundPath)) {
-            createNewSoundProp(userConfigDir, name, filePath, keybind, volume, output);
+            createNewSoundFile(userConfigDir, name, filePath, keybind, volume, output);
         } catch (Exception ignore) {
             Path path = Paths.get(userConfigDir);
             File soundDir = new File(String.valueOf(path));
 
             if (soundDir.mkdir()) {
                 try (OutputStream output = new FileOutputStream(soundPath)) {
-                    createNewSoundProp(userConfigDir, name, filePath, keybind, volume, output);
+                    createNewSoundFile(userConfigDir, name, filePath, keybind, volume, output);
 
                     ArrayList<Integer> keys = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class SoundManager {
      * @param volume        Volume level between 0-1.
      * @param output        Output stream for the file.
      */
-    private static void createNewSoundProp(String userConfigDir, String name, String filePath, String keybind, float volume, OutputStream output) {
+    private static void createNewSoundFile(String userConfigDir, String name, String filePath, String keybind, float volume, OutputStream output) {
         Path path = Paths.get(userConfigDir);
         Properties prop = new Properties();
         prop.setProperty("name", name);

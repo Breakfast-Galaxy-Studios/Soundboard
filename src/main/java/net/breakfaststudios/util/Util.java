@@ -21,6 +21,7 @@ public class Util {
      * Path of the current location of the jar file.
      */
     public static String jarPath = null;
+
     static {
         try {
             jarPath = BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();

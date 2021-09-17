@@ -34,7 +34,7 @@ public class SoundThread extends Thread {
      *
      * @return Mixer.info speakers
      */
-    private static Mixer.Info getSpeakers() {
+    private Mixer.Info getSpeakers() {
         Mixer.Info speakers = null;
         Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
 
@@ -76,6 +76,7 @@ public class SoundThread extends Thread {
 
             // Start clip, wait for it to play, then close it so java can garbage collect it.
             clip.start();
+
             sleep(clipLength);
             clip.drain();
             clip.close();

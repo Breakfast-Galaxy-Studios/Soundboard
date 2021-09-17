@@ -159,6 +159,7 @@ public class UI extends JFrame {
         keyboardCompatLabel.setToolTipText("If recording keybinds constantly records keys that aren't pressed, or doesn't record certain keys, turn this on.");
         openToTray.setToolTipText("Open to tray at startup on supported OS's.");
         darkModeLabel.setToolTipText("Change the theme of the application.");
+
         // TODO: Change this as OS support is implemented.
         openOnStartupLabel.setToolTipText("Open when computer is first logged in to. (Currently only works on windows.)");
         settingsMenu.setText("Settings");
@@ -696,7 +697,7 @@ public class UI extends JFrame {
 
                     String todo = keyBind.toString();
                     SoundManager.createNewSound(newSoundNameField.getText(), hiddenTextField.getText(), newRawCodes, volumeSlider.getValue());
-                    getSoundBoard().addSound(new Sound(newSoundNameField.getText(), hiddenTextField.getText(), arr, volumeSlider.getValue() / (float) 100));
+                    getSoundBoard().addSound(new Sound(newSoundNameField.getText(), hiddenTextField.getText(), arr, volumeSlider.getValue() / 100.f));
                     resetKeyListener();
                     soundTableModel.addRow(new Object[]{newSoundNameField.getText(), todo.substring(0, todo.length() - 3)});
 

@@ -26,11 +26,9 @@ public class BreakfastSounds {
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
     public static final String currentVersion = "pre-v2.0.3";
-    protected static final String os = Util.os;
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-
 
     /**
      * Creates the UI, and initializes all listeners.
@@ -97,8 +95,7 @@ public class BreakfastSounds {
             }
         }
 
-
-        // UI Scaling will be slightly messed up outside of a Windows OS.
+        // UI Scaling will be slightly messed up outside a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception ignore) {
@@ -106,7 +103,6 @@ public class BreakfastSounds {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
             } catch (Exception ignored) { }
         }
-
 
         // Create and display the UI
         makeAppDir();
