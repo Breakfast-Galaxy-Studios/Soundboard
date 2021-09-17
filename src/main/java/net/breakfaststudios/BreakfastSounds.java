@@ -48,7 +48,6 @@ public class BreakfastSounds {
         Properties settings = null;
 
         // Init interception listener
-        // Todo add startup for interceptor in this method
         InterceptionMain.initKeyboardListener();
 
         /*
@@ -116,13 +115,14 @@ public class BreakfastSounds {
         EventQueue.invokeLater(BreakfastSounds::new);
 
         //Register native hook so we can actually listen for keystrokes
-        try {
-            GlobalScreen.registerNativeHook();
-        } catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
-
-            System.exit(53);
+        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || Util.getInterceptionSettings().getProperty("interception").equals("false")){
+            try {
+                GlobalScreen.registerNativeHook();
+            } catch (NativeHookException ex) {
+                System.err.println("There was a problem registering the native hook.");
+                System.err.println(ex.getMessage());
+                System.exit(53);
+            }
         }
 
         //Load some stuff from settings

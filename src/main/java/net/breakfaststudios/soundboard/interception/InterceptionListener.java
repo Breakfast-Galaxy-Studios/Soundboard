@@ -31,8 +31,10 @@ public class InterceptionListener{
         if (udpPacket == null)
             return null;
         StringBuilder data = new StringBuilder();
-        for (byte character : udpPacket){
-            data.append((char) character);
+        int i = 0;
+        while (udpPacket[i] != 0) {
+            data.append((char) udpPacket[i]);
+            i++;
         }
         return data.toString();
     }

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is the main class for interception.
@@ -22,6 +23,9 @@ public class InterceptionMain {
      */
     public static InterceptionListener interceptionListener = new InterceptionListener();
 
+    /**
+     * The directory for the interception program, and it's required dll's
+     */
     public static String interceptionDir = Util.getMainDirectory() + "interception/";
 
     /**
