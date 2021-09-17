@@ -31,7 +31,6 @@ public class SoundThread extends Thread {
 
     /**
      * Gets the speakers as a Mixer.info
-     *
      * @return Mixer.info speakers
      */
     private Mixer.Info getSpeakers() {

@@ -55,6 +55,35 @@ public class GlobalKeyListener implements NativeKeyListener {
     }
 
     /**
+     * Allows the same registry to be used by the keyboard interceptor.
+     * @param keycode int - The keycode of the key that was pressed.
+     */
+    public void interceptionKeyRegister(int keycode){
+        if (!currentlyPressedKeys.contains(keycode))
+            currentlyPressedKeys.add(keycode);
+        try {
+            List<Integer> neededKeys = new ArrayList<>();
+            for (Sound sound : soundBoard.getSounds()) {
+
+                Collections.addAll(neededKeys, sound.getKeys());
+
+                for (int key : currentlyPressedKeys) {
+                    if (neededKeys.get(0) == key) {
+                        neededKeys.remove((Integer) key);
+                    } else if (neededKeys.contains(key)) {
+                        break;
+                    }
+                }
+
+                if (neededKeys.size() == 0) {
+                    new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()).start();
+                }
+                neededKeys.clear();
+            }
+        } catch (IndexOutOfBoundsException ignored) { }
+    }
+
+    /**
      * Listens for key releases and removes that key from the pressed keys cache
      *
      * @param e Key that was released

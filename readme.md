@@ -1,5 +1,7 @@
-# BGS-Soundboard
+# Warning
+This current version of soundboard WILL NOT RUN CORRECTLY. Use one of the release versions if you wish to build this yourself.
 
+# BGS-Soundboard
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.
 
 This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms.
