@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
@@ -32,6 +33,7 @@ public class InterceptionMain {
      * Path in the form of a string, of the interception.properties file
      */
     public static String interceptionSettingsFilePath = Util.getMainDirectory() + "interception.properties";
+    private static String interceptionVBS = interceptionDir + "interception.vbs";
 
     /**
      * Checks if the os is windows, and makes sure that interception is turned on
@@ -61,10 +63,11 @@ public class InterceptionMain {
      * @param devID The device id of the keyboard the interceptor needs to intercept.
      * @return boolean, true if file was created successfully, false if not.
      */
-    public static boolean updateInterceptionProperties(String devID){
+    public static boolean updateInterceptionProperties(String devID, String interception){
         Properties prop = new Properties();
         File interceptionFile = new File(interceptionSettingsFilePath);
         prop.setProperty("devID", devID);
+        prop.setProperty("interception", interception);
 
         // Create file if it doesn't already exist
         if (!interceptionFile.exists()) {
@@ -75,6 +78,8 @@ public class InterceptionMain {
                 e.printStackTrace();
             }
         }
+
+        // Save the file
         try {
             OutputStream output = new FileOutputStream(interceptionFile.getPath());
             prop.store(output, null);
@@ -89,8 +94,7 @@ public class InterceptionMain {
      * Creates a Visual Basic Script, so that interceptor can be launched silently, without having a cmd window.
      * @return Returns true if file was created, false otherwise
      */
-
-    public static boolean createInterceptionVBS(String pathToInterception){
+    private static boolean createInterceptionVBS(String pathToInterception){
         String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + pathToInterception + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
         return true;
     }
@@ -103,6 +107,7 @@ public class InterceptionMain {
         try{
             Files.deleteIfExists(Path.of(interceptionSettingsFilePath));
             Files.deleteIfExists(Path.of(interceptionDir));
+            Files.deleteIfExists(Path.of(interceptionVBS));
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, """
@@ -112,4 +117,6 @@ public class InterceptionMain {
               """ + interceptionDir);
         }
     }
+
+
 }
