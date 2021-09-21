@@ -3,7 +3,6 @@ package net.breakfaststudios;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
-import net.breakfaststudios.soundboard.interception.InterceptionListener;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
@@ -99,7 +98,6 @@ public class BreakfastSounds {
             }
         }
 
-
         // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -108,7 +106,6 @@ public class BreakfastSounds {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
             } catch (Exception ignored) { }
         }
-
 
         // Create and display the UI
         makeAppDir();
@@ -134,7 +131,6 @@ public class BreakfastSounds {
             SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
         }
 
-
         //Disable annoying logger output
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.OFF);
@@ -153,7 +149,6 @@ public class BreakfastSounds {
         if (!Files.exists(soundDir)) {
             try {
                 Files.createDirectories(soundDir);
-
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
