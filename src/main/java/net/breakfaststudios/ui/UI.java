@@ -621,7 +621,7 @@ public class UI extends JFrame {
             @Override public void windowClosing(WindowEvent e) {
                 // I got tired of it complaining about the property potentially being null.
                 //noinspection ConstantConditions
-                if (Util.getInterceptionSettings().getProperty("interception").equals("true")) {
+                if (InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
                     try {
                         InterceptionMain.interceptionListener.closeProgram();
                     } catch (IOException exception){
@@ -751,7 +751,7 @@ public class UI extends JFrame {
 
         recordKeybind.addActionListener(e -> {
             Properties prop = Util.getSettingsFile();
-            Properties intercept = Util.getInterceptionSettings();
+            Properties intercept = InterceptionMain.getInterceptionSettings();
             if (intercept != null && Boolean.parseBoolean(intercept.getProperty("interception"))){
                 recordKeybindDialog.setVisible(true);
                 String text = "Unknown 0x255";

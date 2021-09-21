@@ -3,13 +3,11 @@ package net.breakfaststudios.soundboard.interception;
 import net.breakfaststudios.util.Util;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,19 +31,40 @@ public class InterceptionMain {
      * Path in the form of a string, of the interception.properties file
      */
     public static String interceptionSettingsFilePath = Util.getMainDirectory() + "interception.properties";
-    private static String interceptionVBS = interceptionDir + "interception.vbs";
+
+    /**
+     * The path to in the interception VBS file.
+     */
+    private static final String interceptionVBS = interceptionDir + "interception.vbs";
 
     /**
      * Checks if the os is windows, and makes sure that interception is turned on
      * If these conditions are met, it then calls the startInterception method.
      */
     public static void initKeyboardListener() {
-        if (Util.os.contains("win") && Util.getInterceptionSettings().getProperty("interception").equals("true")) {
+        if (Util.os.contains("win") && getInterceptionSettings().getProperty("interception").equals("true")) {
             try {
                 startInterception();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Get the properties file for interceptor
+     * @return Properties of the settings for the interceptor
+     */
+    public static Properties getInterceptionSettings(){
+        try {
+            FileInputStream file = new FileInputStream(Util.getMainDirectory() + "interception.properties");
+            Properties prop = new Properties();
+            prop.load(file);
+            file.close();
+            return prop;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -72,6 +91,7 @@ public class InterceptionMain {
         // Create file if it doesn't already exist
         if (!interceptionFile.exists()) {
             try {
+                // Silence the error that occurs from ignoring the return
                 //noinspection ResultOfMethodCallIgnored
                 interceptionFile.createNewFile();
             } catch (IOException e) {
@@ -94,8 +114,20 @@ public class InterceptionMain {
      * Creates a Visual Basic Script, so that interceptor can be launched silently, without having a cmd window.
      * @return Returns true if file was created, false otherwise
      */
+    // Todo finalize and implement this method
     private static boolean createInterceptionVBS(String pathToInterception){
         String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + pathToInterception + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
+
+        Path vbsScript = Paths.get(interceptionVBS);
+        try {
+            if (!Files.exists(vbsScript)) Files.createFile(vbsScript);
+            if (Files.exists(vbsScript)){
+                Files.writeString(vbsScript, script);
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -117,6 +149,4 @@ public class InterceptionMain {
               """ + interceptionDir);
         }
     }
-
-
 }

@@ -132,19 +132,6 @@ public class Util {
         }
     }
 
-    public static Properties getInterceptionSettings(){
-        try {
-            FileInputStream file = new FileInputStream(Util.getMainDirectory() + "interception.properties");
-            Properties prop = new Properties();
-            prop.load(file);
-            file.close();
-            return prop;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     /**
      * Changes open to startup settings.
      * @param bool True if you want it to open on startup, else false.

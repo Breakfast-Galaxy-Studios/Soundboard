@@ -115,7 +115,7 @@ public class BreakfastSounds {
         EventQueue.invokeLater(BreakfastSounds::new);
 
         //Register native hook so we can actually listen for keystrokes
-        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || Util.getInterceptionSettings().getProperty("interception").equals("false")){
+        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || InterceptionMain.getInterceptionSettings().getProperty("interception").equals("false")){
             try {
                 GlobalScreen.registerNativeHook();
             } catch (NativeHookException ex) {
