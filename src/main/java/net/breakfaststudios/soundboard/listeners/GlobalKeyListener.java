@@ -50,6 +50,7 @@ public class GlobalKeyListener implements NativeKeyListener {
      */
     private void registerSound() {
         try {
+            System.out.println();
             List<Integer> neededKeys = new ArrayList<>();
             for (Sound sound : soundBoard.getSounds()) {
 

@@ -18,17 +18,17 @@ public class InterceptionMain {
      * Public InterceptionListener class so that other classes & methods can all modify and use the same object.
      * You should never create another InterceptionListener Object.
      */
-    public static InterceptionListener interceptionListener = new InterceptionListener();
+    public static final InterceptionListener interceptionListener = new InterceptionListener();
 
     /**
      * The directory for the interception program, and it's required dll's
      */
-    public static String interceptionDir = Util.getMainDirectory() + "interception/";
+    public static final String interceptionDir = Util.getMainDirectory() + "interception/";
 
     /**
      * Path in the form of a string, of the interception.properties file
      */
-    public static String interceptionSettingsFilePath = Util.getMainDirectory() + "interception.properties";
+    public static final String interceptionSettingsFilePath = Util.getMainDirectory() + "interception.properties";
 
     /**
      * The path to in the interception VBS file.
