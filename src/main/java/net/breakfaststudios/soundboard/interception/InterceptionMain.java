@@ -4,12 +4,10 @@ import net.breakfaststudios.util.Util;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is the main class for interception.
