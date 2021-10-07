@@ -5,6 +5,9 @@ If you wish to build this yourself, I would recommend using one of the past rele
 After v2.0 is released, there will be at least two branches. One branch that is experimental dev builds, mostly used to get new
 changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
 
+# Java Version Warning
+Version 2.0 is going to be the last version compiled with java 16. All future versions will be using java 17.
+
 # BGS-Soundboard
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.
 
