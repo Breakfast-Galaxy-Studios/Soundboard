@@ -26,7 +26,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "beta v2.1.0";
+    public static final String currentVersion = "pre-v2.0.3";
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -45,9 +45,6 @@ public class BreakfastSounds {
     public static void main(String[] args) {
         soundBoard = new SoundBoard();
         Properties settings = null;
-
-        // Init interception listener
-        //InterceptionMain.initKeyboardListener();
 
         /*
          * Make sure AutoUpdater is deleted if it exists.
@@ -98,31 +95,25 @@ public class BreakfastSounds {
             }
         }
 
-        // UI Scaling will be slightly messed up outside a Windows OS.
+        // UI Scaling will be slightly messed up outside of a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
         // Create and display the UI
         makeAppDir();
         EventQueue.invokeLater(BreakfastSounds::new);
 
-        //Register native hook so we can actually listen for keystrokes
-        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || InterceptionMain.getInterceptionSettings().getProperty("interception").equals("false")){
-            try {
-                GlobalScreen.registerNativeHook();
-            } catch (NativeHookException ex) {
-                System.err.println("There was a problem registering the native hook.");
-                System.err.println(ex.getMessage());
-                System.exit(53);
-            }
-        }
+        // Register type of keylistener
+        initKeyListener();
 
         //Load some stuff from settings
+
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
         } else {
@@ -161,6 +152,23 @@ public class BreakfastSounds {
         }).start();
     }
 
+
+    /**
+     * Initializes the type of keylistener to be used.
+     */
+    private static void initKeyListener() {
+        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
+            InterceptionMain.initKeyboardListener();
+        } else {
+            try {
+                GlobalScreen.registerNativeHook();
+            } catch (NativeHookException ex) {
+                System.err.println("There was a problem registering the native hook.");
+                System.err.println(ex.getMessage());
+                System.exit(53);
+            }
+        }
+    }
 
     /**
      * Creates the app directory in APPDATA on Windows, or the user's home folder on linux/macOS.
