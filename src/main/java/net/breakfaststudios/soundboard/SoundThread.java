@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * This class basically is just for playing sounds on threads
  */
-public class SoundThread extends Thread {
+public class SoundThread implements Runnable {
 
     private final String path;
     private final float volume;
@@ -76,7 +76,7 @@ public class SoundThread extends Thread {
             // Start clip, wait for it to play, then close it so java can garbage collect it.
             clip.start();
 
-            sleep(clipLength);
+            Thread.sleep(clipLength);
             clip.drain();
             clip.close();
         } catch (Throwable t) {

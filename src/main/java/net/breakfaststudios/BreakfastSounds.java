@@ -26,7 +26,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.0.3";
+    public static final String currentVersion = "beta v2.1.0";
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -47,7 +47,7 @@ public class BreakfastSounds {
         Properties settings = null;
 
         // Init interception listener
-        InterceptionMain.initKeyboardListener();
+        //InterceptionMain.initKeyboardListener();
 
         /*
          * Make sure AutoUpdater is deleted if it exists.
@@ -98,7 +98,7 @@ public class BreakfastSounds {
             }
         }
 
-        // UI Scaling will be slightly messed up outside of a Windows OS.
+        // UI Scaling will be slightly messed up outside a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception ignore) {
@@ -123,7 +123,6 @@ public class BreakfastSounds {
         }
 
         //Load some stuff from settings
-
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
         } else {
@@ -139,7 +138,29 @@ public class BreakfastSounds {
         //Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
+
+        startAutoCollection(300000);
     }
+
+    /**
+     * Starts the auto garbage collection thread hehe
+     *
+     * @param time Time between each garbage collection cycle
+     */
+    private static void startAutoCollection(int time) {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("RUNNING COLLECTION");
+                Runtime.getRuntime().gc();
+            }
+        }).start();
+    }
+
 
     /**
      * Creates the app directory in APPDATA on Windows, or the user's home folder on linux/macOS.

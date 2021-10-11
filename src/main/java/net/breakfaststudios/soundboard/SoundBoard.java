@@ -2,6 +2,8 @@ package net.breakfaststudios.soundboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * This is the main cache class and stores all the sounds
@@ -9,12 +11,24 @@ import java.util.List;
 public class SoundBoard {
 
     private final List<Sound> sounds;
+    private final ThreadPoolExecutor executorService;
 
     /**
      * Sound cache class
      */
     public SoundBoard() {
         sounds = new ArrayList<>();
+        this.executorService = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    }
+
+    /**
+     * Queues sound for playing.
+     *
+     * @param runnable ooga booga!
+     */
+    public void queueSound(SoundThread runnable) {
+        executorService.execute(runnable);
+        //System.out.println(executorService.getPoolSize());
     }
 
     /**

@@ -9,9 +9,9 @@
     <version>1</version>
 
     <properties>
-        <maven.compiler.release>16</maven.compiler.release>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <packaging>jar</packaging>

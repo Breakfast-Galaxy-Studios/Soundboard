@@ -101,6 +101,7 @@ public class InterceptionMain {
         try {
             OutputStream output = new FileOutputStream(interceptionFile.getPath());
             prop.store(output, null);
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
