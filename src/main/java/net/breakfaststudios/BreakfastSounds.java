@@ -26,7 +26,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.0.3";
+    public static final String currentVersion = "v2.0";
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -45,9 +45,6 @@ public class BreakfastSounds {
     public static void main(String[] args) {
         soundBoard = new SoundBoard();
         Properties settings = null;
-
-        // Init interception listener
-        InterceptionMain.initKeyboardListener();
 
         /*
          * Make sure AutoUpdater is deleted if it exists.
@@ -111,8 +108,10 @@ public class BreakfastSounds {
         makeAppDir();
         EventQueue.invokeLater(BreakfastSounds::new);
 
-        //Register native hook so we can actually listen for keystrokes
-        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || InterceptionMain.getInterceptionSettings().getProperty("interception").equals("false")){
+        // Register type of keylistener
+        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")){
+            InterceptionMain.initKeyboardListener();
+        } else {
             try {
                 GlobalScreen.registerNativeHook();
             } catch (NativeHookException ex) {
