@@ -109,17 +109,7 @@ public class BreakfastSounds {
         EventQueue.invokeLater(BreakfastSounds::new);
 
         // Register type of keylistener
-        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")){
-            InterceptionMain.initKeyboardListener();
-        } else {
-            try {
-                GlobalScreen.registerNativeHook();
-            } catch (NativeHookException ex) {
-                System.err.println("There was a problem registering the native hook.");
-                System.err.println(ex.getMessage());
-                System.exit(53);
-            }
-        }
+        initKeyListener();
 
         //Load some stuff from settings
 
@@ -138,6 +128,23 @@ public class BreakfastSounds {
         //Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
+    }
+
+    /**
+     * Initializes the type of keylistener to be used.
+     */
+    private static void initKeyListener() {
+        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")){
+            InterceptionMain.initKeyboardListener();
+        } else {
+            try {
+                GlobalScreen.registerNativeHook();
+            } catch (NativeHookException ex) {
+                System.err.println("There was a problem registering the native hook.");
+                System.err.println(ex.getMessage());
+                System.exit(53);
+            }
+        }
     }
 
     /**
