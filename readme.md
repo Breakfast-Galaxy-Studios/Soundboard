@@ -1,11 +1,11 @@
-# Warning
+# Warnings
 This version is not guaranteed to work correctly. It likely contains tons of bugs, and may not even build. 
 All release versions build and almost all the recent ones are bug free. 
 If you wish to build this yourself, I would recommend using one of the past release versions, instead of using the current branch.
 After v2.0 is released, there will be at least two branches. One branch that is experimental dev builds, mostly used to get new
 changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
 
-# Java Version Warning
+## Java Version Warning
 Version 2.0 is going to be the last version compiled with java 16. All future versions will be using java 17.
 
 # BGS-Soundboard

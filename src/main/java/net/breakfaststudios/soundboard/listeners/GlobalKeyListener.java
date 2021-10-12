@@ -18,7 +18,6 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
-
     public GlobalKeyListener() {
         soundBoard = BreakfastSounds.getSoundBoard();
     }
@@ -50,7 +49,6 @@ public class GlobalKeyListener implements NativeKeyListener {
      */
     private void registerSound() {
         try {
-            System.out.println();
             List<Integer> neededKeys = new ArrayList<>();
             for (Sound sound : soundBoard.getSounds()) {
 
@@ -65,7 +63,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                 }
 
                 if (neededKeys.size() == 0) {
-                    new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()).start();
+                    soundBoard.queueSound(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()));
                 }
                 neededKeys.clear();
             }

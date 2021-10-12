@@ -46,9 +46,6 @@ public class BreakfastSounds {
         soundBoard = new SoundBoard();
         Properties settings = null;
 
-        // Init interception listener
-        InterceptionMain.initKeyboardListener();
-
         /*
          * Make sure AutoUpdater is deleted if it exists.
          */
@@ -104,23 +101,16 @@ public class BreakfastSounds {
         } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
         // Create and display the UI
         makeAppDir();
         EventQueue.invokeLater(BreakfastSounds::new);
 
-        //Register native hook so we can actually listen for keystrokes
-        if (!Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) || InterceptionMain.getInterceptionSettings().getProperty("interception").equals("false")){
-            try {
-                GlobalScreen.registerNativeHook();
-            } catch (NativeHookException ex) {
-                System.err.println("There was a problem registering the native hook.");
-                System.err.println(ex.getMessage());
-                System.exit(53);
-            }
-        }
+        // Register type of keylistener
+        initKeyListener();
 
         //Load some stuff from settings
 
@@ -139,6 +129,45 @@ public class BreakfastSounds {
         //Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
+
+        startAutoCollection(300000);
+    }
+
+    /**
+     * Starts the auto garbage collection thread hehe
+     *
+     * @param time Time between each garbage collection cycle
+     */
+    private static void startAutoCollection(int time) {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("RUNNING COLLECTION");
+                Runtime.getRuntime().gc();
+            }
+        }).start();
+    }
+
+
+    /**
+     * Initializes the type of keylistener to be used.
+     */
+    private static void initKeyListener() {
+        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
+            InterceptionMain.initKeyboardListener();
+        } else {
+            try {
+                GlobalScreen.registerNativeHook();
+            } catch (NativeHookException ex) {
+                System.err.println("There was a problem registering the native hook.");
+                System.err.println(ex.getMessage());
+                System.exit(53);
+            }
+        }
     }
 
     /**
