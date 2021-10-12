@@ -26,8 +26,8 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.0.3";
-    public static String SELECTED_AUDIO_DEVICE;
+    public static final String currentVersion = "pre-v2.1";
+    public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
 
@@ -95,7 +95,7 @@ public class BreakfastSounds {
             }
         }
 
-        // UI Scaling will be slightly messed up outside of a Windows OS.
+        // UI Scaling will be slightly messed up outside a Windows OS.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception ignore) {
@@ -109,16 +109,13 @@ public class BreakfastSounds {
         makeAppDir();
         EventQueue.invokeLater(BreakfastSounds::new);
 
-        // Register type of keylistener
+        // Register type of listener
         initKeyListener();
 
         //Load some stuff from settings
 
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
-        } else {
-            // Makes new config if it doesn't exist
-            SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
         }
 
         //Disable annoying logger output
