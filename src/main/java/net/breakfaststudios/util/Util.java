@@ -136,7 +136,7 @@ public class Util {
      * @param bool True if you want it to open on startup, else false.
      */
     public static void openOnStartup(boolean bool){
-        // todo make shortcut maybe, this way works fine tho
+        // TODO: potentially make a shortcut; making shortcuts is way more complicated than this though.
         if (os.contains("win")) {
             Path winStartupBatch = Paths.get(getMainDirectory() + "soundboard.bat");
             Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
@@ -176,10 +176,10 @@ public class Util {
                 }
             }
         } else if (os.equals("mac")) {
-            // TODO implement macOS support here
+            // TODO: implement macOS support here
         } else if (os.contains("nux")) {
-            // TODO implement linux support here
-            // TODO TEST LINUX SUPPORT
+            // TODO: implement linux support here
+            // TODO: TEST LINUX SUPPORT
             InputStream is = Util.class.getClassLoader().getResourceAsStream("soundBoardLinux.sh");
             File file = new File("/etc/init.d/soundboard");
             if (bool) {

@@ -65,13 +65,17 @@ public class SoundThread implements Runnable {
             // Try opening the sound file, reading it to stream
             clip.open(inputStream);
 
+            // TODO: Find/create a better implementation for this. It is NOT a linear scale in it's current form.
             // Set volume of the clip, using percents
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             float range = volumeControl.getMaximum() - volumeControl.getMinimum();
             float gain = (range * volume) + volumeControl.getMinimum();
             volumeControl.setValue(gain);
 
-            // Start clip, wait for it to play, then close it so java can garbage collect it.
+            /*
+             * Start clip, wait for it to play, then close it so java can garbage collect it.
+             * Java fails to garbage collect if many sounds are played at once
+             */
             clip.start();
 
             Thread.sleep(clipLength);

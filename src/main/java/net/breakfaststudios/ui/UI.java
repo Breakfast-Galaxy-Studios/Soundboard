@@ -860,9 +860,6 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
-
-        // TODO Remove this before release
-        // new InterceptionUI().interceptionMenu(this, panels);
     }
 
 
@@ -917,7 +914,6 @@ public class UI extends JFrame {
         settingsIcon = new ImageIcon(settingsImage.getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         settingsMenu.setIcon(settingsIcon);
         settingsMenu.setForeground(textColor);
-
     }
 
 

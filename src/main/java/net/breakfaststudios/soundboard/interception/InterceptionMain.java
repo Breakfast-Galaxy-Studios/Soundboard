@@ -70,7 +70,7 @@ public class InterceptionMain {
      * Starts the interceptor thread, and opens interception.exe
      */
     public static void startInterception(){
-        // Todo, add to this method something to run the vbs script to start interceptor
+        // TODO: add to this method something to run the vbs script to start interceptor
         interceptionListener.startInterceptor();
     }
 

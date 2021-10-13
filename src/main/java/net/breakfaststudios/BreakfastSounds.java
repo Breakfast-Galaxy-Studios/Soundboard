@@ -47,7 +47,7 @@ public class BreakfastSounds {
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {
-        // TODO remove this ;)
+        // TODO remove this
         new Thread(() -> new InterceptionUI().interceptionMenu()).start();
 
         soundBoard = new SoundBoard();

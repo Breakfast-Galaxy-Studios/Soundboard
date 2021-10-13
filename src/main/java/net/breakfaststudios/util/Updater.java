@@ -62,19 +62,21 @@ public class Updater {
      */
     private static void updater(String newVersion) {
         // Get operating path of current jar
-        // Download url from github
+        // Download url from GitHub
         final String updateURL = "https://github.com/Breakfast-Galaxy-Studios/Soundboard/releases/download/" + newVersion + "/soundboard.jar";
 
         new Thread(() -> {
             downloadFile(Util.getMainDirectory());
             try {
-                // remove soundboard.jar from operating path, remove / from beginning if on windows
+                // remove soundboard.jar from operating path, remove / from beginning if on Windows
                 String[] newPath;
                 if (jarPath != null){
                     newPath = jarPath.split("/");
                 } else {throw new Exception();}
                 String[] operatingPathArray = Arrays.copyOf(newPath, newPath.length - 1);
                 StringBuilder operatingPath = new StringBuilder(String.join("/", operatingPathArray));
+                // The methods used to do this leave a '/' at the beginning of the path, even on Windows.
+                // This is fine on linux and mac that have root, but Windows gets confused with the non-existent dir
                 if (os.contains("win")) {
                     operatingPath.deleteCharAt(0);
                 }
@@ -96,12 +98,12 @@ public class Updater {
 
     /**
      * Downloads the auto-updater
-     *
      * @param saveDir The save directory for the auto-updater.
      */
     private static void downloadFile(String saveDir) {
-        try (BufferedInputStream in = new BufferedInputStream(new URL(Updater.autoUpdaterURL).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(saveDir + "autoupdater.jar")) {
+        try {
+            BufferedInputStream in = new BufferedInputStream(new URL(Updater.autoUpdaterURL).openStream());
+            FileOutputStream fileOutputStream = new FileOutputStream(saveDir + "autoupdater.jar");
             System.out.println("Downloading Updater.");
             byte[] dataBuffer = new byte[1024];
             int bytesRead;

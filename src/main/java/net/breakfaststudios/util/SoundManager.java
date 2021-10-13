@@ -54,6 +54,8 @@ public class SoundManager {
     }
 
     /**
+     * Creates a new sound file.
+     *
      * @param userConfigDir Directory for the save file.
      * @param name          Name of the sound.
      * @param filePath      Path to the audio file.
@@ -107,7 +109,6 @@ public class SoundManager {
             /*
              * Remove Sound from SoundBoard cache.
              */
-
             Properties prop = new Properties();
             prop.load(file);
             SoundBoard sb = BreakfastSounds.getSoundBoard();
