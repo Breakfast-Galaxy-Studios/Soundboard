@@ -6,6 +6,7 @@ After v2.0 is released, there will be at least two branches. One branch that is 
 changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
 
 > Java Version Warning
+> 
 > Version 2.0 was the last version compiled with Java 16. 2.1 & all future versions will be using Java 17 until a new version of Java is released.
 
 # BGS-Soundboard
