@@ -3,6 +3,7 @@ package net.breakfaststudios;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
+import net.breakfaststudios.ui.InterceptionUI;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
@@ -22,9 +23,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BreakfastSounds {
-
     /*
+     *
+     *
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
+     *
+     *
      */
     public static final String currentVersion = "pre-v2.1";
     public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
@@ -43,6 +47,9 @@ public class BreakfastSounds {
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {
+        // TODO remove this ;)
+        new Thread(() -> new InterceptionUI().interceptionMenu()).start();
+
         soundBoard = new SoundBoard();
         Properties settings = null;
 
@@ -101,8 +108,7 @@ public class BreakfastSounds {
         } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) { }
         }
 
         // Create and display the UI
@@ -112,21 +118,22 @@ public class BreakfastSounds {
         // Register type of listener
         initKeyListener();
 
-        //Load some stuff from settings
+        // Load some stuff from settings
 
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
         }
 
-        //Disable annoying logger output
+        // Disable annoying logger output
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.OFF);
         logger.setUseParentHandlers(false);
 
-        //Register key listeners
+        // Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
 
+        // TODO potentially allow the user to set their own interval
         startAutoCollection(300000);
     }
 
@@ -143,6 +150,7 @@ public class BreakfastSounds {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                // Run garbage collection
                 System.out.println("RUNNING COLLECTION");
                 Runtime.getRuntime().gc();
             }

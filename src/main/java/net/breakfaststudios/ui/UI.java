@@ -2,7 +2,6 @@ package net.breakfaststudios.ui;
 
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
-import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;

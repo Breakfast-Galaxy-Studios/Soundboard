@@ -42,14 +42,11 @@ public class InterceptionListener{
     public void startInterceptor() {
         new Thread(()->{
             // Listen to localhost port 55555
-
             byte[] receive = new byte[65535];
             GlobalKeyListener keyListener = new GlobalKeyListener();
-            DatagramPacket receivePacket;
             while (true) {
-
                 // Create a packet to receive the data
-                receivePacket = new DatagramPacket(receive, receive.length);
+                DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
 
                 // Waits until a packet is received
                 try {
@@ -71,6 +68,7 @@ public class InterceptionListener{
                 }
             }
             // Throw error if other program ends.
+            // Yes I'm throwing an exception in a thread, and yes I am catching it just to show the stack trace...
             try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
             JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
@@ -85,15 +83,19 @@ public class InterceptionListener{
         System.out.println("Closed the interceptor.");
     }
 
+    /**
+     * Opens a socket to listen to the devID program, to get the device ID for interception.
+     * @return String of the device ID from the interception program
+     * @throws Exception If the connection is lost, or there is a fatal error.
+     */
     public String listenForDevID() throws Exception{
         try{
             byte[] receive = new byte[65535];
-            DatagramPacket receivePacket;
+            // Declare the socket to be used.
             DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
 
-
             // Create a packet to receive the data
-            receivePacket = new DatagramPacket(receive, receive.length);
+            DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
 
             // Waits until a packet is received
             dsDevID.receive(receivePacket);

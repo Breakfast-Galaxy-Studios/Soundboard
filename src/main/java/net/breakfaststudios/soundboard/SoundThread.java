@@ -11,14 +11,12 @@ import java.io.IOException;
  * This class basically is just for playing sounds on threads
  */
 public class SoundThread implements Runnable {
-
     private final String path;
     private final float volume;
     private final long clipLength;
 
     /**
      * The normal sound thread constructor
-     *
      * @param path       Path to the sound
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
