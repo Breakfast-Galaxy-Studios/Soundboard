@@ -5,13 +5,13 @@ If you wish to build this yourself, I would recommend using one of the past rele
 After v2.0 is released, there will be at least two branches. One branch that is experimental dev builds, mostly used to get new
 changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
 
-## Java Version Warning
-Version 2.0 is going to be the last version compiled with java 16. All future versions will be using java 17.
+> Java Version Warning
+> Version 2.0 was the last version compiled with Java 16. 2.1 & all future versions will be using Java 17 until a new version of Java is released.
 
 # BGS-Soundboard
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.
 
-This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms.
+This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms, along with continued support.
 
 ## Usage
 To run this program, you must have Java 16 installed, which can be found either [here](https://www.oracle.com/java/technologies/javase-jdk16-downloads.html) or [here.](https://jdk.java.net/16/) <br>
