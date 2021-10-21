@@ -1,9 +1,12 @@
 package net.breakfaststudios.ui;
 
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
+import net.breakfaststudios.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Creates the UI for interception. This option will only display on Windows machines.
@@ -15,21 +18,25 @@ public class InterceptionUI {
     private final JDialog interceptionMenuDialog = new JDialog();
 
     public void interceptionMenu() {
-
+        // Declare all components
+        ArrayList<Panel> p = new ArrayList<>();
         Panel interceptionMenuPanel = new Panel();
         JTextField deviceIDTextField = new JTextField();
-
         JLabel deviceIDLabel = new JLabel();
         JLabel InterceptionCheckboxLabel = new JLabel();
         JCheckBox interceptionCheckbox = new JCheckBox();
-
         JButton devIDButton = new JButton("...");
         JButton confirmButton = new JButton("Confirm");
         JButton cancelButton = new JButton("Cancel");
 
+        // Make all needed changes to all the components.
+        p.add(interceptionMenuPanel);
         deviceIDLabel.setText("Device ID");
         InterceptionCheckboxLabel.setText("Interception");
+        interceptionMenuDialog.setMaximumSize(new Dimension(275, 125));
+        interceptionMenuDialog.setMinimumSize(new Dimension(275, 125));
 
+        // Define group layouts
         GroupLayout panelLayout = new GroupLayout(interceptionMenuPanel);
         interceptionMenuPanel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -92,6 +99,11 @@ public class InterceptionUI {
         );
 
         setVisible(true);
+        // -----------------------------------------------------------------
+        // -----------------------------------------------------------------
+        // End creation of UI & begin creation of action listeners
+        // -----------------------------------------------------------------
+        // -----------------------------------------------------------------
 
         // Save settings on confirm & close window
         confirmButton.addActionListener(e -> {
@@ -101,9 +113,21 @@ public class InterceptionUI {
             setVisible(false);
         });
 
-
         // Close window on cancel
         cancelButton.addActionListener(e -> setVisible(false));
+
+        // -----------------------------------------------------------------
+        // Dark mode
+        // -----------------------------------------------------------------
+        if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")) {
+            Color grey = new Color(51, 51, 51);
+            Color white = new Color(255, 255, 255);
+            Util.setTheme(p, grey, white);
+        } else {
+            Color black = new Color(0, 0, 0);
+            Color white = new Color(242, 242, 242);
+            Util.setTheme(p, white, black);
+        }
     }
 
     /**

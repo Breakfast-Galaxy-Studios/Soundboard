@@ -3,6 +3,7 @@ package net.breakfaststudios.util;
 import net.breakfaststudios.BreakfastSounds;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -11,6 +12,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/**
+ * General purpose class for things are constantly accessed / referenced.
+ */
 public class Util {
     /**
      * Returns the name of the OS.
@@ -56,7 +60,6 @@ public class Util {
 
     /**
      * Updates the settings file.
-     *
      * @param soundOutput   String of the chosen sound output device.
      * @param keyCompatMode Bool representing if keybind compatibility mode is on or off.
      * @param openToTray    Bool representing if open to tray on startup is on or off.
@@ -89,7 +92,7 @@ public class Util {
     /**
      * Gets the settings file from the main app dir.
      *
-     * @return Properties file if it exist, else returns null.
+     * @return Properties file if it exists, else returns null.
      */
     public static Properties getSettingsFile() {
         try {
@@ -129,6 +132,30 @@ public class Util {
             // builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
             builder.append(Converter.getKeyText(toAdd)).append(" + ");
         }
+    }
+
+    /**
+     * General purpose method for other windows, as they are added.
+     * @param p ArrayList of panels so that you can set the style of all child elements.
+     * @param backgroundColor Color of the background
+     * @param textColor Color of the text
+     */
+    public static void setTheme(ArrayList<Panel> p, Color backgroundColor, Color textColor) {
+        // All components
+        p.forEach(panel -> {
+            for (Component c : panel.getComponents()) {
+                JComponent jc = (JComponent) c;
+                if (jc instanceof JButton) {
+                    jc.setOpaque(true);
+                    jc.setBackground(backgroundColor);
+                } else {
+                    jc.setBackground(backgroundColor);
+                    jc.setForeground(textColor);
+                    jc.setOpaque(true);
+                }
+            }
+            panel.setBackground(backgroundColor);
+        });
     }
 
     /**
@@ -214,7 +241,6 @@ public class Util {
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
-
             } else {
                 try {
                     Files.deleteIfExists(file.toPath());

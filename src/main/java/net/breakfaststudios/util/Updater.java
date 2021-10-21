@@ -21,9 +21,8 @@ public class Updater {
     private static final String autoUpdaterPath = Util.getMainDirectory() + "autoupdater.jar";
     private static final String autoUpdaterURL = "https://github.com/Breakfast-Galaxy-Studios/Universial-Auto-Updater/releases/download/v1.0/autoupdater.jar";
 
-
     /**
-     * Checks if there is a new release on the github, and prompts the user to update.
+     * Checks if there is a new release on the GitHub, and prompts the user to update.
      */
     public static void runAutoUpdater() {
         try {
@@ -53,8 +52,7 @@ public class Updater {
                     Updater.updater(version);
                 }
             }
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) { }
     }
 
     /**
@@ -75,6 +73,7 @@ public class Updater {
                 } else {throw new Exception();}
                 String[] operatingPathArray = Arrays.copyOf(newPath, newPath.length - 1);
                 StringBuilder operatingPath = new StringBuilder(String.join("/", operatingPathArray));
+
                 // The methods used to do this leave a '/' at the beginning of the path, even on Windows.
                 // This is fine on linux and mac that have root, but Windows gets confused with the non-existent dir
                 if (os.contains("win")) {

@@ -24,11 +24,7 @@ import java.util.logging.Logger;
 
 public class BreakfastSounds {
     /*
-     *
-     *
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
-     *
-     *
      */
     public static final String currentVersion = "pre-v2.1";
     public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
@@ -64,6 +60,7 @@ public class BreakfastSounds {
             }
         }
 
+        // Check for updates
         Updater.runAutoUpdater();
 
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {

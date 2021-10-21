@@ -845,9 +845,9 @@ public class UI extends JFrame {
         });
 
 
-        // -----------------------------------------------------------------
-        // Dark mode
-        // -----------------------------------------------------------------
+        /*
+         * Dark Mode
+         */
         if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")) {
             Color grey = new Color(51, 51, 51);
             Color white = new Color(255, 255, 255);
@@ -861,7 +861,6 @@ public class UI extends JFrame {
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
     }
-
 
     private void setTheme(JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu, JComboBox<String> soundOutputDropdown, boolean darkMode, Color backgroundColor, Color textColor) {
         Toolkit toolKit = Toolkit.getDefaultToolkit();
