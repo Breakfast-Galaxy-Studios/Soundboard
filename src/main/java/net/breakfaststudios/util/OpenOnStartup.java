@@ -75,11 +75,12 @@ public class OpenOnStartup {
         // TODO: implement linux support here
         // TODO: TEST LINUX SUPPORT
         InputStream is = Util.class.getClassLoader().getResourceAsStream("soundBoardLinux.sh");
-        File file = new File("/etc/init.d/soundboard");
+        File file = new File("/etc/systemd/soundboard.service");
         if (bool) {
             try {
                 boolean dirCreated;
 
+                // Make sure the dirs exist and create the file
                 if (!file.exists()) {
                     dirCreated = file.mkdirs();
                     Files.createFile(Paths.get(file.getPath()));
@@ -87,39 +88,62 @@ public class OpenOnStartup {
                     return;
                 }
 
+                // Throw exception if startup dir couldn't be created.
                 if (!dirCreated || is == null) throw new IOException("Startup Directory could not be created.");
+
+                // Create the contents of the file.
                 FileWriter fileWriter = new FileWriter(file);
                 BufferedWriter out = new BufferedWriter(fileWriter);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 String line;
 
+                // Replace unique things in the file
                 while ((line = reader.readLine()) != null) {
-                    if (line.equals("PATH_TO_JAR=%JAR_PATH%")) {
-                        line.replace("%JAR_PATH%", BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "soundboard.jar");
+                    // Replace jar path in startup script to exact path
+                    if (line.equals("ExecStart=/usr/bin/java -jar %JAR_PATH%")) {
+                        line = line.replace("%JAR_PATH%", BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "soundboard.jar");
+                    }
+                    // Replace user in service to actual username
+                    if (line.equals("User=%USER%")) {
+                        line = line.replace("%USER%", System.getProperty("user.name"));
                     }
                     out.append(line);
                     out.newLine();
                 }
+
+                // Close the streams
                 reader.close();
                 out.close();
 
+
                 /*
-                 * Create a command to make the file executable
-                 * sudo chmod +x /etc/init.d/soundboard
-                 * This probably requires sudo
-                 * This DEFINITELY needs more testing
+                 * Execute necessary commands
                  */
-                String[] createFileCommand = {"sudo", "chmod", "+x", "/etc/init.d/soundboard"};
-                Runtime.getRuntime().exec(createFileCommand);
+                Runtime runtime = Runtime.getRuntime();
+                // Reload the daemon
+                String[] reloadDaemon = {"sudo", "systemctl", "daemon-reload"};
+                runtime.exec(reloadDaemon);
+
+                // Enable the service
+                String[] enableService =  {"sudo", "systemctl", "enable", "soundboard"};
+                runtime.exec(enableService);
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
         } else {
+            // If file exist, disable the service
             try {
-                Files.deleteIfExists(file.toPath());
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
-                ex.printStackTrace();
+                if (Files.exists(file.toPath())) {
+                    String[] disableService = {"sudo", "systemctl", "disable", "soundboard"};
+                    Runtime.getRuntime().exec(disableService);
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+                JOptionPane.showMessageDialog(null, """
+                        Failed to disable the service.
+                        You can disable the service yourself by running the following command:
+                        sudo systemctl disable soundboard
+                        """);
             }
         }
     }

@@ -1,0 +1,10 @@
+[Unit]
+Description=Breakfast Galaxy Studios Soundboard
+
+[Service]
+Type=simple
+User=%USER%
+ExecStart=/usr/bin/java -jar %JAR_PATH%
+
+[Install]
+WantedBy=multi-user.target
