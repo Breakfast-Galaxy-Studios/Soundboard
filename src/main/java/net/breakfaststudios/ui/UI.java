@@ -619,9 +619,7 @@ public class UI extends JFrame {
         // If interception is turned on, send close to the listening program
         this.addWindowListener(new WindowAdapter() {
             @Override public void windowClosing(WindowEvent e) {
-                // I got tired of it complaining about the property potentially being null.
-                //noinspection ConstantConditions
-                if (InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
+                if (InterceptionMain.getInterceptionSettings() != null && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
                     try {
                         InterceptionMain.interceptionListener.closeProgram();
                     } catch (IOException exception){

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-public class InterceptionListener{
+final public class InterceptionListener{
 
     /**
      * Initializes the main socket used in the listener

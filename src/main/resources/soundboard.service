@@ -2,9 +2,10 @@
 Description=Breakfast Galaxy Studios Soundboard
 
 [Service]
-Type=simple
+Environment="DISPLAY=:0.0"
 User=%USER%
-ExecStart=/usr/bin/java -jar %JAR_PATH%
+ExecStart=/usr/bin/java -jar "%JAR_PATH%"
+SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target

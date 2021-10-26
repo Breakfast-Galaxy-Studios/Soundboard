@@ -44,7 +44,7 @@ public class BreakfastSounds {
      */
     public static void main(String[] args) {
         // TODO remove this
-        new Thread(() -> new InterceptionUI().interceptionMenu()).start();
+        // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
 
         soundBoard = new SoundBoard();
         Properties settings = null;
@@ -116,7 +116,6 @@ public class BreakfastSounds {
         initKeyListener();
 
         // Load some stuff from settings
-
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
         }
@@ -153,7 +152,6 @@ public class BreakfastSounds {
             }
         }).start();
     }
-
 
     /**
      * Initializes the type of keylistener to be used.

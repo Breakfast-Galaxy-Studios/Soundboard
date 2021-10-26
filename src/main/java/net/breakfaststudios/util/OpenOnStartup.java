@@ -74,12 +74,12 @@ public class OpenOnStartup {
     private static void linux(boolean bool){
         // TODO: implement linux support here
         // TODO: TEST LINUX SUPPORT
-        InputStream is = Util.class.getClassLoader().getResourceAsStream("soundBoardLinux.sh");
-        File file = new File("/etc/systemd/soundboard.service");
+        InputStream is = Util.class.getClassLoader().getResourceAsStream("soundboard.service");
+        File file = new File("/etc/systemd/system/soundboard.service");
         if (bool) {
             try {
                 boolean dirCreated;
-
+                
                 // Make sure the dirs exist and create the file
                 if (!file.exists()) {
                     dirCreated = file.mkdirs();
