@@ -84,7 +84,7 @@ public class OpenOnStartup {
                 // Make sure the dirs exist and create the file
                 if (!file.exists()) {
                     dirCreated = systemd.mkdirs();
-                    Files.createFile(Paths.get(file.getPath()));
+                    Files.createFile(Path.of("/etc/systemd/system/soundboard.service"));
                 } else {
                     return;
                 }
