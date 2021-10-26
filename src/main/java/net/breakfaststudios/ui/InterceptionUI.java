@@ -17,7 +17,12 @@ public class InterceptionUI {
      */
     private final JDialog interceptionMenuDialog = new JDialog();
 
+    /**
+     * Create the interception settings ui & init all listeners for it
+     */
     public void interceptionMenu() {
+        // TODO for some reason the panel isn't aligned to the main window.
+
         // Declare all components
         ArrayList<Panel> p = new ArrayList<>();
         Panel interceptionMenuPanel = new Panel();

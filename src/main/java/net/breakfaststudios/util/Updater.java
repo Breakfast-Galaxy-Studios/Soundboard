@@ -83,7 +83,6 @@ public class Updater {
 
                 String[] autoUpdater = {"java", "-jar", autoUpdaterPath, updateURL, operatingPath.toString(), fileName};
                 Runtime.getRuntime().exec(autoUpdater);
-                System.out.println(Arrays.toString(autoUpdater));
 
                 // Make sure program closes itself, even though it should on its own.
                 System.exit(47);
