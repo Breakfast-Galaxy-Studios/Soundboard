@@ -75,14 +75,15 @@ public class OpenOnStartup {
         // TODO: implement linux support here
         // TODO: TEST LINUX SUPPORT
         InputStream is = Util.class.getClassLoader().getResourceAsStream("soundboard.service");
-        File file = new File("/etc/systemd/system/soundboard.service");
+        File systemd = new File("/etc/systemd/system/");
+        File file = new File("soundboard.service");
         if (bool) {
             try {
                 boolean dirCreated;
                 
                 // Make sure the dirs exist and create the file
                 if (!file.exists()) {
-                    dirCreated = file.mkdirs();
+                    dirCreated = systemd.mkdirs();
                     Files.createFile(Paths.get(file.getPath()));
                 } else {
                     return;
@@ -96,6 +97,8 @@ public class OpenOnStartup {
                 BufferedWriter out = new BufferedWriter(fileWriter);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 String line;
+
+                System.out.println("Test1");
 
                 // Replace unique things in the file
                 while ((line = reader.readLine()) != null) {
@@ -127,6 +130,7 @@ public class OpenOnStartup {
                 // Enable the service
                 String[] enableService =  {"sudo", "systemctl", "enable", "soundboard"};
                 runtime.exec(enableService);
+                System.out.println("Test2");
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
