@@ -6,7 +6,6 @@ import net.breakfaststudios.util.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Creates the UI for interception. This option will only display on Windows machines.
@@ -38,8 +37,8 @@ public class InterceptionUI {
         p.add(interceptionMenuPanel);
         deviceIDLabel.setText("Device ID");
         InterceptionCheckboxLabel.setText("Interception");
-        interceptionMenuDialog.setMaximumSize(new Dimension(275, 125));
-        interceptionMenuDialog.setMinimumSize(new Dimension(275, 125));
+        interceptionMenuDialog.setMaximumSize(new Dimension(325, 200));
+        interceptionMenuDialog.setMinimumSize(new Dimension(325, 200));
 
         // Define group layouts
         GroupLayout panelLayout = new GroupLayout(interceptionMenuPanel);
@@ -91,14 +90,12 @@ public class InterceptionUI {
         interceptionMenuLayout.setHorizontalGroup(
                 interceptionMenuLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(interceptionMenuLayout.createSequentialGroup()
-                                .addContainerGap()
                                 .addComponent(interceptionMenuPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         interceptionMenuLayout.setVerticalGroup(
                 interceptionMenuLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(interceptionMenuLayout.createSequentialGroup()
-                                .addContainerGap()
                                 .addComponent(interceptionMenuPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -124,7 +121,7 @@ public class InterceptionUI {
         // -----------------------------------------------------------------
         // Dark mode
         // -----------------------------------------------------------------
-        if (Objects.requireNonNull(Util.getSettingsFile()).getProperty("darkMode").equals("true")) {
+        if (Util.getSettingsFile().getProperty("darkMode").equals("true")) {
             Color grey = new Color(51, 51, 51);
             Color white = new Color(255, 255, 255);
             Util.setTheme(p, grey, white);

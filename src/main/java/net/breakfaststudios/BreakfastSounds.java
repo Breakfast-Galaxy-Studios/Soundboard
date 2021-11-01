@@ -44,7 +44,7 @@ public class BreakfastSounds {
      */
     public static void main(String[] args) {
         // TODO remove this
-        // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
+        new Thread(() -> new InterceptionUI().interceptionMenu()).start();
 
         soundBoard = new SoundBoard();
         Properties settings = null;
@@ -63,6 +63,7 @@ public class BreakfastSounds {
         // Check for updates
         Updater.runAutoUpdater();
 
+        // Validate that all settings are actually set and not null
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
             Util.updateSettings(soundOutput, false, false, false, false);
@@ -78,10 +79,18 @@ public class BreakfastSounds {
                         validateSettings.setProperty(keyAsString, "Primary Sound Driver");
                         continue;
                     }
+                    if (key.equals("gcTime")) {
+                        validateSettings.setProperty(keyAsString, "300000");
+                        continue;
+                    }
                     validateSettings.setProperty(keyAsString, "false");
                 } else {
                     if (key.equals("soundOutput")) {
                         validateSettings.setProperty(keyAsString, settings.getProperty("soundOutput"));
+                        continue;
+                    }
+                    if (key.equals("gcTime")) {
+                        validateSettings.setProperty(keyAsString, settings.getProperty("gcTime"));
                         continue;
                     }
                     validateSettings.setProperty(keyAsString, settings.getProperty((String) key));
@@ -116,8 +125,16 @@ public class BreakfastSounds {
         initKeyListener();
 
         // Load some stuff from settings
+
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
+            if (settings.getProperty("gcTime") != null){
+                startAutoCollection(Integer.parseInt(settings.getProperty("gcTime")));
+            } else {
+                startAutoCollection(300000);
+            }
+        } else {
+            startAutoCollection(300000);
         }
 
         // Disable annoying logger output
@@ -128,13 +145,10 @@ public class BreakfastSounds {
         // Register key listeners
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
-
-        // TODO potentially allow the user to set their own interval
-        startAutoCollection(300000);
     }
 
     /**
-     * Starts the auto garbage collection thread hehe
+     * Starts the auto garbage collection thread
      *
      * @param time Time between each garbage collection cycle
      */
@@ -152,6 +166,7 @@ public class BreakfastSounds {
             }
         }).start();
     }
+
 
     /**
      * Initializes the type of keylistener to be used.

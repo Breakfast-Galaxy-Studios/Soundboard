@@ -71,6 +71,8 @@ public class Util {
         settings.setProperty("openToTray", String.valueOf(openToTray));
         settings.setProperty("darkMode", String.valueOf(darkMode));
         settings.setProperty("openOnStartup", String.valueOf(openOnStartup));
+        // Potentially allow user to set this in the future.
+        settings.setProperty("gcTime", String.valueOf(300000));
         if (!settingsFile.exists()) {
             try {
                 boolean a = settingsFile.createNewFile();

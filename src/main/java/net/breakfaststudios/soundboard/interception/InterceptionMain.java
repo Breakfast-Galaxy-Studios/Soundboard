@@ -35,6 +35,8 @@ public class InterceptionMain {
      */
     private static final String interceptionVBS = interceptionDir + "interception.vbs";
 
+    public static boolean isRunning = false;
+
     /**
      * Checks if the os is windows, and makes sure that interception is turned on
      * If these conditions are met, it then calls the startInterception method.
@@ -72,6 +74,7 @@ public class InterceptionMain {
     public static void startInterception(){
         // TODO: add to this method something to run the vbs script to start interceptor
         interceptionListener.startInterceptor();
+        isRunning = true;
     }
 
 
@@ -136,6 +139,7 @@ public class InterceptionMain {
     public static void deleteInterception(){
         // Delete startup script, interception.properties, and the entire interception folder.
         try{
+            isRunning = false;
             Files.deleteIfExists(Path.of(interceptionSettingsFilePath));
             Files.deleteIfExists(Path.of(interceptionDir));
             Files.deleteIfExists(Path.of(interceptionVBS));
