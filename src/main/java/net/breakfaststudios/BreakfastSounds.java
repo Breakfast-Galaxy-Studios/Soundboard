@@ -125,7 +125,6 @@ public class BreakfastSounds {
         initKeyListener();
 
         // Load some stuff from settings
-
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
             if (settings.getProperty("gcTime") != null){

@@ -32,6 +32,7 @@ public class Util {
     }
 
     /**
+     * Get a string representation of where the Sounds are stored.
      * @return String representing the dir that the sound-config files are stored.
      */
     public static String getSoundDirectory() {
@@ -44,6 +45,7 @@ public class Util {
     }
 
     /**
+     * Get a string representation of the Main Working Directory.
      * @return String of the main app folder.
      */
     public static String getMainDirectory() {
@@ -75,7 +77,8 @@ public class Util {
         settings.setProperty("gcTime", String.valueOf(300000));
         if (!settingsFile.exists()) {
             try {
-                boolean a = settingsFile.createNewFile();
+                //noinspection ResultOfMethodCallIgnored
+                settingsFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }

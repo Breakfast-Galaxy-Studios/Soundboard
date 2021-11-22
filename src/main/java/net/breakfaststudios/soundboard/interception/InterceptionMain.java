@@ -35,6 +35,10 @@ public class InterceptionMain {
      */
     private static final String interceptionVBS = interceptionDir + "interception.vbs";
 
+    /**
+     * Holds the current state of interceptor.
+     */
+    // TODO this still needs proper implementation
     public static boolean isRunning = false;
 
     /**

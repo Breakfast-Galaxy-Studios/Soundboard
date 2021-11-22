@@ -915,7 +915,9 @@ public class UI extends JFrame {
     }
 
 
-
+    /**
+     * Remove a sound from soundboard.
+     */
     private void removeSound(JTable soundTable, DefaultTableModel soundTableModel) {
         try {
             int column = 0;

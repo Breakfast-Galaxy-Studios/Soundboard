@@ -9,9 +9,9 @@ import java.io.OutputStream;
 import java.net.*;
 
 final public class InterceptionListener{
-
     /**
      * Initializes the main socket used in the listener
+     * This is done here and not later, so it's easier to determine if port is already bound
      */
     private DatagramSocket listenerSocket;
     {
@@ -19,6 +19,10 @@ final public class InterceptionListener{
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, """
+                    Another program is using the port needed by interceptor.
+                    This can occur when there is already an instance of soundboard running.
+                    """);
         }
     }
 
