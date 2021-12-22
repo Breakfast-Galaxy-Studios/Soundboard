@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class SoundManager {
+
     /**
      * Creates a new sound config file.
      *

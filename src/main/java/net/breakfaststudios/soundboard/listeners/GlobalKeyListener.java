@@ -1,6 +1,7 @@
 package net.breakfaststudios.soundboard.listeners;
 
 import net.breakfaststudios.BreakfastSounds;
+import net.breakfaststudios.audio.AudioInterface;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.SoundThread;
@@ -18,8 +19,10 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
+    private int audioInterface;
     public GlobalKeyListener() {
         soundBoard = BreakfastSounds.getSoundBoard();
+        audioInterface = AudioInterface.getAudioInterface();
     }
 
     /**
@@ -63,7 +66,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                 }
 
                 if (neededKeys.size() == 0) {
-                    soundBoard.queueSound(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()));
+                    soundBoard.queueSound(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength(), audioInterface));
                 }
                 neededKeys.clear();
             }
@@ -84,6 +87,8 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void interceptionKeyReleased(Integer releasedKey) {
         currentlyPressedKeys.remove(releasedKey);
     }
+
+    public void setAudioInterface(int a){ audioInterface = a; }
 
     public void nativeKeyTyped(NativeKeyEvent e) { }
 }

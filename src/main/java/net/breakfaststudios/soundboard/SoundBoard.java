@@ -9,9 +9,9 @@ import java.util.concurrent.ThreadPoolExecutor;
  * This is the main cache class and stores all the sounds
  */
 public class SoundBoard {
-
     private final List<Sound> sounds;
     private final ThreadPoolExecutor executorService;
+    // private final JackInterface jack;
 
     /**
      * Sound cache class
@@ -19,6 +19,7 @@ public class SoundBoard {
     public SoundBoard() {
         sounds = new ArrayList<>();
         this.executorService = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        // jack = new JackInterface();
     }
 
     /**
@@ -62,6 +63,12 @@ public class SoundBoard {
         }
         return null;
     }
+
+    /*
+    public JackInterface getJack() {
+        return jack;
+    }
+    */
 
     /**
      * Get all sounds in the cache

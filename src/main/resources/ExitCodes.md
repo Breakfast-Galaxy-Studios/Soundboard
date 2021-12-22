@@ -3,6 +3,7 @@
 <hr>
 0: Program closed normally. <br>
 -1: Program forced closed.<br>
+1: Program failed to bind interceptor port.<br>
 3: Program failed to make its own program dir in Appdata, or your platforms equivalent folder. <br>
 33: Program failed to make its own program dir in Appdata, or your platforms equivalent folder. <br>
 47: Program closed itself to update <br>

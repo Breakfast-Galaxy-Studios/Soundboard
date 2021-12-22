@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-final public class InterceptionListener{
+final public class InterceptionListener {
     /**
      * Initializes the main socket used in the listener
      * This is done here and not later, so it's easier to determine if port is already bound
      */
-    private DatagramSocket listenerSocket;
+    // private DatagramSocket listenerSocket;
+    /*
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
@@ -24,10 +25,11 @@ final public class InterceptionListener{
                     This can occur when there is already an instance of soundboard running.
                     """);
         }
-    }
+    }*/
 
     /**
      * Converts a byte array into a string
+     *
      * @param udpPacket byte[] from a socket, all bytes are converted to chars
      * @return String of all the chars in the byte array.
      */
@@ -43,8 +45,8 @@ final public class InterceptionListener{
         return data.toString();
     }
 
-    public void startInterceptor() {
-        new Thread(()->{
+    public void startInterceptor(DatagramSocket listenerSocket) {
+        new Thread(() -> {
             // Listen to localhost port 55555
             byte[] receive = new byte[65535];
             GlobalKeyListener keyListener = new GlobalKeyListener();
@@ -71,15 +73,13 @@ final public class InterceptionListener{
                     e.printStackTrace();
                 }
             }
-            // Throw error if other program ends.
-            // Yes I'm throwing an exception in a thread, and yes I am catching it just to show the stack trace...
-            try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
+            System.err.println("Lost connection to interceptor.");
             JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
 
     public void closeProgram() throws IOException {
-        // Send tcp packet via localhost:55556 to close the key listener
+        // Send tcp packet via localhost:58585 to close the key listener
         Socket socket = new Socket("127.0.0.1", 58585);
         OutputStream output = socket.getOutputStream();
         byte[] buffer = "EXIT0".getBytes();
@@ -89,11 +89,12 @@ final public class InterceptionListener{
 
     /**
      * Opens a socket to listen to the devID program, to get the device ID for interception.
+     *
      * @return String of the device ID from the interception program
      * @throws Exception If the connection is lost, or there is a fatal error.
      */
-    public String listenForDevID() throws Exception{
-        try{
+    public String listenForDevID() throws Exception {
+        try {
             byte[] receive = new byte[65535];
             // Declare the socket to be used.
             DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
@@ -122,7 +123,7 @@ final public class InterceptionListener{
 
 
     public String getNextKeycode() throws Exception {
-        try{
+        try {
             byte[] receive = new byte[65535];
             DatagramSocket ds = new DatagramSocket(55556, InetAddress.getByName("127.0.0.1"));
 

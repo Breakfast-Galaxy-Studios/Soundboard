@@ -36,6 +36,11 @@ public class InterceptionMain {
     private static final String interceptionVBS = interceptionDir + "interception.vbs";
 
     /**
+     * Interface for interceptionJNI
+     */
+    private static final InterceptionInterface interceptionInterface = new InterceptionInterface();
+
+    /**
      * Holds the current state of interceptor.
      */
     // TODO this still needs proper implementation
@@ -77,7 +82,7 @@ public class InterceptionMain {
      */
     public static void startInterception(){
         // TODO: add to this method something to run the vbs script to start interceptor
-        interceptionListener.startInterceptor();
+        interceptionListener.startInterceptor(interceptionInterface.getListenerSocket());
         isRunning = true;
     }
 

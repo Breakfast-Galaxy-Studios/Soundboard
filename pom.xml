@@ -61,14 +61,13 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>16</version>
+            <version>17.0.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -78,6 +77,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jaudiolibs/jnajack -->
+        <dependency>
+            <groupId>org.jaudiolibs</groupId>
+            <artifactId>jnajack</artifactId>
+            <version>1.4.0</version>
         </dependency>
     </dependencies>
 </project>

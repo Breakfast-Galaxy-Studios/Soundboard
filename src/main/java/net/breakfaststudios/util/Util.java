@@ -22,7 +22,10 @@ public class Util {
      */
     public static String jarPath = null;
 
+
+
     static {
+        // Get the jar path
         try {
             jarPath = BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         } catch (URISyntaxException e) {

@@ -3,7 +3,6 @@ package net.breakfaststudios;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
-import net.breakfaststudios.ui.InterceptionUI;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
@@ -26,7 +25,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.1";
+    public static final String currentVersion = "v2.0";
     public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -44,7 +43,7 @@ public class BreakfastSounds {
      */
     public static void main(String[] args) {
         // TODO remove this
-        new Thread(() -> new InterceptionUI().interceptionMenu()).start();
+        // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
 
         soundBoard = new SoundBoard();
         Properties settings = null;
@@ -58,6 +57,16 @@ public class BreakfastSounds {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        // UI Scaling will be slightly messed up outside a Windows OS.
+        // This is done here to correctly style any error messages displayed to users.
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception ignore) {
+            try {
+                UIManager.setLookAndFeel(new NimbusLookAndFeel());
+            } catch (Exception ignored) { }
         }
 
         // Check for updates
@@ -106,15 +115,6 @@ public class BreakfastSounds {
                         Boolean.parseBoolean(validateSettings.getProperty("openOnStartup"))
                 );
             }
-        }
-
-        // UI Scaling will be slightly messed up outside a Windows OS.
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception ignore) {
-            try {
-                UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) { }
         }
 
         // Create and display the UI

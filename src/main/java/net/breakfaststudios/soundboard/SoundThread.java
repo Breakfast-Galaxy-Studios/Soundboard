@@ -6,6 +6,9 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 /**
  * This class basically is just for playing sounds on threads
@@ -14,17 +17,20 @@ public class SoundThread implements Runnable {
     private final String path;
     private final float volume;
     private final long clipLength;
-
+    private final int interfaceType;
+    // private JackInterface jack;
     /**
      * The normal sound thread constructor
      * @param path       Path to the sound
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
      */
-    public SoundThread(String path, float volume, long clipLength) {
+    public SoundThread(String path, float volume, long clipLength, int type) {
         this.path = path;
         this.volume = volume;
         this.clipLength = clipLength;
+        // jack = BreakfastSounds.getSoundBoard().getJack();
+        interfaceType = type;
     }
 
     /**
@@ -61,28 +67,48 @@ public class SoundThread implements Runnable {
             System.exit(56);
         }
         try {
-            Clip clip = AudioSystem.getClip(getSpeakers());
-            // Try opening the sound file, reading it to stream
-            clip.open(inputStream);
 
-            // TODO: Find/create a better implementation for this. It is NOT a linear scale in it's current form.
-            // Set volume of the clip, using percents
-            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float range = volumeControl.getMaximum() - volumeControl.getMinimum();
-            float gain = (range * volume) + volumeControl.getMinimum();
-            volumeControl.setValue(gain);
+            // Jack Audio Connection Kit interface
+            // TODO implement this, it's currently going to be left in this non-working state for forever.
+            if (interfaceType == 1){
+                AudioFormat.Encoding targetEncoding = AudioFormat.Encoding.PCM_SIGNED;
+                AudioInputStream pcmStream = AudioSystem.getAudioInputStream(targetEncoding, inputStream);
+                byte[] b = new byte[102400];
+                pcmStream.read(b, 0, b.length);
+                FloatBuffer l =  ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
+                final float[] audioFloats = new float[l.capacity()];
+                l.get(audioFloats);
+                // jack.getSimpleAudioClient();
+            }
+            // Normal interface type
+            else {
+                Clip clip = AudioSystem.getClip(getSpeakers());
+                // Try opening the sound file, reading it to stream
+                clip.open(inputStream);
 
-            /*
-             * Start clip, wait for it to play, then close it so java can garbage collect it.
-             * Java fails to garbage collect if many sounds are played at once
-             */
-            clip.start();
+                // TODO: Find/create a better implementation for this. It is NOT a linear scale in it's current form.
+                // Set volume of the clip, using percents
+                FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                float range = volumeControl.getMaximum() - volumeControl.getMinimum();
+                float gain = (range * volume) + volumeControl.getMinimum();
+                volumeControl.setValue(gain);
 
-            Thread.sleep(clipLength);
-            clip.drain();
-            clip.close();
+                /*
+                 * Start clip, wait for it to play, then close it so java can garbage collect it.
+                 * Java fails to garbage collect if many sounds are played at once
+                 */
+                clip.start();
+
+                Thread.sleep(clipLength);
+                clip.drain();
+                clip.close();
+            }
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    public void updateAudioInterface(){
+
     }
 }
