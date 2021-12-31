@@ -62,13 +62,14 @@ public class Util {
 
     /**
      * Updates the settings file.
+     *
      * @param soundOutput   String of the chosen sound output device.
      * @param keyCompatMode Bool representing if keybind compatibility mode is on or off.
      * @param openToTray    Bool representing if open to tray on startup is on or off.
      * @param darkMode      Bool representing if dark mode is on or off.
      * @param openOnStartup Bool representing if open on startup is on or off.
      */
-    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode, boolean openOnStartup) {
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode, boolean openOnStartup, int gcTime) {
         File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
@@ -76,11 +77,10 @@ public class Util {
         settings.setProperty("openToTray", String.valueOf(openToTray));
         settings.setProperty("darkMode", String.valueOf(darkMode));
         settings.setProperty("openOnStartup", String.valueOf(openOnStartup));
-        // Potentially allow user to set this in the future.
-        settings.setProperty("gcTime", String.valueOf(300000));
+        // Potentially allow user to set this in the future. default 300k
+        settings.setProperty("gcTime", String.valueOf(gcTime));
         if (!settingsFile.exists()) {
             try {
-                //noinspection ResultOfMethodCallIgnored
                 settingsFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -92,6 +92,10 @@ public class Util {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode, boolean openOnStartup) {
+        updateSettings(soundOutput, keyCompatMode, openToTray, darkMode, openOnStartup, 300000);
     }
 
     /**

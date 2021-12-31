@@ -8,15 +8,13 @@ import java.util.Properties;
 public class AudioInterface {
 
     /**
-     *
-     * @return  0 if using clips, normal audio
-     *          2 if using jack audio connection kit interface
+     * @return 0 if using clips, normal audio
+     * 2 if using jack audio connection kit interface
      */
-    public static int getAudioInterface(){
+    public static byte getAudioInterface() {
         Properties prop = getAudioSettings();
         if (prop.getProperty("interface").equals("0")) return 0;
-        if (prop.getProperty("interface").equals("0")) return 0;
-        return -1;
+        else return -1;
     }
 
     public static Properties getAudioSettings(){

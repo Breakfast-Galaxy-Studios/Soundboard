@@ -1,16 +1,15 @@
 package net.breakfaststudios.soundboard.listeners;
 
 import net.breakfaststudios.BreakfastSounds;
-import net.breakfaststudios.audio.AudioInterface;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
-import net.breakfaststudios.soundboard.SoundThread;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class holds the method of playing sounds if the correct keys are pressed
@@ -19,10 +18,8 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
-    private int audioInterface;
     public GlobalKeyListener() {
         soundBoard = BreakfastSounds.getSoundBoard();
-        audioInterface = AudioInterface.getAudioInterface();
     }
 
     /**
@@ -31,8 +28,9 @@ public class GlobalKeyListener implements NativeKeyListener {
      * @param pressedKey Key that was pressed
      */
     public void nativeKeyPressed(NativeKeyEvent pressedKey) {
-        if (!currentlyPressedKeys.contains(pressedKey.getKeyCode()))
+        if (!currentlyPressedKeys.contains(pressedKey.getKeyCode())) {
             currentlyPressedKeys.add(pressedKey.getKeyCode());
+        }
         registerSound();
     }
 
@@ -42,8 +40,9 @@ public class GlobalKeyListener implements NativeKeyListener {
      * @param keycode int - The keycode of the key that was pressed.
      */
     public void interceptionKeyRegister(int keycode) {
-        if (!currentlyPressedKeys.contains(keycode))
+        if (!currentlyPressedKeys.contains(keycode)) {
             currentlyPressedKeys.add(keycode);
+        }
         registerSound();
     }
 
@@ -57,16 +56,16 @@ public class GlobalKeyListener implements NativeKeyListener {
 
                 Collections.addAll(neededKeys, sound.getKeys());
 
-                for (int key : currentlyPressedKeys) {
-                    if (neededKeys.get(0) == key) {
-                        neededKeys.remove((Integer) key);
-                    } else if (neededKeys.contains(key)) {
-                        break;
+                for (int i = 0; i < currentlyPressedKeys.size(); i++) {
+                    if (neededKeys.size() != 0 && Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i))) {
+                        neededKeys.remove(0);
+                        if (!Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i + 1))) break;
+                        else neededKeys.remove(0);
                     }
                 }
 
                 if (neededKeys.size() == 0) {
-                    soundBoard.queueSound(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength(), audioInterface));
+                    soundBoard.queueSound(sound);
                 }
                 neededKeys.clear();
             }
@@ -80,6 +79,7 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void nativeKeyReleased(NativeKeyEvent releasedKey) {
         currentlyPressedKeys.remove((Integer) releasedKey.getKeyCode());
     }
+
     /**
      * Deletes stored interception key from cache
      * @param releasedKey Key that was released
@@ -87,8 +87,6 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void interceptionKeyReleased(Integer releasedKey) {
         currentlyPressedKeys.remove(releasedKey);
     }
-
-    public void setAudioInterface(int a){ audioInterface = a; }
 
     public void nativeKeyTyped(NativeKeyEvent e) { }
 }
