@@ -1,7 +1,6 @@
 package net.breakfaststudios.util;
 
 import net.breakfaststudios.BreakfastSounds;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
 import javax.swing.*;
 import java.io.*;

@@ -1,11 +1,11 @@
 package net.breakfaststudios.soundboard.listeners;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.SoundThread;
-import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.ArrayList;
 import java.util.Collections;

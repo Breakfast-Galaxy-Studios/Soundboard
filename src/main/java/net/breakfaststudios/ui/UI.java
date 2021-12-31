@@ -656,25 +656,15 @@ public class UI extends JFrame {
         cancelAddSound.addActionListener(e -> soundAddMenu.setVisible(false));
         // Confirm button inside AddSound panel, creates a new sound.properties file, adds new sound to table
         confirmAddSound.addActionListener(e -> {
-            String[] a = getFileList();
+            String[] listOfFiles = getFileList();
             boolean uniqueName;
-            if (a != null) {
-                uniqueName = a.length == 0;
+            if (fileList != null) {
+                uniqueName = listOfFiles.length == 0;
             } else {
                 uniqueName = true;
             }
             if (!uniqueName) {
-                for (String s : a) {
-                    if (s.equals(newSoundNameField.getText() + ".properties")) {
-                        if (!editSound)
-                            JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
-                    }
-                    if (s.equals("")) {
-                        JOptionPane.showMessageDialog(null, "Name field cannot be empty.");
-                    } else {
-                        uniqueName = true;
-                    }
-                }
+                uniqueName = isUniqueName(newSoundNameField, listOfFiles);
             }
             if (uniqueName) {
                 String keybindField;
@@ -921,7 +911,23 @@ public class UI extends JFrame {
 
     }
 
-
+    private boolean isUniqueName(JTextField newSoundNameField, String[] listOfFiles) {
+        boolean uniqueName = false;
+        for (String name : listOfFiles) {
+            if (name.equals(newSoundNameField.getText() + ".properties")) {
+                if (!editSound)
+                    JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
+                return false;
+            }
+            if (name.equals("")) {
+                JOptionPane.showMessageDialog(null, "Name field cannot be empty.");
+                return false;
+            } else {
+                uniqueName = true;
+            }
+        }
+        return uniqueName;
+    }
 
     private void removeSound(JTable soundTable, DefaultTableModel soundTableModel) {
         try {
