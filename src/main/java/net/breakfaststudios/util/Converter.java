@@ -170,7 +170,6 @@ public class Converter {
      * @param var0 The character you need the code of as a string
      * @return key code int
      */
-    @Deprecated
     public static int getKeyCode(String var0) {
 
         if (Toolkit.getProperty("AWT.undefined", "Undefined").equals(var0)) {

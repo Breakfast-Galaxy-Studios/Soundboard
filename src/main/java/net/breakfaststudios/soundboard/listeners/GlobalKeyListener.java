@@ -10,6 +10,7 @@ import net.breakfaststudios.soundboard.SoundThread;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class holds the method of playing sounds if the correct keys are pressed
@@ -54,16 +55,16 @@ public class GlobalKeyListener implements NativeKeyListener {
 
                 Collections.addAll(neededKeys, sound.getKeys());
 
-                for (int key : currentlyPressedKeys) {
-                    if (neededKeys.get(0) == key) {
-                        neededKeys.remove((Integer) key);
-                    } else if (neededKeys.contains(key)) {
-                        break;
+                for (int i = 0; i < currentlyPressedKeys.size(); i++) {
+                    if (neededKeys.size() != 0 && Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i))) {
+                        neededKeys.remove(0);
+                        if(!Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i + 1))) break;
+                        else neededKeys.remove(0);
                     }
                 }
 
                 if (neededKeys.size() == 0) {
-                    soundBoard.queueSound(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()));
+                    soundBoard.queueSound(sound);
                 }
                 neededKeys.clear();
             }

@@ -26,7 +26,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "pre-v2.0.3";
+    public static final String currentVersion = "v2.1";
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
