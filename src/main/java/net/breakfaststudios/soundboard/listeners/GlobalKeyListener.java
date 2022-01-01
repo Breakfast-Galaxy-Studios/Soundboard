@@ -28,10 +28,7 @@ public class GlobalKeyListener implements NativeKeyListener {
      * @param pressedKey Key that was pressed
      */
     public void nativeKeyPressed(NativeKeyEvent pressedKey) {
-        if (!currentlyPressedKeys.contains(pressedKey.getKeyCode())) {
-            currentlyPressedKeys.add(pressedKey.getKeyCode());
-        }
-        registerSound();
+        interceptionKeyRegister(pressedKey.getKeyCode());
     }
 
     /**

@@ -58,7 +58,6 @@ public class BreakfastSounds {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         // UI Scaling will be slightly messed up outside a Windows OS.
@@ -158,6 +157,7 @@ public class BreakfastSounds {
         new Thread(() -> {
             while (true) {
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(time);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

@@ -6,7 +6,6 @@ import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
-import net.breakfaststudios.util.OpenOnStartup;
 import net.breakfaststudios.util.SoundManager;
 import net.breakfaststudios.util.Util;
 
@@ -540,7 +539,7 @@ public class UI extends JFrame {
                 Color white = new Color(242, 242, 242);
                 setTheme(tablePane, soundTable, menuBar, settingsMenu, soundOutputDropdown, false, white, black);
             }
-            OpenOnStartup.openOnStartup(openOnStartupCheckbox.isSelected());
+            Util.openOnStartup(openOnStartupCheckbox.isSelected());
         });
 
 
