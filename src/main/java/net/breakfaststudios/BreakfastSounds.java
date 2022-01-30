@@ -1,14 +1,14 @@
 package net.breakfaststudios;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
 import net.breakfaststudios.util.Util;
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-import org.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
