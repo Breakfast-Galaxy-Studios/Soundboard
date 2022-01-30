@@ -17,15 +17,17 @@ public class SoundThread implements Runnable {
     private final String path;
     private final float volume;
     private final long clipLength;
-    private final int interfaceType;
+    private final byte interfaceType;
     // private JackInterface jack;
+
     /**
      * The normal sound thread constructor
+     *
      * @param path       Path to the sound
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
      */
-    public SoundThread(String path, float volume, long clipLength, int type) {
+    public SoundThread(String path, float volume, long clipLength, byte type) {
         this.path = path;
         this.volume = volume;
         this.clipLength = clipLength;

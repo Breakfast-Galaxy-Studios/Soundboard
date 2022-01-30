@@ -1,5 +1,7 @@
 package net.breakfaststudios.soundboard;
 
+import net.breakfaststudios.audio.AudioInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -11,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SoundBoard {
     private final List<Sound> sounds;
     private final ThreadPoolExecutor executorService;
+    private final byte audioInterfaceType;
     // private final JackInterface jack;
 
     /**
@@ -18,6 +21,7 @@ public class SoundBoard {
      */
     public SoundBoard() {
         sounds = new ArrayList<>();
+        audioInterfaceType = AudioInterface.getAudioInterface();
         this.executorService = (ThreadPoolExecutor) Executors.newCachedThreadPool();
         // jack = new JackInterface();
     }
@@ -25,11 +29,10 @@ public class SoundBoard {
     /**
      * Queues sound for playing.
      *
-     * @param runnable ooga booga!
+     * @param sound Sound to play
      */
-    public void queueSound(SoundThread runnable) {
-        executorService.execute(runnable);
-        //System.out.println(executorService.getPoolSize());
+    public void queueSound(Sound sound) {
+        executorService.execute(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength(), audioInterfaceType));
     }
 
     /**

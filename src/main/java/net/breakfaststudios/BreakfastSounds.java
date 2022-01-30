@@ -41,6 +41,7 @@ public class BreakfastSounds {
      * Main method for the program.
      * @param args Accepts no command line arguments.
      */
+    //TODO Add audio.properties
     public static void main(String[] args) {
         // TODO remove this
         // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
@@ -75,7 +76,7 @@ public class BreakfastSounds {
         // Validate that all settings are actually set and not null
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
-            Util.updateSettings(soundOutput, false, false, false, false);
+            Util.updateSettings(soundOutput, false, false, false, false, 300000);
         } else {
             settings = Util.getSettingsFile();
             Properties validateSettings = new Properties();
@@ -112,7 +113,8 @@ public class BreakfastSounds {
                         Boolean.parseBoolean(validateSettings.getProperty("keyCompatMode")),
                         Boolean.parseBoolean(validateSettings.getProperty("openToTray")),
                         Boolean.parseBoolean(validateSettings.getProperty("darkMode")),
-                        Boolean.parseBoolean(validateSettings.getProperty("openOnStartup"))
+                        Boolean.parseBoolean(validateSettings.getProperty("openOnStartup")),
+                        Integer.parseInt(validateSettings.getProperty("gcTime"))
                 );
             }
         }
@@ -155,6 +157,7 @@ public class BreakfastSounds {
         new Thread(() -> {
             while (true) {
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(time);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
