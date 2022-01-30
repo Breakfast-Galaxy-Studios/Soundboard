@@ -67,16 +67,51 @@ public class BreakfastSounds {
         } catch (Exception ignore) {
             try {
                 UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
         // Check for updates
         Updater.runAutoUpdater();
 
-        // Validate that all settings are actually set and not null
+        //Validate Settings
+        settings = validateSettings();
+
+        // Create and display the UI
+        makeAppDir();
+        EventQueue.invokeLater(BreakfastSounds::new);
+
+        // Register type of listener
+        initKeyListener();
+
+        // Load some stuff from settings
+        if (settings != null) {
+            SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
+            if (settings.getProperty("gcTime") != null){
+                startAutoCollection(Integer.parseInt(settings.getProperty("gcTime")));
+            } else {
+                startAutoCollection(300000);
+            }
+        } else {
+            startAutoCollection(300000);
+        }
+
+        // Register key listeners
+        listener = new GlobalKeyListener();
+        GlobalScreen.addNativeKeyListener(listener);
+    }
+
+    /**
+     * Validate the settings to check that they are all set and not null.
+     *
+     * @return New setting value that can be null. It turns out null if Util.getSettingsFile() returns null.
+     */
+    private static Properties validateSettings() {
+        Properties settings;
         if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
             Util.updateSettings(soundOutput, false, false, false, false, 300000);
+            settings = Util.getSettingsFile();
         } else {
             settings = Util.getSettingsFile();
             Properties validateSettings = new Properties();
@@ -118,34 +153,7 @@ public class BreakfastSounds {
                 );
             }
         }
-
-        // Create and display the UI
-        makeAppDir();
-        EventQueue.invokeLater(BreakfastSounds::new);
-
-        // Register type of listener
-        initKeyListener();
-
-        // Load some stuff from settings
-        if (settings != null) {
-            SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
-            if (settings.getProperty("gcTime") != null){
-                startAutoCollection(Integer.parseInt(settings.getProperty("gcTime")));
-            } else {
-                startAutoCollection(300000);
-            }
-        } else {
-            startAutoCollection(300000);
-        }
-
-        // Disable annoying logger output
-        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-        logger.setLevel(Level.OFF);
-        logger.setUseParentHandlers(false);
-
-        // Register key listeners
-        listener = new GlobalKeyListener();
-        GlobalScreen.addNativeKeyListener(listener);
+        return settings;
     }
 
     /**
@@ -204,6 +212,25 @@ public class BreakfastSounds {
     }
 
     /**
+     * Use this to toggle the console logging of the key presses.
+     *
+     * @param status Determines whether to log the key presses to console or not.
+     */
+    @Deprecated
+    private static void setJNativeLogging(boolean status) {
+        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        if (status) {
+            // Enable annoying logger output
+            logger.setLevel(Level.ALL);
+            logger.setUseParentHandlers(true);
+        } else {
+            // Disable annoying logger output
+            logger.setLevel(Level.OFF);
+            logger.setUseParentHandlers(false);
+        }
+    }
+
+    /**
      * Returns the soundboard.
      */
     public static SoundBoard getSoundBoard() {
@@ -218,4 +245,5 @@ public class BreakfastSounds {
         listener = new GlobalKeyListener();
         GlobalScreen.addNativeKeyListener(listener);
     }
+
 }

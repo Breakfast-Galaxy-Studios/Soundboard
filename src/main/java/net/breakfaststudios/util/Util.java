@@ -129,7 +129,6 @@ public class Util {
         for (int i = 0; i < intArray.length; i++) {
             intArray[i] = list.get(i);
         }
-
         return intArray;
     }
 
@@ -139,10 +138,8 @@ public class Util {
     public static void parseRawCodeText(String rawText, ArrayList<Integer> keys, StringBuilder builder) {
         for (String key : rawText.split("_")) {
             if (key.equalsIgnoreCase("none")) break;
-
             int toAdd = Integer.parseInt(key);
             keys.add(toAdd);
-            // builder.append(NativeKeyEvent.getKeyText(toAdd)).append(" + ");
             builder.append(Converter.getKeyText(toAdd)).append(" + ");
         }
     }
