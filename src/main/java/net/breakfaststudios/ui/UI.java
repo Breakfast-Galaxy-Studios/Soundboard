@@ -654,25 +654,15 @@ public class UI extends JFrame {
         cancelAddSound.addActionListener(e -> soundAddMenu.setVisible(false));
         // Confirm button inside AddSound panel, creates a new sound.properties file, adds new sound to table
         confirmAddSound.addActionListener(e -> {
-            String[] a = getFileList();
+            String[] listOfFiles = getFileList();
             boolean uniqueName;
-            if (a != null) {
-                uniqueName = a.length == 0;
+            if (fileList != null) {
+                uniqueName = listOfFiles.length == 0;
             } else {
                 uniqueName = true;
             }
             if (!uniqueName) {
-                for (String s : a) {
-                    if (s.equals(newSoundNameField.getText() + ".properties")) {
-                        if (!editSound)
-                            JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
-                    }
-                    if (s.equals("")) {
-                        JOptionPane.showMessageDialog(null, "Name field cannot be empty.");
-                    } else {
-                        uniqueName = true;
-                    }
-                }
+                uniqueName = isUniqueName(newSoundNameField, listOfFiles);
             }
             if (uniqueName) {
                 String keybindField;
@@ -722,6 +712,7 @@ public class UI extends JFrame {
                     newKeybindField.setText("");
                     newSoundFileField.setText("");
                     volumeSlider.setValue(100);
+
                 } else if (hiddenTextField.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "File must be linked.");
                 } else {
@@ -834,9 +825,9 @@ public class UI extends JFrame {
                 }
                 newSoundFileField.setText(a[a.length - 1]);
                 hiddenTextField.setText(soundProp.getProperty("filepath"));
-
-                soundAddMenu.setVisible(true);
                 editSound = true;
+                soundAddMenu.setVisible(true);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to load that sound file.");
             }
@@ -859,6 +850,26 @@ public class UI extends JFrame {
 
         // All things to do with putting app to system tray, and sets the window visible.
         minimizeToTray();
+    }
+
+    private boolean isUniqueName(JTextField newSoundNameField, String[] listOfFiles) {
+        boolean uniqueName = false;
+        for (String name : listOfFiles) {
+            if (name.equals(newSoundNameField.getText() + ".properties")) {
+                if (!editSound){
+                    JOptionPane.showMessageDialog(null, "Sounds cannot have the same name.");
+                    return false;
+                }
+            }
+            if (name.equals("")) {
+                JOptionPane.showMessageDialog(null, "Name field cannot be empty.");
+                return false;
+            } else {
+                uniqueName = true;
+            }
+        }
+        System.err.println(uniqueName);
+        return uniqueName;
     }
 
     private void setTheme(JScrollPane tablePane, JTable soundTable, JMenuBar menuBar, JMenu settingsMenu, JComboBox<String> soundOutputDropdown, boolean darkMode, Color backgroundColor, Color textColor) {
