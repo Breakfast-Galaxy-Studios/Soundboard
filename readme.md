@@ -40,7 +40,17 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 ### Dev
 - Likely isn't stable or will crash
 - Typically has major, app breaking, bugs
-- Has the newest features, but likely have broken or incomplete implementation.
+- Has the newest features, but likely has broken or incomplete implementations.
+- Combinds all the other branches. Has both jack AND interception.
 
-### Building
+### Interception
+- Based off of main
+- Includes an implemenation of interception, allowing you to use a second keyboard to control soundboard.
+
+### Jack Audio
+- Based off of main
+- Includes an implementation for jack audio
+- Unfinished with no plans of continuing development. 
+
+## Building
 Building either branch should be done with maven. The build enviornment should be set up already in `pom.xml`, so all you should have to do is compile with maven.
