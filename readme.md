@@ -1,21 +1,10 @@
-# Warnings
-This version is not guaranteed to work correctly. It likely contains tons of bugs, and may not even build. 
-All release versions build and almost all the recent ones are bug free. 
-If you wish to build this yourself, I would recommend using one of the past release versions, instead of using the current branch.
-After v2.0 is released, there will be at least two branches. One branch that is experimental dev builds, mostly used to get new
-changes between our devs, and another will be stable builds, that are guaranteed to build correctly and mostly bug free. 
-
-> Java Version Warning
-> 
-> Version 2.0 was the last version compiled with Java 16. 2.1 & all future versions will be using Java 17 until a new version of Java is released.
-
 # BGS-Soundboard
 This program is a platform independent soundboard that was written in Java. This, combined with virtual audio cables / virtual audio mixer, allows anyone to play sounds through their microphone.
 
-This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms, along with continued support.
+This project is heavy inspired by [DCSB,](https://github.com/kalejin/dcsb) the main difference being that this one can be easily used on all platforms.
 
 ## Usage
-To run this program, you must have Java 16 installed, which can be found either [here](https://www.oracle.com/java/technologies/javase-jdk16-downloads.html) or [here.](https://jdk.java.net/16/) <br>
+To run this program, you must have Java 17 installed, which can be found either [here](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html) or [here.](https://jdk.java.net/17/) <br>
 If you wish to have it output to your microphone, you will likely need to use a virtual audio cable. 
 
 ### Virtual audio cables / mixers
@@ -25,6 +14,7 @@ There are several free and open source audio cables / mixers, and some closed so
 - Linux: The only mainstream option is [Jack Audio,](https://jackaudio.org/) although you can potentially achieve the same thing from command line.
 - Windows: The open source option is [Jack Audio,](https://jackaudio.org/) but the free but closed source [VB-Audio VoiceMeeter](https://vb-audio.com/Voicemeeter/banana.htm) is more widely adopted and has much more online support.
 
+> The only tested support is with VoiceMeeter on Windows. Jack Audio likely needs more support from us, but as of right now there is no push for the feature by users, and therefore this isn't one of our priorities. If there is enough request for the feature we will implement it, but as of right now there are no plans to finish the implementation.
 
 ### Supported Sound formats:
 
@@ -37,3 +27,20 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 
 ## Known issues
 - Users on version 1.2 or 1.3 will not recieve auto-updates. 1.3.1+ or 1.1 and earlier will work.
+- Popup alerts aren't always on top. This can lead to getting stuck behind fullscreen apps and not being able to open soundboard without minimizing everything. No ETA for a fix, but it will be fixed soon.
+
+## Branches
+> More branches will be made, seperating interception and jack audio development from main dev.
+### Main
+- Known to build
+- Stable
+- Likely has older features, but they are known to work and are 
+- Matches release
+
+### Dev
+- Likely isn't stable or will crash
+- Typically has major, app breaking, bugs
+- Has the newest features, but likely have broken or incomplete implementation.
+
+### Building
+Building either branch should be done with maven. The build enviornment should be set up already in `pom.xml`, so all you should have to do is compile with maven.
