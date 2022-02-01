@@ -30,7 +30,7 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 - Popup alerts aren't always on top. This can lead to getting stuck behind fullscreen apps and not being able to open soundboard without minimizing everything. No ETA for a fix, but it will be fixed soon.
 
 ## Branches
-> More branches will be made, seperating interception and jack audio development from main dev.
+
 ### Main
 - Known to build
 - Stable
