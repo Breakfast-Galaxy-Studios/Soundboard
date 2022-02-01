@@ -55,7 +55,6 @@ public class GlobalKeyListener implements NativeKeyListener {
             for (int i = 0; i < currentlyPressedKeys.size(); i++) {
                 if (neededKeys.size() != 0 && Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i))) {
                     neededKeys.remove(0);
-                    System.out.println(neededKeys.size());
                     try {
                         if (!Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i + 1))) break;
                         else neededKeys.remove(0);
