@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
@@ -619,12 +618,8 @@ public class UI extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override public void windowClosing(WindowEvent e) {
                 if (InterceptionMain.getInterceptionSettings() != null && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
-                    try {
-                        InterceptionMain.interceptionListener.closeProgram();
-                    } catch (IOException exception){
-                        System.out.println("This happens if program is already closed.");
-                        exception.printStackTrace();
-                    }
+                    InterceptionMain.interceptionListener.stopInterceptor();
+                    System.exit(0);
                 }
             }
         });

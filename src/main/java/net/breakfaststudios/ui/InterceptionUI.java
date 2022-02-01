@@ -30,6 +30,7 @@ public class InterceptionUI {
         JButton devIDButton = new JButton("...");
         JButton confirmButton = new JButton("Confirm");
         JButton cancelButton = new JButton("Cancel");
+        JDialog recordingWindow = new JDialog();
 
         // Make all needed changes to all the components.
         p.add(interceptionMenuPanel);
@@ -37,6 +38,12 @@ public class InterceptionUI {
         InterceptionCheckboxLabel.setText("Interception");
         interceptionMenuDialog.setMaximumSize(new Dimension(325, 200));
         interceptionMenuDialog.setMinimumSize(new Dimension(325, 200));
+
+        recordingWindow.setAlwaysOnTop(true);
+        recordingWindow.setVisible(false);
+        recordingWindow.setMaximumSize(new Dimension(30, 30));
+        recordingWindow.setMinimumSize(new Dimension(30, 30));
+        recordingWindow.add(new JLabel("Press a key on the keyboard you wish to have intercepted."));
 
         // Define group layouts
         GroupLayout panelLayout = new GroupLayout(interceptionMenuPanel);
@@ -115,6 +122,13 @@ public class InterceptionUI {
 
         // Close window on cancel
         cancelButton.addActionListener(e -> setVisible(false));
+
+        // Get the Device ID for the intercepted Device
+        devIDButton.addActionListener(e -> {
+            recordingWindow.setVisible(true);
+            // deviceIDTextField.setText(String.valueOf(InterceptionMain.interceptionInterface.deviceID()));
+            recordingWindow.setVisible(false);
+        });
 
         // -----------------------------------------------------------------
         // Dark mode

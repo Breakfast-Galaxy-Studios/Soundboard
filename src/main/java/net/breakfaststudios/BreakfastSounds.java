@@ -25,7 +25,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "v2.0";
+    public static final String currentVersion = "v2.1";
     public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
@@ -168,7 +168,6 @@ public class BreakfastSounds {
             }
         }).start();
     }
-
 
     /**
      * Initializes the type of keylistener to be used.

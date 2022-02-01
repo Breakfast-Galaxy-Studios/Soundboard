@@ -5,27 +5,34 @@ import net.breakfaststudios.util.Converter;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 final public class InterceptionListener {
     /**
      * Initializes the main socket used in the listener
      * This is done here and not later, so it's easier to determine if port is already bound
      */
-    // private DatagramSocket listenerSocket;
-    /*
+    private DatagramSocket listenerSocket;
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
-        } catch (SocketException | UnknownHostException e) {
+        } catch (SocketException |UnknownHostException  e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, """
                     Another program is using the port needed by interceptor.
                     This can occur when there is already an instance of soundboard running.
                     """);
         }
-    }*/
+    }
+    private final AtomicBoolean running = new AtomicBoolean(false);
+    private InterceptionJNI interceptionJNI;
+    private Thread interceptionThread;
+
+    public InterceptionListener() {
+        interceptionJNI = new InterceptionJNI();
+    }
 
     /**
      * Converts a byte array into a string
@@ -45,14 +52,60 @@ final public class InterceptionListener {
         return data.toString();
     }
 
-    public void startInterceptor(DatagramSocket listenerSocket) {
-        new Thread(() -> {
+    private final Thread interceptor = new Thread(() ->{
+        // Listen to localhost port 55555
+        byte[] receive = new byte[65535];
+        DatagramSocket listenerSocket = InterceptionJNI.getListenerSocket();
+        while (running.get()) {
+            // Create a packet to receive the data
+            DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
+
+            // Waits until a packet is received
+            try {
+                listenerSocket.receive(receivePacket);
+                System.out.println(Converter.getKeyText(Integer.parseInt(data(receive))));
+
+                // Break the loop if the other program ends.
+                if (data(receive).equals("FATALERROR")) {
+                    System.out.println("Fatal error occurred \"serverside\".");
+                    break;
+                }
+                receive = new byte[65535];
+            } catch (IOException e) {
+                // e.printStackTrace();
+                System.out.println("This process was PROBABLY stopped by another process.");
+                Thread.currentThread().interrupt();
+            }
+        }
+        listenerSocket.close();
+    });
+
+    private Thread interception(){
+        return new Thread(() -> {
+            int[] ports = interceptionJNI.getPorts();
+            interceptionJNI.interception(ports[0], ports[1], ports[2], 340);
+        });
+    }
+
+    public void startInterceptor() {
+        running.set(true);
+        interceptor.start();
+        interceptionThread = interception();
+        interceptionThread.start();
+    }
+
+    @Deprecated
+    public void startInterceptorDeprecated() {
+        new Thread(()->{
             // Listen to localhost port 55555
+
             byte[] receive = new byte[65535];
             GlobalKeyListener keyListener = new GlobalKeyListener();
+            DatagramPacket receivePacket;
             while (true) {
+
                 // Create a packet to receive the data
-                DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
+                receivePacket = new DatagramPacket(receive, receive.length);
 
                 // Waits until a packet is received
                 try {
@@ -73,54 +126,24 @@ final public class InterceptionListener {
                     e.printStackTrace();
                 }
             }
-            System.err.println("Lost connection to interceptor.");
+            // Throw error if other program ends.
+            try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
             JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
 
-    public void closeProgram() throws IOException {
-        // Send tcp packet via localhost:58585 to close the key listener
-        Socket socket = new Socket("127.0.0.1", 58585);
-        OutputStream output = socket.getOutputStream();
-        byte[] buffer = "EXIT0".getBytes();
-        output.write(buffer);
-        System.out.println("Closed the interceptor.");
-    }
-
-    /**
-     * Opens a socket to listen to the devID program, to get the device ID for interception.
-     *
-     * @return String of the device ID from the interception program
-     * @throws Exception If the connection is lost, or there is a fatal error.
-     */
-    public String listenForDevID() throws Exception {
+    public void stopInterceptor() {
         try {
-            byte[] receive = new byte[65535];
-            // Declare the socket to be used.
-            DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
-
-            // Create a packet to receive the data
-            DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
-
-            // Waits until a packet is received
-            dsDevID.receive(receivePacket);
-            // Break the loop if the other program ends.
-            if (data(receive).equals("FATALERROR")) {
-                System.out.println("Fatal error occurred \"serverside\".");
-                JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
-                dsDevID.close();
-                throw new Exception("Lost connection to interceptor.");
-            }
-            dsDevID.close();
-            return String.valueOf(data(receive));
-
+            running.set(false);
+            interceptor.interrupt();
+            interceptionThread.interrupt();
+            DatagramSocket socket = InterceptionJNI.getClosingSocket();
+            socket.send(new DatagramPacket("Closing".getBytes(StandardCharsets.UTF_8), "Closing".length()));
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
-            throw new Exception("Lost connection to interceptor.");
+            System.exit(123);
         }
     }
-
 
     public String getNextKeycode() throws Exception {
         try {

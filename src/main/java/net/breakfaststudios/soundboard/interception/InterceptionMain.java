@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is the main class for interception.
@@ -38,13 +39,13 @@ public class InterceptionMain {
     /**
      * Interface for interceptionJNI
      */
-    private static final InterceptionInterface interceptionInterface = new InterceptionInterface();
+    public static final InterceptionInterface interceptionInterface = new InterceptionInterface();
 
     /**
      * Holds the current state of interceptor.
      */
     // TODO this still needs proper implementation
-    public static boolean isRunning = false;
+    public static AtomicBoolean isRunning = new AtomicBoolean(false);
 
     /**
      * Checks if the os is windows, and makes sure that interception is turned on
@@ -59,6 +60,7 @@ public class InterceptionMain {
             }
         }
     }
+
 
     /**
      * Get the properties file for interceptor
@@ -82,9 +84,20 @@ public class InterceptionMain {
      */
     public static void startInterception(){
         // TODO: add to this method something to run the vbs script to start interceptor
-        interceptionListener.startInterceptor(interceptionInterface.getListenerSocket());
-        isRunning = true;
+        // interceptionListener.startInterceptor(interceptionInterface.getListenerSocket());
+        isRunning.set(true);
+        interceptionListener.startInterceptorDeprecated();
+        /*
+        interceptionListener.startInterceptor();
+        int[] ports = interceptionInterface.getPorts();
+        new Thread(() -> interceptionInterface.interception(ports[0], ports[1], ports[2], Long.parseLong(getInterceptionSettings().getProperty("devID"))));
+         */
     }
+
+    public static void stopInterception(){
+        isRunning.set(false);
+    }
+
 
 
     /**
@@ -148,7 +161,7 @@ public class InterceptionMain {
     public static void deleteInterception(){
         // Delete startup script, interception.properties, and the entire interception folder.
         try{
-            isRunning = false;
+            isRunning.set(false);
             Files.deleteIfExists(Path.of(interceptionSettingsFilePath));
             Files.deleteIfExists(Path.of(interceptionDir));
             Files.deleteIfExists(Path.of(interceptionVBS));

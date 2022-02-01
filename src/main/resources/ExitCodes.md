@@ -10,4 +10,5 @@
 56: Program failed to load sound / sound file has been moved or is nonexistent. <br>
 88: Program failed to save a property file to the program dir.<br>
 90: Program failed to create FileOutputStream when trying to save a new sound. <br>
+123: Failed to close connection to interceptor. Windows <i>should</i> clean this up, but it isn't a good sign this is happening. <br>
 125: Program failed to either load property file, or read program dir.<br>

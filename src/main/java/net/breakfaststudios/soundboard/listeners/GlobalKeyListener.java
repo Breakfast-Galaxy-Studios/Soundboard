@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class holds the method of playing sounds if the correct keys are pressed
+ * This class holds the method of playing sounds if the correct keys are pressed.
  */
 public class GlobalKeyListener implements NativeKeyListener {
 
