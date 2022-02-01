@@ -6,9 +6,6 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 /**
  * This class basically is just for playing sounds on threads
@@ -17,8 +14,6 @@ public class SoundThread implements Runnable {
     private final String path;
     private final float volume;
     private final long clipLength;
-    private final byte interfaceType;
-    // private JackInterface jack;
 
     /**
      * The normal sound thread constructor
@@ -27,12 +22,10 @@ public class SoundThread implements Runnable {
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
      */
-    public SoundThread(String path, float volume, long clipLength, byte type) {
+    public SoundThread(String path, float volume, long clipLength) {
         this.path = path;
         this.volume = volume;
         this.clipLength = clipLength;
-        // jack = BreakfastSounds.getSoundBoard().getJack();
-        interfaceType = type;
     }
 
     /**
@@ -69,21 +62,6 @@ public class SoundThread implements Runnable {
             System.exit(56);
         }
         try {
-
-            // Jack Audio Connection Kit interface
-            // TODO implement this, it's currently going to be left in this non-working state for forever.
-            if (interfaceType == 1){
-                AudioFormat.Encoding targetEncoding = AudioFormat.Encoding.PCM_SIGNED;
-                AudioInputStream pcmStream = AudioSystem.getAudioInputStream(targetEncoding, inputStream);
-                byte[] b = new byte[102400];
-                pcmStream.read(b, 0, b.length);
-                FloatBuffer l =  ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
-                final float[] audioFloats = new float[l.capacity()];
-                l.get(audioFloats);
-                // jack.getSimpleAudioClient();
-            }
-            // Normal interface type
-            else {
                 Clip clip = AudioSystem.getClip(getSpeakers());
                 // Try opening the sound file, reading it to stream
                 clip.open(inputStream);
@@ -104,13 +82,9 @@ public class SoundThread implements Runnable {
                 Thread.sleep(clipLength);
                 clip.drain();
                 clip.close();
-            }
+
         } catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    public void updateAudioInterface(){
-
     }
 }
