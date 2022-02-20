@@ -46,7 +46,7 @@ public class Updater {
                 } else {
                     message = "A new update is available. Would you like to update?";
                 }
-                int updateResult = JOptionPane.showConfirmDialog(null, message, "New Soundboard Update Available",
+                int updateResult = JOptionPane.showConfirmDialog(BreakfastSounds.dialogParent, message, "New Soundboard Update Available",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
                 if (updateResult == JOptionPane.YES_OPTION) {
@@ -87,7 +87,7 @@ public class Updater {
                 // Make sure program closes itself, even though it should on its own.
                 System.exit(47);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Failed to update the application.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update the application.");
                 e.printStackTrace();
             }
         }).start();
@@ -110,7 +110,7 @@ public class Updater {
             }
             System.out.println("Done downloading Updater.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to update your application.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update your application.");
         }
     }
 }

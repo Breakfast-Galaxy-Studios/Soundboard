@@ -1,5 +1,6 @@
 package net.breakfaststudios.soundboard.interception;
 
+import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.util.Converter;
 
@@ -72,7 +73,7 @@ public class InterceptionListener{
             }
             // Throw error if other program ends.
             try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
 
@@ -100,7 +101,7 @@ public class InterceptionListener{
             // Break the loop if the other program ends.
             if (data(receive).equals("FATALERROR")) {
                 System.out.println("Fatal error occurred \"serverside\".");
-                JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
                 dsDevID.close();
                 throw new Exception("Lost connection to interceptor.");
             }
@@ -109,7 +110,7 @@ public class InterceptionListener{
 
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
             throw new Exception("Lost connection to interceptor.");
         }
     }
@@ -128,7 +129,7 @@ public class InterceptionListener{
             // Break the loop if the other program ends.
             if (data(receive).equals("FATALERROR")) {
                 System.out.println("Fatal error occurred \"serverside\".");
-                JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
                 ds.close();
                 throw new Exception("Lost connection to interceptor.");
             }
@@ -136,7 +137,7 @@ public class InterceptionListener{
             return data(receive);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
             throw new Exception("Lost connection to interceptor.");
         }
     }

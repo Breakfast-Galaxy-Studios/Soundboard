@@ -63,7 +63,7 @@ public class SoundThread implements Runnable {
             inputStream = AudioSystem.getAudioInputStream(reformatFormat, inputStream);
         } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Couldn't play sound. Make sure the sound file exist. Error is as follows:" + e);
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Couldn't play sound. Make sure the sound file exist. Error is as follows:" + e);
             System.exit(56);
         }
         try {

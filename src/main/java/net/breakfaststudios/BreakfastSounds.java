@@ -30,7 +30,7 @@ public class BreakfastSounds {
     public static String SELECTED_AUDIO_DEVICE;
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-
+    public static JFrame dialogParent = new JFrame();
     /**
      * Creates the UI, and initializes all listeners.
      */
@@ -43,6 +43,7 @@ public class BreakfastSounds {
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {
+        dialogParent.setAlwaysOnTop(true);
         soundBoard = new SoundBoard();
         Properties settings = null;
 
@@ -180,7 +181,7 @@ public class BreakfastSounds {
                 Files.createDirectories(soundDir);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
                 System.exit(3);
             }
         }

@@ -26,7 +26,7 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 > ***DISCLAIMER: MP3 SOUNDS WILL LIKELY BE DISTORTED***
 
 ## Known issues
-- Users on version 1.2 or 1.3 will not recieve auto-updates. 1.3.1+ or 1.1 and earlier will work.
+- Users on version 1.2 or 1.3 will not receive auto-updates. 1.3.1+ or 1.1 and earlier will work.
 - Popup alerts aren't always on top. This can lead to getting stuck behind fullscreen apps and not being able to open soundboard without minimizing everything. No ETA for a fix, but it will be fixed soon.
 
 ## Branches
@@ -36,16 +36,18 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 - Stable
 - Likely has older features, but they are known to work and are 
 - Matches release
+- All optimizations/simple features will eventually be brought to this branch.
 
 ### Dev
 - Likely isn't stable or will crash
 - Typically has major, app breaking, bugs
 - Has the newest features, but likely has broken or incomplete implementations.
-- Combinds all the other branches. Has both jack AND interception.
+- Combines all the other branches. Has both jack AND interception.
 
 ### Interception
 - Based off of main
-- Includes an implemenation of interception, allowing you to use a second keyboard to control soundboard.
+- Includes an implementation of interception, allowing you to use a second keyboard to control soundboard.
+- Very limited implementation, little to no automatic setup.
 
 ### Jack Audio
 - Based off of main
@@ -53,4 +55,4 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 - Unfinished with no plans of continuing development. 
 
 ## Building
-Building either branch should be done with maven. The build enviornment should be set up already in `pom.xml`, so all you should have to do is compile with maven.
+Building any branch should be done with maven. The build environment should be set up already in `pom.xml`, so all you should have to do is compile with maven.

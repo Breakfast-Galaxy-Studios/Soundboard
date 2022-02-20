@@ -169,7 +169,7 @@ public class Util {
                     Files.deleteIfExists(winStartupBatch);
                     Files.deleteIfExists(winStartupScript);
                 } catch (IOException ex){
-                    JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
+                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to remove from startup folder.");
                     ex.printStackTrace();
                 }
             }
@@ -178,7 +178,7 @@ public class Util {
         } else if (os.contains("nux")){
             // TODO implement linux support here
         } else {
-            JOptionPane.showMessageDialog(null, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
         }
     }
 }
