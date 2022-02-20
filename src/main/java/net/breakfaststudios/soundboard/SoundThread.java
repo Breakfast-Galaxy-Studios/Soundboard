@@ -6,9 +6,6 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 /**
  * This class basically is just for playing sounds on threads
@@ -19,8 +16,10 @@ public class SoundThread implements Runnable {
     private final long clipLength;
     private final byte interfaceType;
     // private JackInterface jack;
+
     /**
      * The normal sound thread constructor
+     *
      * @param path       Path to the sound
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
@@ -35,6 +34,7 @@ public class SoundThread implements Runnable {
 
     /**
      * Gets the speakers as a Mixer.info
+     *
      * @return Mixer.info speakers
      */
     private Mixer.Info getSpeakers() {
@@ -92,7 +92,7 @@ public class SoundThread implements Runnable {
         }
     }
 
-    public void updateAudioInterface(){
+    public void updateAudioInterface() {
 
     }
 }

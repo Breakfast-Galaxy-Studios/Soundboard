@@ -301,8 +301,6 @@ public class UI extends JFrame {
         );
 
 
-
-
         GroupLayout recordKeybindPanelLayout = new GroupLayout(recordKeybindPanel);
         recordKeybindPanel.setLayout(recordKeybindPanelLayout);
         recordKeybindPanelLayout.setHorizontalGroup(
@@ -416,7 +414,6 @@ public class UI extends JFrame {
         settingsPopup.add(settingsPanel);
 
 
-
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -465,8 +462,6 @@ public class UI extends JFrame {
         );
 
 
-
-
         pack();
         // -----------------------------------------------------------------
         // -----------------------------------------------------------------
@@ -494,10 +489,22 @@ public class UI extends JFrame {
                 }
                 settingsPopup.setVisible(true);
             }
-            @Override public void mousePressed(MouseEvent e) {}
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
         });
 
         // Close settings window
@@ -560,7 +567,7 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        if(new File(Util.getSoundDirectory() + s).delete()){
+                        if (new File(Util.getSoundDirectory() + s).delete()) {
                             System.out.println("Deleted File");
                         }
                         JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
@@ -618,13 +625,14 @@ public class UI extends JFrame {
 
         // If interception is turned on, send close to the listening program
         this.addWindowListener(new WindowAdapter() {
-            @Override public void windowClosing(WindowEvent e) {
+            @Override
+            public void windowClosing(WindowEvent e) {
                 // I got tired of it complaining about the property potentially being null.
                 //noinspection ConstantConditions
                 if (InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
                     try {
                         InterceptionMain.interceptionListener.closeProgram();
-                    } catch (IOException exception){
+                    } catch (IOException exception) {
                         System.out.println("This happens if program is already closed.");
                         exception.printStackTrace();
                     }
@@ -686,7 +694,8 @@ public class UI extends JFrame {
                             } else {
                                 JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to change that sound.");
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                     }
 
                     StringBuilder rawCodes = new StringBuilder();
@@ -726,7 +735,8 @@ public class UI extends JFrame {
         KeyListener keybindListener = new KeyListener() {
             public void keyTyped(KeyEvent e) {
             }
-            public void keyPressed( KeyEvent e) {
+
+            public void keyPressed(KeyEvent e) {
                 if (!characters.contains(KeyEvent.getKeyText(e.getKeyCode())))
                     characters.add(KeyEvent.getKeyText(e.getKeyCode()));
             }
@@ -742,7 +752,7 @@ public class UI extends JFrame {
         recordKeybind.addActionListener(e -> {
             Properties prop = Util.getSettingsFile();
             Properties intercept = InterceptionMain.getInterceptionSettings();
-            if (intercept != null && Boolean.parseBoolean(intercept.getProperty("interception"))){
+            if (intercept != null && Boolean.parseBoolean(intercept.getProperty("interception"))) {
                 recordKeybindDialog.setVisible(true);
                 String text = "Unknown 0x255";
                 try {
@@ -792,10 +802,22 @@ public class UI extends JFrame {
                     soundTable.setRowSelectionInterval(row, row);
                 }
             }
-            @Override public void mousePressed(MouseEvent e) { }
-            @Override public void mouseReleased(MouseEvent e) { }
-            @Override public void mouseEntered(MouseEvent e) { }
-            @Override public void mouseExited(MouseEvent e) { }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
         });
 
         editMenuItem.addActionListener(e -> {
@@ -939,7 +961,8 @@ public class UI extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to delete that sound.");
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     /**

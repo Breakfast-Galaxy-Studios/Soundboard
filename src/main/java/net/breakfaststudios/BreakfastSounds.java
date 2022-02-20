@@ -26,11 +26,12 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "v2.1";
+    public static final String currentVersion = "v2.2";
     public static String SELECTED_AUDIO_DEVICE;
+    public static JFrame dialogParent = new JFrame();
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
-    public static JFrame dialogParent = new JFrame();
+
     /**
      * Creates the UI, and initializes all listeners.
      */
@@ -40,6 +41,7 @@ public class BreakfastSounds {
 
     /**
      * Main method for the program.
+     *
      * @param args Accepts no command line arguments.
      */
     public static void main(String[] args) {

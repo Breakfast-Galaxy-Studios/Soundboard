@@ -5,7 +5,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
-import net.breakfaststudios.soundboard.SoundThread;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +18,7 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
+
     public GlobalKeyListener() {
         soundBoard = BreakfastSounds.getSoundBoard();
     }
@@ -58,7 +58,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                 for (int i = 0; i < currentlyPressedKeys.size(); i++) {
                     if (neededKeys.size() != 0 && Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i))) {
                         neededKeys.remove(0);
-                        if(!Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i + 1))) break;
+                        if (!Objects.equals(neededKeys.get(0), currentlyPressedKeys.get(i + 1))) break;
                         else neededKeys.remove(0);
                     }
                 }
@@ -68,23 +68,28 @@ public class GlobalKeyListener implements NativeKeyListener {
                 }
                 neededKeys.clear();
             }
-        } catch (IndexOutOfBoundsException ignored) { }
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     /**
      * Listens for key releases and removes that key from the pressed keys cache
+     *
      * @param releasedKey Key that was released
      */
     public void nativeKeyReleased(NativeKeyEvent releasedKey) {
         currentlyPressedKeys.remove((Integer) releasedKey.getKeyCode());
     }
+
     /**
      * Deletes stored interception key from cache
+     *
      * @param releasedKey Key that was released
      */
     public void interceptionKeyReleased(Integer releasedKey) {
         currentlyPressedKeys.remove(releasedKey);
     }
 
-    public void nativeKeyTyped(NativeKeyEvent e) { }
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    }
 }

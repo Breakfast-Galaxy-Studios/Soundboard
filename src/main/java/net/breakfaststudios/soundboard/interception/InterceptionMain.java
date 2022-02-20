@@ -52,9 +52,10 @@ public class InterceptionMain {
 
     /**
      * Get the properties file for interceptor
+     *
      * @return Properties of the settings for the interceptor
      */
-    public static Properties getInterceptionSettings(){
+    public static Properties getInterceptionSettings() {
         try {
             FileInputStream file = new FileInputStream(Util.getMainDirectory() + "interception.properties");
             Properties prop = new Properties();
@@ -70,7 +71,7 @@ public class InterceptionMain {
     /**
      * Starts the interceptor thread, and opens interception.exe
      */
-    public static void startInterception(){
+    public static void startInterception() {
         // Todo, add to this method something to run the vbs script to start interceptor
         interceptionListener.startInterceptor();
     }
@@ -78,10 +79,11 @@ public class InterceptionMain {
 
     /**
      * Creates the interception.properties file, used to store information needed by both soundboard and the interception program.
+     *
      * @param devID The device id of the keyboard the interceptor needs to intercept.
      * @return boolean, true if file was created successfully, false if not.
      */
-    public static boolean updateInterceptionProperties(String devID, String interception){
+    public static boolean updateInterceptionProperties(String devID, String interception) {
         Properties prop = new Properties();
         File interceptionFile = new File(interceptionSettingsFilePath);
         prop.setProperty("devID", devID);
@@ -112,16 +114,17 @@ public class InterceptionMain {
 
     /**
      * Creates a Visual Basic Script, so that interceptor can be launched silently, without having a cmd window.
+     *
      * @return Returns true if file was created, false otherwise
      */
     // Todo finalize and implement this method
-    private static boolean createInterceptionVBS(String pathToInterception){
+    private static boolean createInterceptionVBS(String pathToInterception) {
         String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + pathToInterception + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
 
         Path vbsScript = Paths.get(interceptionVBS);
         try {
             if (!Files.exists(vbsScript)) Files.createFile(vbsScript);
-            if (Files.exists(vbsScript)){
+            if (Files.exists(vbsScript)) {
                 Files.writeString(vbsScript, script);
             }
         } catch (IOException exception) {
@@ -134,19 +137,19 @@ public class InterceptionMain {
     /**
      * Delete everything having to do with interception.
      */
-    public static void deleteInterception(){
+    public static void deleteInterception() {
         // Delete startup script, interception.properties, and the entire interception folder.
-        try{
+        try {
             Files.deleteIfExists(Path.of(interceptionSettingsFilePath));
             Files.deleteIfExists(Path.of(interceptionDir));
             Files.deleteIfExists(Path.of(interceptionVBS));
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
-              Failed to delete all the contents of interceptor.
-              If this error keeps occurring, please delete it yourself.
-              The path to the folder is as follows:
-              """ + interceptionDir);
+                    Failed to delete all the contents of interceptor.
+                    If this error keeps occurring, please delete it yourself.
+                    The path to the folder is as follows:
+                    """ + interceptionDir);
         }
     }
 }

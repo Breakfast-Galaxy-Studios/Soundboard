@@ -7,12 +7,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+
 import static net.breakfaststudios.util.Util.jarPath;
 import static net.breakfaststudios.util.Util.os;
 
@@ -70,9 +72,11 @@ public class Updater {
             try {
                 // remove soundboard.jar from operating path, remove / from beginning if on windows
                 String[] newPath;
-                if (jarPath != null){
+                if (jarPath != null) {
                     newPath = jarPath.split("/");
-                } else {throw new Exception();}
+                } else {
+                    throw new Exception();
+                }
                 String[] operatingPathArray = Arrays.copyOf(newPath, newPath.length - 1);
                 StringBuilder operatingPath = new StringBuilder(String.join("/", operatingPathArray));
                 if (os.contains("win")) {

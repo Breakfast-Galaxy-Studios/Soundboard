@@ -9,12 +9,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-public class InterceptionListener{
+public class InterceptionListener {
 
     /**
      * Initializes the main socket used in the listener
      */
     private DatagramSocket listenerSocket;
+
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
@@ -25,6 +26,7 @@ public class InterceptionListener{
 
     /**
      * Converts a byte array into a string
+     *
      * @param udpPacket byte[] from a socket, all bytes are converted to chars
      * @return String of all the chars in the byte array.
      */
@@ -41,7 +43,7 @@ public class InterceptionListener{
     }
 
     public void startInterceptor() {
-        new Thread(()->{
+        new Thread(() -> {
             // Listen to localhost port 55555
 
             byte[] receive = new byte[65535];
@@ -72,7 +74,11 @@ public class InterceptionListener{
                 }
             }
             // Throw error if other program ends.
-            try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
+            try {
+                throw new Exception("Lost connection to interceptor.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
@@ -86,8 +92,8 @@ public class InterceptionListener{
         System.out.println("Closed the interceptor.");
     }
 
-    public String listenForDevID() throws Exception{
-        try{
+    public String listenForDevID() throws Exception {
+        try {
             byte[] receive = new byte[65535];
             DatagramPacket receivePacket;
             DatagramSocket dsDevID = new DatagramSocket(55554, InetAddress.getByName("127.0.0.1"));
@@ -117,7 +123,7 @@ public class InterceptionListener{
 
 
     public String getNextKeycode() throws Exception {
-        try{
+        try {
             byte[] receive = new byte[65535];
             DatagramSocket ds = new DatagramSocket(55556, InetAddress.getByName("127.0.0.1"));
 
