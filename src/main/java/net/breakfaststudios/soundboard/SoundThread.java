@@ -14,7 +14,6 @@ public class SoundThread implements Runnable {
     private final String path;
     private final float volume;
     private final long clipLength;
-    private final byte interfaceType;
     // private JackInterface jack;
 
     /**
@@ -24,12 +23,10 @@ public class SoundThread implements Runnable {
      * @param volume     Volume of the sound
      * @param clipLength Length of the sound
      */
-    public SoundThread(String path, float volume, long clipLength, byte type) {
+    public SoundThread(String path, float volume, long clipLength) {
         this.path = path;
         this.volume = volume;
         this.clipLength = clipLength;
-        // jack = BreakfastSounds.getSoundBoard().getJack();
-        interfaceType = type;
     }
 
     /**
@@ -90,9 +87,5 @@ public class SoundThread implements Runnable {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    public void updateAudioInterface() {
-
     }
 }

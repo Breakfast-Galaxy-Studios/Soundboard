@@ -4,7 +4,6 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import net.breakfaststudios.soundboard.SoundBoard;
-import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.ui.UI;
 import net.breakfaststudios.util.Updater;
@@ -160,9 +159,6 @@ public class BreakfastSounds {
      * Initializes the type of keylistener to be used.
      */
     private static void initKeyListener() {
-        if (Files.exists(Path.of(InterceptionMain.interceptionSettingsFilePath)) && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
-            InterceptionMain.initKeyboardListener();
-        } else {
             try {
                 GlobalScreen.registerNativeHook();
             } catch (NativeHookException ex) {
@@ -170,7 +166,6 @@ public class BreakfastSounds {
                 System.err.println(ex.getMessage());
                 System.exit(53);
             }
-        }
     }
 
     /**

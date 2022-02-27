@@ -11,8 +11,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SoundBoard {
     private final List<Sound> sounds;
     private final ThreadPoolExecutor executorService;
-    private byte audioInterfaceType;
-    // private final JackInterface jack;
 
     /**
      * Sound cache class
@@ -30,7 +28,7 @@ public class SoundBoard {
      * @param sound Sound to play
      */
     public void queueSound(Sound sound) {
-        executorService.execute(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength(), audioInterfaceType));
+        executorService.execute(new SoundThread(sound.getPath(), sound.getVolume(), sound.getLength()));
     }
 
     /**
