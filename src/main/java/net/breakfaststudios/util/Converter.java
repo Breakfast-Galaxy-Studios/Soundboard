@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Converter {
 
-    public static String getKeyText(int var0){
+    public static String getKeyText(int var0) {
         return switch (var0) {
             case 0 -> Toolkit.getProperty("AWT.undefined", "Undefined");
             case 1 -> Toolkit.getProperty("AWT.escape", "Escape");
@@ -145,20 +145,20 @@ public class Converter {
             case 65404 -> Toolkit.getProperty("AWT.sun_copy", "Sun Copy");
             case 65405 -> Toolkit.getProperty("AWT.sun_insert", "Sun Insert");
             case 65406 -> Toolkit.getProperty("AWT.sun_find", "Sun Find");
-            case 1076-> "num5";
-            case 1074-> "num-";
-            case 1078-> "num+";
-            case 1055-> "num*";
-            case 1082-> "num0";
-            case 1071-> "num7";
-            case 1073-> "num9";
-            case 1083-> "num.";
-            case 1079-> "num1";
-            case 1081-> "num3";
-            case 1072-> "num8";
-            case 1080-> "num2";
-            case 1077-> "num6";
-            case 1075-> "num4";
+            case 1076 -> "num5";
+            case 1074 -> "num-";
+            case 1078 -> "num+";
+            case 1055 -> "num*";
+            case 1082 -> "num0";
+            case 1071 -> "num7";
+            case 1073 -> "num9";
+            case 1083 -> "num.";
+            case 1079 -> "num1";
+            case 1081 -> "num3";
+            case 1072 -> "num8";
+            case 1080 -> "num2";
+            case 1077 -> "num6";
+            case 1075 -> "num4";
 
             default -> Toolkit.getProperty("AWT.unknown", "Unknown") + " keyCode: 0x" + Integer.toString(var0, 16);
         };
@@ -449,33 +449,33 @@ public class Converter {
             return 65405;
         } else if (Toolkit.getProperty("AWT.sun_find", "Sun Find").equals(var0)) {
             return 65406;
-        } else if ("num5".equals(var0)){
+        } else if ("num5".equals(var0)) {
             return 1076;
-        } else if ("num-".equals(var0)){
+        } else if ("num-".equals(var0)) {
             return 1074;
-        } else if ("num+".equals(var0)){
+        } else if ("num+".equals(var0)) {
             return 1078;
-        } else if ("num*".equals(var0)){
+        } else if ("num*".equals(var0)) {
             return 1055;
-        } else if ("num0".equals(var0)){
+        } else if ("num0".equals(var0)) {
             return 1082;
-        } else if ("num7".equals(var0)){
+        } else if ("num7".equals(var0)) {
             return 1071;
-        } else if ("num9".equals(var0)){
+        } else if ("num9".equals(var0)) {
             return 1073;
-        } else if ("num.".equals(var0)){
+        } else if ("num.".equals(var0)) {
             return 1083;
-        } else if ("num1".equals(var0)){
+        } else if ("num1".equals(var0)) {
             return 1079;
-        } else if ("num3".equals(var0)){
+        } else if ("num3".equals(var0)) {
             return 1081;
-        } else if ("num8".equals(var0)){
+        } else if ("num8".equals(var0)) {
             return 1072;
-        } else if ("num2".equals(var0)){
+        } else if ("num2".equals(var0)) {
             return 1080;
-        } else if ("num6".equals(var0)){
+        } else if ("num6".equals(var0)) {
             return 1077;
-        }  else if ("num4".equals(var0)){
+        } else if ("num4".equals(var0)) {
             return 1075;
         }
         return -1;

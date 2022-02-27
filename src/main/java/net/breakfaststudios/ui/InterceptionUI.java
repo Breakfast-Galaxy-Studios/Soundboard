@@ -1,5 +1,6 @@
 package net.breakfaststudios.ui;
 
+import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.util.Util;
 
@@ -114,8 +115,8 @@ public class InterceptionUI {
 
         // Save settings on confirm & close window
         confirmButton.addActionListener(e -> {
-            if(!(InterceptionMain.updateInterceptionProperties(deviceIDTextField.getText(), String.valueOf(interceptionCheckbox.isSelected())))){
-                JOptionPane.showMessageDialog(null, "Failed to update interception settings. Try restarting the program.");
+            if (!(InterceptionMain.updateInterceptionProperties(deviceIDTextField.getText(), String.valueOf(interceptionCheckbox.isSelected())))) {
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update interception settings. Try restarting the program.");
             }
             setVisible(false);
         });
@@ -147,5 +148,7 @@ public class InterceptionUI {
     /**
      * Makes setting the visibility of the menu easier to change
      */
-    private void setVisible(boolean b) { interceptionMenuDialog.setVisible(b); }
+    private void setVisible(boolean b) {
+        interceptionMenuDialog.setVisible(b);
+    }
 }

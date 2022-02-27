@@ -1,5 +1,7 @@
 package net.breakfaststudios.soundboard.interception;
 
+import net.breakfaststudios.BreakfastSounds;
+
 import javax.swing.*;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,23 +14,24 @@ public class InterceptionInterface {
     private static DatagramSocket listenerSocket;
     private static DatagramSocket closingSocket;
     private static DatagramSocket recordingSocket;
-    private int port;
-    private int port2;
-    private int port3;
 
     // Load the lib
     static {
         try {
             // if (!Files.exists(Path.of(INTERCEPTION_PATH))){
-                // TODO uncomment this
-                // downloadFile();
+            // TODO uncomment this
+            // downloadFile();
             // }
             System.load("C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll");
         } catch (Exception exception) {
             exception.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Interception.dll could not be found/installed. Interception will not work without this.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Interception.dll could not be found/installed. Interception will not work without this.");
         }
     }
+
+    private int port;
+    private int port2;
+    private int port3;
 
     // Create the port & socket
     public InterceptionInterface() {
@@ -40,11 +43,23 @@ public class InterceptionInterface {
         recordingSocket = createRecordingSocket();
     }
 
+    public static DatagramSocket getListenerSocket() {
+        return listenerSocket;
+    }
+
+    public static DatagramSocket getClosingSocket() {
+        return closingSocket;
+    }
+
+    public static DatagramSocket getRecordingSocket() {
+        return recordingSocket;
+    }
+
     public native long getDeviceID();
 
     public native void interception(int port, int port2, int port3, long devID);
 
-    public void restartInterception(){
+    public void restartInterception() {
         port = createNewPort();
         port2 = createNewPort();
         port3 = createNewPort();
@@ -53,18 +68,15 @@ public class InterceptionInterface {
         recordingSocket = createRecordingSocket();
     }
 
-    public int[] getPorts(){ return new int[]{ port, port2, port3 }; }
+    public int[] getPorts() {
+        return new int[]{port, port2, port3};
+    }
 
-    private int createNewPort(){ return (int) (Math.random() * 16414 + 49152); }
+    private int createNewPort() {
+        return (int) (Math.random() * 16414 + 49152);
+    }
 
-    public static DatagramSocket getListenerSocket(){ return listenerSocket; }
-
-    public static DatagramSocket getClosingSocket() { return closingSocket; }
-
-    public static DatagramSocket getRecordingSocket() { return recordingSocket; }
-
-
-    private DatagramSocket createListenerSocket(){
+    private DatagramSocket createListenerSocket() {
         DatagramSocket listenerSocket;
         try {
             listenerSocket = new DatagramSocket(port, InetAddress.getByName("127.0.0.1"));
@@ -115,7 +127,7 @@ public class InterceptionInterface {
             }
             System.out.println("Done downloading DLL.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to download the dll for interceptor.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to download the dll for interceptor.");
         }
     }*/
 }

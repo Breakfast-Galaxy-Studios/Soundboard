@@ -25,8 +25,9 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "v2.1";
+    public static final String currentVersion = "v2.2";
     public static String SELECTED_AUDIO_DEVICE = "Primary Sound Driver";
+    public static JFrame dialogParent = new JFrame();
     private static SoundBoard soundBoard;
     private static NativeKeyListener listener;
 
@@ -39,15 +40,17 @@ public class BreakfastSounds {
 
     /**
      * Main method for the program.
+     *
      * @param args Accepts no command line arguments.
      */
     //TODO Add audio.properties
     public static void main(String[] args) {
+        dialogParent.setAlwaysOnTop(true);
         // TODO remove this
         // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
 
         soundBoard = new SoundBoard();
-        Properties settings = null;
+        Properties settings;
 
         /*
          * Make sure AutoUpdater is deleted if it exists.
@@ -87,7 +90,7 @@ public class BreakfastSounds {
         // Load some stuff from settings
         if (settings != null) {
             SELECTED_AUDIO_DEVICE = settings.getProperty("soundOutput");
-            if (settings.getProperty("gcTime") != null){
+            if (settings.getProperty("gcTime") != null) {
                 startAutoCollection(Integer.parseInt(settings.getProperty("gcTime")));
             } else {
                 startAutoCollection(300000);
@@ -204,7 +207,7 @@ public class BreakfastSounds {
                 Files.createDirectories(soundDir);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
                 System.exit(3);
             }
         }

@@ -18,9 +18,11 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private final ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();
     private final SoundBoard soundBoard;
+
     public GlobalKeyListener() {
         soundBoard = BreakfastSounds.getSoundBoard();
     }
+
     /**
      * Listens for all key presses and plays sound if requirements are met
      *
@@ -41,6 +43,7 @@ public class GlobalKeyListener implements NativeKeyListener {
         }
         registerSound();
     }
+
     /**
      * Plays the sound if all the keys needed are pressed.
      */
@@ -82,11 +85,13 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     /**
      * Deletes stored interception key from cache
+     *
      * @param releasedKey Key that was released
      */
     public void interceptionKeyReleased(Integer releasedKey) {
         currentlyPressedKeys.remove(releasedKey);
     }
 
-    public void nativeKeyTyped(NativeKeyEvent e) { }
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    }
 }

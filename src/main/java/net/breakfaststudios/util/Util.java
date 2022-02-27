@@ -26,7 +26,6 @@ public class Util {
     public static String jarPath = null;
 
 
-
     static {
         // Get the jar path
         try {
@@ -39,6 +38,7 @@ public class Util {
 
     /**
      * Get a string representation of where the Sounds are stored.
+     *
      * @return String representing the dir that the sound-config files are stored.
      */
     public static String getSoundDirectory() {
@@ -52,6 +52,7 @@ public class Util {
 
     /**
      * Get a string representation of the Main Working Directory.
+     *
      * @return String of the main app folder.
      */
     public static String getMainDirectory() {
@@ -146,9 +147,10 @@ public class Util {
 
     /**
      * General purpose method for other windows, as they are added.
-     * @param p ArrayList of panels so that you can set the style of all child elements.
+     *
+     * @param p               ArrayList of panels so that you can set the style of all child elements.
      * @param backgroundColor Color of the background
-     * @param textColor Color of the text
+     * @param textColor       Color of the text
      */
     public static void setTheme(ArrayList<Panel> p, Color backgroundColor, Color textColor) {
         // All components
@@ -181,7 +183,7 @@ public class Util {
         } else if (os.contains("nux")) {
             startupLinux(bool);
         } else {
-            JOptionPane.showMessageDialog(null, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
         }
     }
 
@@ -219,7 +221,7 @@ public class Util {
                 Files.deleteIfExists(winStartupBatch);
                 Files.deleteIfExists(winStartupScript);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Failed to remove from startup folder.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to remove from startup folder.");
                 ex.printStackTrace();
             }
         }
@@ -301,7 +303,7 @@ public class Util {
                 }
             } catch (IOException exception) {
                 exception.printStackTrace();
-                JOptionPane.showMessageDialog(null, """
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
                         Failed to disable the service.
                         You can disable the service yourself by running the following command:
                         sudo systemctl disable soundboard

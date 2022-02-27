@@ -1,19 +1,23 @@
 package net.breakfaststudios.soundboard.interception;
 
-import java.net.*;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class InterceptionJNI {
+    private static final String interceptionDLLDownload = "C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll";
     private static DatagramSocket listenerSocket;
     private static DatagramSocket closingSocket;
     private static DatagramSocket recordingSocket;
-    private int port;
-    private int port2;
-    private int port3;
-    private static final String interceptionDLLDownload = "C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll";
 
     static {
         System.load("C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll");
     }
+
+    private int port;
+    private int port2;
+    private int port3;
 
     // Create the port & socket
     public InterceptionJNI() {
@@ -25,11 +29,23 @@ public class InterceptionJNI {
         recordingSocket = createRecordingSocket();
     }
 
+    public static DatagramSocket getListenerSocket() {
+        return listenerSocket;
+    }
+
+    public static DatagramSocket getClosingSocket() {
+        return closingSocket;
+    }
+
+    public static DatagramSocket getRecordingSocket() {
+        return recordingSocket;
+    }
+
     public native long getDeviceID();
 
     public native void interception(int port, int port2, int port3, long devID);
 
-    public void restartInterception(){
+    public void restartInterception() {
         port = createNewPort();
         port2 = createNewPort();
         port3 = createNewPort();
@@ -40,19 +56,18 @@ public class InterceptionJNI {
 
     /**
      * Get the ints corresponding to the ports
+     *
      * @return int[], where index 0 is the listener port, index 1 is the closing port, and index 3 is the recording port.
      */
-    public int[] getPorts(){ return new int[]{ port, port2, port3 }; }
+    public int[] getPorts() {
+        return new int[]{port, port2, port3};
+    }
 
-    public static DatagramSocket getListenerSocket(){ return listenerSocket; }
+    private int createNewPort() {
+        return (int) (Math.random() * 16414 + 49152);
+    }
 
-    public static DatagramSocket getClosingSocket() { return closingSocket; }
-
-    public static DatagramSocket getRecordingSocket() { return recordingSocket; }
-
-    private int createNewPort(){ return (int) (Math.random() * 16414 + 49152); }
-
-    private DatagramSocket createListenerSocket(){
+    private DatagramSocket createListenerSocket() {
         DatagramSocket listenerSocket;
         try {
             listenerSocket = new DatagramSocket(port, InetAddress.getByName("127.0.0.1"));

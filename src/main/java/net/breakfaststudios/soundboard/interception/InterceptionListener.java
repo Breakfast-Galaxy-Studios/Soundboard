@@ -1,5 +1,6 @@
 package net.breakfaststudios.soundboard.interception;
 
+import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.util.Converter;
 
@@ -10,49 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final public class InterceptionListener {
-    /**
-     * Initializes the main socket used in the listener
-     * This is done here and not later, so it's easier to determine if port is already bound
-     */
-    private DatagramSocket listenerSocket;
-    {
-        try {
-            listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
-        } catch (SocketException |UnknownHostException  e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, """
-                    Another program is using the port needed by interceptor.
-                    This can occur when there is already an instance of soundboard running.
-                    """);
-        }
-    }
     private final AtomicBoolean running = new AtomicBoolean(false);
-    private InterceptionJNI interceptionJNI;
-    private Thread interceptionThread;
-
-    public InterceptionListener() {
-        interceptionJNI = new InterceptionJNI();
-    }
-
-    /**
-     * Converts a byte array into a string
-     *
-     * @param udpPacket byte[] from a socket, all bytes are converted to chars
-     * @return String of all the chars in the byte array.
-     */
-    private static String data(byte[] udpPacket) {
-        if (udpPacket == null)
-            return null;
-        StringBuilder data = new StringBuilder();
-        int i = 0;
-        while (udpPacket[i] != 0) {
-            data.append((char) udpPacket[i]);
-            i++;
-        }
-        return data.toString();
-    }
-
-    private final Thread interceptor = new Thread(() ->{
+    private final Thread interceptor = new Thread(() -> {
         // Listen to localhost port 55555
         byte[] receive = new byte[65535];
         DatagramSocket listenerSocket = InterceptionJNI.getListenerSocket();
@@ -79,8 +39,49 @@ final public class InterceptionListener {
         }
         listenerSocket.close();
     });
+    /**
+     * Initializes the main socket used in the listener
+     * This is done here and not later, so it's easier to determine if port is already bound
+     */
+    private DatagramSocket listenerSocket;
+    private final InterceptionJNI interceptionJNI;
+    private Thread interceptionThread;
 
-    private Thread interception(){
+    {
+        try {
+            listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
+                    Another program is using the port needed by interceptor.
+                    This can occur when there is already an instance of soundboard running.
+                    """);
+        }
+    }
+
+    public InterceptionListener() {
+        interceptionJNI = new InterceptionJNI();
+    }
+
+    /**
+     * Converts a byte array into a string
+     *
+     * @param udpPacket byte[] from a socket, all bytes are converted to chars
+     * @return String of all the chars in the byte array.
+     */
+    private static String data(byte[] udpPacket) {
+        if (udpPacket == null)
+            return null;
+        StringBuilder data = new StringBuilder();
+        int i = 0;
+        while (udpPacket[i] != 0) {
+            data.append((char) udpPacket[i]);
+            i++;
+        }
+        return data.toString();
+    }
+
+    private Thread interception() {
         return new Thread(() -> {
             int[] ports = interceptionJNI.getPorts();
             interceptionJNI.interception(ports[0], ports[1], ports[2], 340);
@@ -96,7 +97,7 @@ final public class InterceptionListener {
 
     @Deprecated
     public void startInterceptorDeprecated() {
-        new Thread(()->{
+        new Thread(() -> {
             // Listen to localhost port 55555
 
             byte[] receive = new byte[65535];
@@ -127,8 +128,12 @@ final public class InterceptionListener {
                 }
             }
             // Throw error if other program ends.
-            try { throw new Exception("Lost connection to interceptor."); } catch (Exception e) { e.printStackTrace(); }
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            try {
+                throw new Exception("Lost connection to interceptor.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
 
@@ -158,7 +163,7 @@ final public class InterceptionListener {
             // Break the loop if the other program ends.
             if (data(receive).equals("FATALERROR")) {
                 System.out.println("Fatal error occurred \"serverside\".");
-                JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
                 ds.close();
                 throw new Exception("Lost connection to interceptor.");
             }
@@ -166,7 +171,7 @@ final public class InterceptionListener {
             return data(receive);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
             throw new Exception("Lost connection to interceptor.");
         }
     }

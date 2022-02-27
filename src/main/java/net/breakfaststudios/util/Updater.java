@@ -7,12 +7,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+
 import static net.breakfaststudios.util.Util.jarPath;
 import static net.breakfaststudios.util.Util.os;
 
@@ -45,14 +47,15 @@ public class Updater {
                 } else {
                     message = "A new update is available. Would you like to update?";
                 }
-                int updateResult = JOptionPane.showConfirmDialog(null, message, "New Soundboard Update Available",
+                int updateResult = JOptionPane.showConfirmDialog(BreakfastSounds.dialogParent, message, "New Soundboard Update Available",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
                 if (updateResult == JOptionPane.YES_OPTION) {
                     Updater.updater(version);
                 }
             }
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 
     /**
@@ -68,9 +71,11 @@ public class Updater {
             try {
                 // remove soundboard.jar from operating path, remove / from beginning if on Windows
                 String[] newPath;
-                if (jarPath != null){
+                if (jarPath != null) {
                     newPath = jarPath.split("/");
-                } else {throw new Exception();}
+                } else {
+                    throw new Exception();
+                }
                 String[] operatingPathArray = Arrays.copyOf(newPath, newPath.length - 1);
                 StringBuilder operatingPath = new StringBuilder(String.join("/", operatingPathArray));
 
@@ -87,7 +92,7 @@ public class Updater {
                 // Make sure program closes itself, even though it should on its own.
                 System.exit(47);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Failed to update the application.");
+                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update the application.");
                 e.printStackTrace();
             }
         }).start();
@@ -96,6 +101,7 @@ public class Updater {
 
     /**
      * Downloads the auto-updater
+     *
      * @param saveDir The save directory for the auto-updater.
      */
     private static void downloadFile(String saveDir) {
@@ -110,7 +116,7 @@ public class Updater {
             }
             System.out.println("Done downloading Updater.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to update your application.");
+            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update your application.");
         }
     }
 }
