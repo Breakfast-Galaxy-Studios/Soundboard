@@ -27,7 +27,6 @@ If you would like to convert sound files to `.wav`, we recommend using [this sit
 
 ## Known issues
 - Users on version 1.2 or 1.3 will not receive auto-updates. 1.3.1+ or 1.1 and earlier will work.
-- Popup alerts aren't always on top. This can lead to getting stuck behind fullscreen apps and not being able to open soundboard without minimizing everything. No ETA for a fix, but it will be fixed soon.
 
 ## Branches
 
