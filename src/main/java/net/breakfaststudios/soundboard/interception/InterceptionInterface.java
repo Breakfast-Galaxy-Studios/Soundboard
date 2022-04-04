@@ -10,25 +10,9 @@ import java.net.UnknownHostException;
 
 @Deprecated
 public class InterceptionInterface {
-    // public static final String INTERCEPTION_PATH = Util.getMainDirectory() + "interception/" + "interception.dll";
-    // private final String interceptionDLLDownload = "";
     private static DatagramSocket listenerSocket;
     private static DatagramSocket closingSocket;
     private static DatagramSocket recordingSocket;
-
-    // Load the lib
-    static {
-        try {
-            // if (!Files.exists(Path.of(INTERCEPTION_PATH))){
-            // TODO uncomment this
-            // downloadFile();
-            // }
-            System.load("C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll");
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Interception.dll could not be found/installed. Interception will not work without this.");
-        }
-    }
 
     private int port;
     private int port2;
@@ -115,20 +99,4 @@ public class InterceptionInterface {
         }
         return socket;
     }
-
-    /* private void downloadFile() {
-        try {
-            BufferedInputStream in = new BufferedInputStream(new URL(interceptionDLLDownload).openStream());
-            FileOutputStream fileOutputStream = new FileOutputStream(InterceptionInterface.INTERCEPTION_PATH + "interception.dll");
-            System.out.println("Downloading Interception DLL.");
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-            }
-            System.out.println("Done downloading DLL.");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to download the dll for interceptor.");
-        }
-    }*/
 }

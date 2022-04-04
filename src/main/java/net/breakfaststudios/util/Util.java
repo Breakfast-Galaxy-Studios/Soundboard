@@ -184,7 +184,7 @@ public class Util {
         } else if (os.contains("nux")) {
             startupLinux(bool);
         } else {
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
+            Logger.messagePane("This application currently doesn't support openOnStartup for this operating system.\nIf you think this is an error, or would like to request this feature be added for your OS, please create an issue on the GitHub Repo.");
         }
     }
 
@@ -222,7 +222,7 @@ public class Util {
                 Files.deleteIfExists(winStartupBatch);
                 Files.deleteIfExists(winStartupScript);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to remove from startup folder.");
+                Logger.errorPane( "Failed to remove from startup folder.");
                 ex.printStackTrace();
             }
         }
@@ -304,7 +304,7 @@ public class Util {
                 }
             } catch (IOException exception) {
                 exception.printStackTrace();
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
+                Logger.errorPane("""
                         Failed to disable the service.
                         You can disable the service yourself by running the following command:
                         sudo systemctl disable soundboard

@@ -570,7 +570,7 @@ public class UI extends JFrame {
                         if (new File(Util.getSoundDirectory() + s).delete()) {
                             Logger.log("Deleted File");
                         }
-                        JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
+                        Logger.errorPane("Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
                     }
 
                     float volume = Float.parseFloat(prop.getProperty("volume"));
@@ -587,7 +587,7 @@ public class UI extends JFrame {
                     getSoundBoard().addSound(new Sound(name, path, arr, volume));
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal error when loading sounds. \nError is as follows:\n" + ex + "\nPlease report this to the Github Repo.");
+                    Logger.errorPane("Fatal error when loading sounds. \nError is as follows:\n" + ex + "\nPlease report this to the Github Repo.");
                     System.exit(125);
                 }
             }
@@ -665,7 +665,7 @@ public class UI extends JFrame {
                     keybindField = newKeybindField.getText();
                 }
                 if (hiddenTextField.getText().endsWith("mp3")) {
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "MP3 files are not supported.");
+                    Logger.errorPane("MP3 files are not supported.");
                 } else if (!newSoundFileField.getText().equals("") || !hiddenTextField.getText().equals("")) {
                     if (editSound) {
                         try {
@@ -675,7 +675,7 @@ public class UI extends JFrame {
                             if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
                                 soundTableModel.removeRow(row);
                             } else {
-                                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to change that sound.");
+                                Logger.messagePane("Failed to change that sound.");
                             }
                         } catch (Exception ignored) {
                         }
@@ -708,9 +708,9 @@ public class UI extends JFrame {
                     volumeSlider.setValue(100);
 
                 } else if (hiddenTextField.getText().equals("")) {
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "File must be linked.");
+                    Logger.messagePane("File must be linked.");
                 } else {
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Name field cannot be empty.");
+                    Logger.messagePane("Name field cannot be empty.");
                 }
             }
         });
@@ -836,7 +836,7 @@ public class UI extends JFrame {
                 soundAddMenu.setVisible(true);
 
             } else {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to load that sound file.");
+                Logger.errorPane( "Failed to load that sound file.");
             }
 
         });
@@ -864,12 +864,12 @@ public class UI extends JFrame {
         for (String name : listOfFiles) {
             if (name.equals(newSoundNameField.getText() + ".properties")) {
                 if (!editSound) {
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Sounds cannot have the same name.");
+                    Logger.messagePane("Sounds cannot have the same name.");
                     return false;
                 }
             }
             if (name.equals("")) {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Name field cannot be empty.");
+                Logger.messagePane("Name field cannot be empty.");
                 return false;
             } else {
                 uniqueName = true;
@@ -944,7 +944,7 @@ public class UI extends JFrame {
             if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
                 soundTableModel.removeRow(row);
             } else {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to delete that sound.");
+                Logger.errorPane("Failed to delete that sound.");
             }
         } catch (Exception ignored) {
         }
@@ -997,7 +997,7 @@ public class UI extends JFrame {
                     setVisible(false);
                 } catch (AWTException e) {
                     setVisible(true);
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to open to tray.");
+                    Logger.errorPane("Failed to open to tray.");
                 }
             } else {
                 setVisible(true);

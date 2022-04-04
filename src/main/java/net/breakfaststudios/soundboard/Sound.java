@@ -1,5 +1,6 @@
 package net.breakfaststudios.soundboard;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 
 import javax.sound.sampled.AudioFormat;
@@ -34,7 +35,7 @@ public class Sound {
             this.length = (long) (durationInSeconds * 1000) + 250;
         } catch (Exception exception) {
             exception.printStackTrace();
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "You prolly won't see this, but literally you cannot play that file. (" + path + ")");
+            Logger.errorPane("You prolly won't see this, but literally you cannot play that file. (" + path + ")");
             System.exit(90);
         }
     }

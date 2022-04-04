@@ -93,7 +93,7 @@ public class Updater {
                 // Make sure program closes itself, even though it should on its own.
                 System.exit(47);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update the application.");
+                Logger.errorPane("Failed to update the application.");
                 e.printStackTrace();
             }
         }).start();
@@ -117,7 +117,7 @@ public class Updater {
             }
             Logger.log("Done downloading Updater.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update your application.");
+            Logger.errorPane( "Failed to update your application.");
         }
     }
 }

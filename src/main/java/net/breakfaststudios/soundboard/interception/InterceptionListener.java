@@ -24,7 +24,7 @@ final public class InterceptionListener {
             keyBindSocket = new DatagramSocket(55556, InetAddress.getByName("127.0.0.1"));
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
+            Logger.errorPane( """
                     Another program is using the port needed by interceptor.
                     This can occur when there is already an instance of soundboard running.
                     """);
@@ -120,7 +120,7 @@ final public class InterceptionListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            Logger.errorPane("Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
         }).start();
     }
 
@@ -135,7 +135,7 @@ final public class InterceptionListener {
             // Break the loop if the other program ends.
             if (data(receive).equals("FATALERROR")) {
                 Logger.err("Fatal error occurred \"serverside\".");
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+                Logger.errorPane("Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
                 keyBindSocket.close();
                 throw new Exception("Lost connection to interceptor.");
             }
@@ -143,7 +143,7 @@ final public class InterceptionListener {
             return data(receive);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
+            Logger.errorPane("Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
             throw new Exception("Lost connection to interceptor.");
         }
     }

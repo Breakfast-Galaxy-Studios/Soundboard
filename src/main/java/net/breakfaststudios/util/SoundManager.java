@@ -1,5 +1,6 @@
 package net.breakfaststudios.util;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
 import net.breakfaststudios.soundboard.SoundBoard;
@@ -47,7 +48,7 @@ public class SoundManager {
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal exception when adding Sound. Error is as follows:\n" + ex + "\nPlease report this error to the Github Repo.");
+                    Logger.errorPane("Fatal exception when adding Sound. Error is as follows:\n" + ex + "\nPlease report this error to the Github Repo.");
                     System.exit(90);
                 }
             }
@@ -76,7 +77,7 @@ public class SoundManager {
             try {
                 prop.store(output, null);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to add sound. If this keeps occurring, please report it to the Github Repo.");
+                Logger.errorPane( "Failed to add sound. If this keeps occurring, please report it to the Github Repo.");
                 e.printStackTrace();
             }
         } else {
@@ -85,12 +86,12 @@ public class SoundManager {
                 if (soundDir.mkdir()) {
                     prop.store(output, null);
                 } else {
-                    JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal error when saving sound. If this keeps occurring, please report it to the Github Repo.");
+                    Logger.errorPane("Fatal error when saving sound. If this keeps occurring, please report it to the Github Repo.");
                     System.exit(88);
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal exception when creating Dir. Error is as follows:\n" + ex + "\nPlease report this error to the Github Repo.");
+                Logger.errorPane("Fatal exception when creating Dir. Error is as follows:\n" + ex + "\nPlease report this error to the Github Repo.");
                 System.exit(33);
             }
         }

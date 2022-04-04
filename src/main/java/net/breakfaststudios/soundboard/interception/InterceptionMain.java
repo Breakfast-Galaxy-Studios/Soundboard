@@ -1,5 +1,6 @@
 package net.breakfaststudios.soundboard.interception;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.util.Util;
 
@@ -163,7 +164,7 @@ public class InterceptionMain {
             Files.deleteIfExists(Path.of(interceptionVBS));
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
+            Logger.errorPane( """
                     Failed to delete all the contents of interceptor.
                     If this error keeps occurring, please delete it yourself.
                     The path to the folder is as follows:

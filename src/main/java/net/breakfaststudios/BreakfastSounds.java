@@ -207,7 +207,7 @@ public class BreakfastSounds {
                 Files.createDirectories(soundDir);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
+                com.github.malthelegend104.Logger.errorPane("Fatal error when creating dir. \nError is as follows:\n" + e + "\nPlease report this error to the Github Repo.");
                 System.exit(3);
             }
         }
