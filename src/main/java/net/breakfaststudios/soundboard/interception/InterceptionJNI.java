@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+@Deprecated
 public class InterceptionJNI {
     private static final String interceptionDLLDownload = "C:\\Users\\Malcolm\\OneDrive\\Desktop\\interceptiontest\\Project5.dll";
     private static DatagramSocket listenerSocket;

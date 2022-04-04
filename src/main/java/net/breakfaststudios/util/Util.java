@@ -1,5 +1,6 @@
 package net.breakfaststudios.util;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class Util {
             jarPath = BreakfastSounds.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            System.out.println("Error occurred when getting jar path.");
+            Logger.err("Error occurred when getting jar path.");
         }
     }
 
@@ -117,7 +118,7 @@ public class Util {
             return prop;
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("\n\nError tends to occur on first startup.\n\n");
+            Logger.warn("\n\nError tends to occur on first startup.\n\n");
             return null;
         }
     }

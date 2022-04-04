@@ -1,5 +1,6 @@
 package net.breakfaststudios.util;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -108,13 +109,13 @@ public class Updater {
         try {
             BufferedInputStream in = new BufferedInputStream(new URL(Updater.autoUpdaterURL).openStream());
             FileOutputStream fileOutputStream = new FileOutputStream(saveDir + "autoupdater.jar");
-            System.out.println("Downloading Updater.");
+            Logger.log("Downloading Updater.");
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
-            System.out.println("Done downloading Updater.");
+            Logger.log("Done downloading Updater.");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to update your application.");
         }

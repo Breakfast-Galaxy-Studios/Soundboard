@@ -1,5 +1,6 @@
 package net.breakfaststudios.soundboard.interception;
 
+import com.github.malthelegend104.Logger;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.listeners.GlobalKeyListener;
 import net.breakfaststudios.util.Converter;
@@ -7,49 +8,20 @@ import net.breakfaststudios.util.Converter;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final public class InterceptionListener {
     private final AtomicBoolean running = new AtomicBoolean(false);
-    private final Thread interceptor = new Thread(() -> {
-        // Listen to localhost port 55555
-        byte[] receive = new byte[65535];
-        DatagramSocket listenerSocket = InterceptionJNI.getListenerSocket();
-        while (running.get()) {
-            // Create a packet to receive the data
-            DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
-
-            // Waits until a packet is received
-            try {
-                listenerSocket.receive(receivePacket);
-                System.out.println(Converter.getKeyText(Integer.parseInt(data(receive))));
-
-                // Break the loop if the other program ends.
-                if (data(receive).equals("FATALERROR")) {
-                    System.out.println("Fatal error occurred \"serverside\".");
-                    break;
-                }
-                receive = new byte[65535];
-            } catch (IOException e) {
-                // e.printStackTrace();
-                System.out.println("This process was PROBABLY stopped by another process.");
-                Thread.currentThread().interrupt();
-            }
-        }
-        listenerSocket.close();
-    });
     /**
      * Initializes the main socket used in the listener
      * This is done here and not later, so it's easier to determine if port is already bound
      */
     private DatagramSocket listenerSocket;
-    private final InterceptionJNI interceptionJNI;
-    private Thread interceptionThread;
-
+    private DatagramSocket keyBindSocket;
     {
         try {
             listenerSocket = new DatagramSocket(55555, InetAddress.getByName("127.0.0.1"));
+            keyBindSocket = new DatagramSocket(55556, InetAddress.getByName("127.0.0.1"));
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, """
@@ -59,9 +31,35 @@ final public class InterceptionListener {
         }
     }
 
-    public InterceptionListener() {
-        interceptionJNI = new InterceptionJNI();
-    }
+    private final Thread interceptor = new Thread(() -> {
+        // Listen to localhost port 55555
+        byte[] receive = new byte[65535];
+        GlobalKeyListener keyListener = new GlobalKeyListener();
+        DatagramPacket receivePacket;
+        while (true) {
+            // Create a packet to receive the data
+            receivePacket = new DatagramPacket(receive, receive.length);
+
+            // Waits until a packet is received
+            try {
+                listenerSocket.receive(receivePacket);
+                Logger.info(Converter.getKeyText(Integer.parseInt(data(receive))));
+                // Checks if the key is registered to a sound, and simulates key up event
+                keyListener.interceptionKeyRegister(Integer.parseInt(data(receive)));
+                keyListener.interceptionKeyReleased(Integer.parseInt(data(receive)));
+
+                // Break the loop if the other program ends.
+                if (data(receive).equals("FATALERROR")) {
+                    Logger.err("Fatal error occurred with BGS-Macros.");
+                    break;
+                }
+                receive = new byte[65535];
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        listenerSocket.close();
+    });
 
     /**
      * Converts a byte array into a string
@@ -81,37 +79,26 @@ final public class InterceptionListener {
         return data.toString();
     }
 
-    private Thread interception() {
-        return new Thread(() -> {
-            int[] ports = interceptionJNI.getPorts();
-            interceptionJNI.interception(ports[0], ports[1], ports[2], 340);
-        });
-    }
-
     public void startInterceptor() {
         running.set(true);
         interceptor.start();
-        interceptionThread = interception();
-        interceptionThread.start();
     }
 
     @Deprecated
     public void startInterceptorDeprecated() {
         new Thread(() -> {
             // Listen to localhost port 55555
-
             byte[] receive = new byte[65535];
             GlobalKeyListener keyListener = new GlobalKeyListener();
             DatagramPacket receivePacket;
             while (true) {
-
                 // Create a packet to receive the data
                 receivePacket = new DatagramPacket(receive, receive.length);
 
                 // Waits until a packet is received
                 try {
                     listenerSocket.receive(receivePacket);
-                    System.out.println(Converter.getKeyText(Integer.parseInt(data(receive))));
+                    Logger.info(Converter.getKeyText(Integer.parseInt(data(receive))));
 
                     // Checks if the key is registered to a sound, and simulates key up event
                     keyListener.interceptionKeyRegister(Integer.parseInt(data(receive)));
@@ -119,7 +106,7 @@ final public class InterceptionListener {
 
                     // Break the loop if the other program ends.
                     if (data(receive).equals("FATALERROR")) {
-                        System.out.println("Fatal error occurred \"serverside\".");
+                        Logger.err("Fatal error occurred \"serverside\".");
                         break;
                     }
                     receive = new byte[65535];
@@ -137,37 +124,22 @@ final public class InterceptionListener {
         }).start();
     }
 
-    public void stopInterceptor() {
-        try {
-            running.set(false);
-            interceptor.interrupt();
-            interceptionThread.interrupt();
-            DatagramSocket socket = InterceptionJNI.getClosingSocket();
-            socket.send(new DatagramPacket("Closing".getBytes(StandardCharsets.UTF_8), "Closing".length()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(123);
-        }
-    }
-
     public String getNextKeycode() throws Exception {
         try {
             byte[] receive = new byte[65535];
-            DatagramSocket ds = new DatagramSocket(55556, InetAddress.getByName("127.0.0.1"));
-
             // Create a packet to receive the data
             DatagramPacket receivePacket = new DatagramPacket(receive, receive.length);
 
             // Waits until a packet is received
-            ds.receive(receivePacket);
+            keyBindSocket.receive(receivePacket);
             // Break the loop if the other program ends.
             if (data(receive).equals("FATALERROR")) {
-                System.out.println("Fatal error occurred \"serverside\".");
+                Logger.err("Fatal error occurred \"serverside\".");
                 JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Fatal Error From Interceptor.\nRestart the program.\nIf this error keeps occurring please contact us on the GitHub Repo.");
-                ds.close();
+                keyBindSocket.close();
                 throw new Exception("Lost connection to interceptor.");
             }
-            ds.close();
+            keyBindSocket.close();
             return data(receive);
         } catch (Exception e) {
             e.printStackTrace();

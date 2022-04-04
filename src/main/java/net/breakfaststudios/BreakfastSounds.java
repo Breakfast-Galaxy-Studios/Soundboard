@@ -46,9 +46,6 @@ public class BreakfastSounds {
     //TODO Add audio.properties
     public static void main(String[] args) {
         dialogParent.setAlwaysOnTop(true);
-        // TODO remove this
-        // new Thread(() -> new InterceptionUI().interceptionMenu()).start();
-
         soundBoard = new SoundBoard();
         Properties settings;
 
@@ -73,6 +70,8 @@ public class BreakfastSounds {
             } catch (Exception ignored) {
             }
         }
+        // TODO REMOVE THIS
+        // new InterceptionUI(null, true).setVisible(true);
 
         // Check for updates
         Updater.runAutoUpdater();
@@ -174,7 +173,8 @@ public class BreakfastSounds {
                     e.printStackTrace();
                 }
                 // Run garbage collection
-                System.out.println("RUNNING COLLECTION");
+                // Since logger is already imported for something below
+                com.github.malthelegend104.Logger.warn("RUNNING COLLECTION");
                 Runtime.getRuntime().gc();
             }
         }).start();

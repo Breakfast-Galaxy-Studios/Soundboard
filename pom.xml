@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.breakfaststudios</groupId>
-    <artifactId>Soundboard</artifactId>
+    <artifactId>soundboard</artifactId>
     <version>1</version>
 
     <properties>
@@ -85,6 +85,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20220320</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.malthelegend104</groupId>
+            <artifactId>logger</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

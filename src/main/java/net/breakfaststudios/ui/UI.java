@@ -1,5 +1,6 @@
 package net.breakfaststudios.ui;
 
+import com.github.malthelegend104.Logger;
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
 import net.breakfaststudios.BreakfastSounds;
@@ -567,7 +568,7 @@ public class UI extends JFrame {
                     if (!f.exists()) {
                         file.close();
                         if (new File(Util.getSoundDirectory() + s).delete()) {
-                            System.out.println("Deleted File");
+                            Logger.log("Deleted File");
                         }
                         JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
                     }
@@ -621,17 +622,6 @@ public class UI extends JFrame {
         });
 
         removeButton.addActionListener(e -> removeSound(soundTable, soundTableModel));
-
-        // If interception is turned on, send close to the listening program
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                if (InterceptionMain.getInterceptionSettings() != null && InterceptionMain.getInterceptionSettings().getProperty("interception").equals("true")) {
-                    InterceptionMain.interceptionListener.stopInterceptor();
-                    System.exit(0);
-                }
-            }
-        });
 
         // -----------------------------------------------------------------
         // Add sound panel functions

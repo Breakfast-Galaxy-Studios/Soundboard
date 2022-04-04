@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+@Deprecated
 public class InterceptionInterface {
     // public static final String INTERCEPTION_PATH = Util.getMainDirectory() + "interception/" + "interception.dll";
     // private final String interceptionDLLDownload = "";

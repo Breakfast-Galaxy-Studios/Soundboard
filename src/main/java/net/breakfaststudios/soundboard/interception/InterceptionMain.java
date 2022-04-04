@@ -31,10 +31,7 @@ public class InterceptionMain {
      * Path in the form of a string, of the interception.properties file
      */
     public static final String interceptionSettingsFilePath = Util.getMainDirectory() + "interception.properties";
-    /**
-     * Interface for interceptionJNI
-     */
-    public static final InterceptionInterface interceptionInterface = new InterceptionInterface();
+
     /**
      * The path to in the interception VBS file.
      */
@@ -58,7 +55,6 @@ public class InterceptionMain {
             }
         }
     }
-
 
     /**
      * Get the properties file for interceptor
@@ -86,7 +82,8 @@ public class InterceptionMain {
         // interceptionListener.startInterceptor(interceptionInterface.getListenerSocket());
         isRunning.set(true);
         interceptionListener.startInterceptorDeprecated();
-        /*
+        // interceptionListener.startInterceptor();
+        /* Leftovers from dll stuff
         interceptionListener.startInterceptor();
         int[] ports = interceptionInterface.getPorts();
         new Thread(() -> interceptionInterface.interception(ports[0], ports[1], ports[2], Long.parseLong(getInterceptionSettings().getProperty("devID"))));
