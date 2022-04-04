@@ -875,7 +875,7 @@ public class UI extends JFrame {
                 uniqueName = true;
             }
         }
-        System.err.println(uniqueName);
+        Logger.err(uniqueName);
         return uniqueName;
     }
 

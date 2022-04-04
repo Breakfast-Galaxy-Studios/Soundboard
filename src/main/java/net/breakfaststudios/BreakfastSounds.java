@@ -190,8 +190,8 @@ public class BreakfastSounds {
             try {
                 GlobalScreen.registerNativeHook();
             } catch (NativeHookException ex) {
-                System.err.println("There was a problem registering the native hook.");
-                System.err.println(ex.getMessage());
+                com.github.malthelegend104.Logger.err("There was a problem registering the native hook.");
+                com.github.malthelegend104.Logger.err(ex.getMessage());
                 System.exit(53);
             }
         }

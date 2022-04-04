@@ -1,5 +1,7 @@
 package net.breakfaststudios.soundboard.interception;
 
+import com.github.malthelegend104.Logger;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -74,7 +76,7 @@ public class InterceptionJNI {
             listenerSocket = new DatagramSocket(port, InetAddress.getByName("127.0.0.1"));
         } catch (SocketException | UnknownHostException e) {
             // e.printStackTrace();
-            System.err.println("Port " + port + " was already in use. Trying again. - Listener Socket");
+            Logger.err("Port " + port + " was already in use. Trying again. - Listener Socket");
             port = createNewPort();
             listenerSocket = createListenerSocket();
         }
@@ -87,7 +89,7 @@ public class InterceptionJNI {
             socket = new DatagramSocket(port2, InetAddress.getByName("127.0.0.1"));
         } catch (SocketException | UnknownHostException e) {
             // e.printStackTrace();
-            System.err.println("Port " + port2 + " was already in use. Trying again. - Recording Socket");
+            Logger.err("Port " + port2 + " was already in use. Trying again. - Recording Socket");
             port2 = createNewPort();
             socket = createListenerSocket();
         }
@@ -100,7 +102,7 @@ public class InterceptionJNI {
             socket = new DatagramSocket(port3, InetAddress.getByName("127.0.0.1"));
         } catch (Exception e) {
             // e.printStackTrace();
-            System.err.println("Port " + port3 + " was already in use. Trying again. - Closing Socket");
+            Logger.err("Port " + port3 + " was already in use. Trying again. - Closing Socket");
             port3 = createNewPort();
             socket = createClosingSocket();
         }
