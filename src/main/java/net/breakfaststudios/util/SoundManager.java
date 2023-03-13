@@ -22,7 +22,7 @@ public class SoundManager {
      * @param volume   Volume level between 0-1.
      */
     public static void createNewSound(String name, String filePath, String keybind, float volume) {
-        String userConfigDir = Util.getSoundDirectory();
+        String userConfigDir = Util.soundDir;
         String soundPath = userConfigDir + name + ".properties";
         try (OutputStream output = new FileOutputStream(soundPath)) {
             createNewSoundFile(userConfigDir, name, filePath, keybind, volume, output);
@@ -102,7 +102,7 @@ public class SoundManager {
      */
     public static boolean removeSound(String filePath, String fileName) {
         try {
-            FileInputStream file = new FileInputStream(Util.getSoundDirectory() + fileName);
+            FileInputStream file = new FileInputStream(Util.soundDir + fileName);
 
             /*
              * Remove Sound from SoundBoard cache.
@@ -127,7 +127,7 @@ public class SoundManager {
 
     public static Properties getSoundConfig(String soundName) {
         try {
-            FileInputStream file = new FileInputStream(Util.getSoundDirectory() + soundName + ".properties");
+            FileInputStream file = new FileInputStream(Util.soundDir + soundName + ".properties");
             Properties prop = new Properties();
             prop.load(file);
             file.close();

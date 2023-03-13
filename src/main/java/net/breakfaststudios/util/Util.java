@@ -20,6 +20,9 @@ public class Util {
      * Path of the current location of the jar file.
      */
     public static String jarPath = null;
+    public static final String soundDir = getSoundDirectory();
+    public static final String mainDir = getMainDirectory();
+
 
     static {
         try {
@@ -33,7 +36,7 @@ public class Util {
     /**
      * @return String representing the dir that the sound-config files are stored.
      */
-    public static String getSoundDirectory() {
+    private static String getSoundDirectory() {
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\sounds\\";
         else if (os.contains("mac") || os.contains("nux"))
@@ -45,7 +48,7 @@ public class Util {
     /**
      * @return String of the main app folder.
      */
-    public static String getMainDirectory() {
+    private static String getMainDirectory() {
         if (os.contains("win"))
             return System.getenv("APPDATA") + "\\BGS-Soundboard\\";
         else if (os.contains("mac") || os.contains("nux"))
@@ -64,7 +67,7 @@ public class Util {
      * @param openOnStartup Bool representing if open on startup is on or off.
      */
     public static void updateSettings(String soundOutput, boolean keyCompatMode, boolean openToTray, boolean darkMode, boolean openOnStartup) {
-        File settingsFile = new File(Util.getMainDirectory() + "settings.properties");
+        File settingsFile = new File(mainDir + "settings.properties");
         Properties settings = new Properties();
         settings.setProperty("soundOutput", soundOutput);
         settings.setProperty("keyCompatMode", String.valueOf(keyCompatMode));
@@ -81,6 +84,7 @@ public class Util {
         try {
             OutputStream output = new FileOutputStream(settingsFile.getPath());
             settings.store(output, null);
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,7 +97,7 @@ public class Util {
      */
     public static Properties getSettingsFile() {
         try {
-            FileInputStream file = new FileInputStream(Util.getMainDirectory() + "settings.properties");
+            FileInputStream file = new FileInputStream(mainDir + "settings.properties");
             Properties prop = new Properties();
             prop.load(file);
             file.close();
@@ -138,7 +142,7 @@ public class Util {
      */
     public static void openOnStartup(boolean bool) {
         // todo make shortcut maybe, this way works fine tho
-        Path winStartupBatch = Paths.get(Util.getMainDirectory() + "soundboard.bat");
+        Path winStartupBatch = Paths.get(mainDir + "soundboard.bat");
         Path winStartupScript = Paths.get(System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\soundboard.vbs");
         String script = "Set WshShell = CreateObject(\"WScript.Shell\") \n" + "WshShell.Run chr(34) & \"" + winStartupBatch + "\" & Chr(34), 0\n" + "Set WshShell = Nothing";
         if (os.contains("win")) {

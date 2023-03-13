@@ -20,7 +20,7 @@ import static net.breakfaststudios.util.Util.os;
 
 public class Updater {
     private static final String fileName = "soundboard.jar";
-    private static final String autoUpdaterPath = Util.getMainDirectory() + "autoupdater.jar";
+    private static final String autoUpdaterPath = Util.mainDir + "autoupdater.jar";
     private static final String autoUpdaterURL = "https://github.com/Breakfast-Galaxy-Studios/Universial-Auto-Updater/releases/download/v1.0/autoupdater.jar";
 
 
@@ -68,7 +68,7 @@ public class Updater {
         final String updateURL = "https://github.com/Breakfast-Galaxy-Studios/Soundboard/releases/download/" + newVersion + "/soundboard.jar";
 
         new Thread(() -> {
-            downloadFile(Util.getMainDirectory());
+            downloadFile(Util.mainDir);
             try {
                 // remove soundboard.jar from operating path, remove / from beginning if on windows
                 String[] newPath;

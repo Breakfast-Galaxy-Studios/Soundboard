@@ -4,6 +4,7 @@ import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
 import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
+import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
 import net.breakfaststudios.util.SoundManager;
@@ -18,7 +19,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
@@ -31,10 +31,11 @@ public class UI extends JFrame {
 
     private final ArrayList<JPanel> panels;
     private boolean editSound;
-
+    private final SoundBoard soundBoard;
     public UI() {
         editSound = false;
         panels = new ArrayList<>();
+        soundBoard = BreakfastSounds.getSoundBoard();
     }
 
     /**
@@ -556,7 +557,7 @@ public class UI extends JFrame {
         String[] fileList = getFileList();
         if (fileList != null) {
             for (String s : fileList) {
-                try (FileInputStream file = new FileInputStream(Util.getSoundDirectory() + s)) {
+                try (FileInputStream file = new FileInputStream(Util.soundDir + s)) {
                     Properties prop = new Properties();
                     prop.load(file);
                     String name = prop.getProperty("name");
@@ -566,7 +567,7 @@ public class UI extends JFrame {
                     File f = new File(path);
                     if (!f.exists()) {
                         file.close();
-                        if (new File(Util.getSoundDirectory() + s).delete()) {
+                        if (new File(Util.soundDir + s).delete()) {
                             System.out.println("Deleted File");
                         }
                         JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to load file: \n" + f + "\nThe sound registered to this file has been removed.");
@@ -671,7 +672,7 @@ public class UI extends JFrame {
                             int column = 0;
                             int row = soundTable.getSelectedRow();
                             String value = soundTable.getModel().getValueAt(row, column).toString();
-                            if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
+                            if (SoundManager.removeSound(Util.soundDir, value + ".properties")) {
                                 soundTableModel.removeRow(row);
                             } else {
                                 JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to change that sound.");
@@ -685,7 +686,6 @@ public class UI extends JFrame {
 
                     for (String character : keybindField.split("_")) {
                         // I'm sick of compiler warnings for this deprecation
-                        //noinspection deprecation
                         rawCodes.append(Converter.getKeyCode(character)).append("_");
                     }
                     String newRawCodes = rawCodes.substring(0, rawCodes.length() - 1);
@@ -766,7 +766,10 @@ public class UI extends JFrame {
         soundTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                    System.out.println("double clicked");
+                    soundBoard.queueSound(getSoundBoard().getSound(soundTable.getValueAt(soundTable.rowAtPoint(e.getPoint()), 0).toString()));
+                }
                 if (e.getButton() == 3) {
                     editMenu.show(e.getComponent(), e.getX(), e.getY());
                     int row = soundTable.rowAtPoint(e.getPoint());
@@ -924,7 +927,7 @@ public class UI extends JFrame {
             int column = 0;
             int row = soundTable.getSelectedRow();
             String value = soundTable.getModel().getValueAt(row, column).toString();
-            if (SoundManager.removeSound(Util.getSoundDirectory(), value + ".properties")) {
+            if (SoundManager.removeSound(Util.soundDir, value + ".properties")) {
                 soundTableModel.removeRow(row);
             } else {
                 JOptionPane.showMessageDialog(BreakfastSounds.dialogParent, "Failed to delete that sound.");
@@ -994,7 +997,7 @@ public class UI extends JFrame {
      * @return String[] of all files in the sound-config directory.
      */
     private String[] getFileList() {
-        File file = new File(Util.getSoundDirectory());
+        File file = new File(Util.soundDir);
         return file.list();
     }
 }

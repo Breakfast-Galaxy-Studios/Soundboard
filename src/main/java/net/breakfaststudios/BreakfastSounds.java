@@ -25,7 +25,7 @@ public class BreakfastSounds {
     /*
      * TODO For every release make sure this is changed. It should correspond to the github tag for the release.
      */
-    public static final String currentVersion = "v2.2";
+    public static final String currentVersion = "v2.3";
     public static String SELECTED_AUDIO_DEVICE;
     public static JFrame dialogParent = new JFrame();
     private static SoundBoard soundBoard;
@@ -51,9 +51,9 @@ public class BreakfastSounds {
         /*
          * Make sure AutoUpdater is deleted if it exists.
          */
-        if (Files.exists(Path.of(Util.getMainDirectory() + "autoupdater.jar"))) {
+        if (Files.exists(Path.of(Util.mainDir + "autoupdater.jar"))) {
             try {
-                Files.delete(Path.of(Util.getMainDirectory() + "autoupdater.jar"));
+                Files.delete(Path.of(Util.mainDir + "autoupdater.jar"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class BreakfastSounds {
 
         Updater.runAutoUpdater();
 
-        if (!Files.exists(Path.of(Util.getMainDirectory() + "settings.properties"))) {
+        if (!Files.exists(Path.of(Util.mainDir + "settings.properties"))) {
             String soundOutput = "Primary Sound Driver";
             Util.updateSettings(soundOutput, false, false, false, false);
         } else {
@@ -144,6 +144,7 @@ public class BreakfastSounds {
         new Thread(() -> {
             while (true) {
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(time);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -172,7 +173,7 @@ public class BreakfastSounds {
      * Creates the app directory in APPDATA on Windows, or the user's home folder on linux/macOS.
      */
     private static void makeAppDir() {
-        Path soundDir = Paths.get(Util.getSoundDirectory());
+        Path soundDir = Paths.get(Util.soundDir);
         if (!Files.exists(soundDir)) {
             try {
                 Files.createDirectories(soundDir);
