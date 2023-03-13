@@ -3,8 +3,8 @@ package net.breakfaststudios.ui;
 import com.github.malthelegend104.Logger;
 import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.FileChooser;
-import net.breakfaststudios.BreakfastSounds;
 import net.breakfaststudios.soundboard.Sound;
+import net.breakfaststudios.soundboard.SoundBoard;
 import net.breakfaststudios.soundboard.interception.InterceptionMain;
 import net.breakfaststudios.soundboard.listeners.KeybindRecorder;
 import net.breakfaststudios.util.Converter;
@@ -32,10 +32,11 @@ public class UI extends JFrame {
 
     private final ArrayList<JPanel> panels;
     private boolean editSound;
-
+    private final SoundBoard soundBoard;
     public UI() {
         editSound = false;
         panels = new ArrayList<>();
+        soundBoard = getSoundBoard();
     }
 
     /**
@@ -779,7 +780,9 @@ public class UI extends JFrame {
         soundTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                    soundBoard.queueSound(getSoundBoard().getSound(soundTable.getValueAt(soundTable.rowAtPoint(e.getPoint()), 0).toString()));
+                }
                 if (e.getButton() == 3) {
                     editMenu.show(e.getComponent(), e.getX(), e.getY());
                     int row = soundTable.rowAtPoint(e.getPoint());
